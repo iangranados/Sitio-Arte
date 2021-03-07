@@ -1,11 +1,13 @@
+var fs = require('fs');
 const http = require('http');
 
 const hostname = '127.0.0.1';
 const port = 3000;
 
 const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'content-type': 'text/html' })
-  fs.createReadStream('index.html').pipe(res)
+  res.writeHead(200, { 'content-type': 'text/html' });
+  fs.createReadStream('index.html').pipe(res);
+  // console.log(req);
 });
 
 server.listen(port, hostname, () => {
