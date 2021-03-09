@@ -9,17 +9,7 @@ const { Users } = require('./scr/models/usuarioModel');
 // Init
 const app = express();
 // Routes
-app.get( '/clientes', ( req, res ) => {
-  Users
-  .verClientes()
-  .then( result => {
-      return res.status( 200).json( result );
-  })
-  .catch( err => {
-      res.statusMessage = "Something went wrong with the DB";
-      return res.status( 500 ).end();
-  })
-});
+app.use('/', rutas );
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, { 'content-type': 'text/html' })

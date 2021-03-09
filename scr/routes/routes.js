@@ -1,4 +1,5 @@
 const express = require('express');
+const router = express.Router();
 const bodyParser = require('body-parser');
 //const { Portafolio } = require('../models/portafolioModel');
 const { Users } = require( '../models/usuarioModel' );
@@ -18,7 +19,7 @@ const app = express();
 });*/
 
 // Ruta para obtener los clientes
-app.get( '/clientes', ( req, res ) => {
+router.get( '/clientes', ( req, res ) => {
     Users
     .verClientes()
     .then( result => {
@@ -29,3 +30,5 @@ app.get( '/clientes', ( req, res ) => {
         return res.status( 500 ).end();
     })
 });
+
+module.exports = router;
