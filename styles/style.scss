@@ -9,8 +9,8 @@
     max-height: 10 vh;
 } */
 
-html{
-  max-width: 803px  ;
+html {
+  max-width: 803px;
   margin: 20px auto 0;
 }
 
@@ -21,7 +21,6 @@ html{
 
   // margin: 0 23px 54px 586px;
 
-  
   padding-top: 13px;
 
   border-radius: 30px;
@@ -35,10 +34,20 @@ html{
   text-transform: uppercase;
 }
 
-.navbar-nav{
-  flex:1;
+.navbar-nav {
+  flex: 1;
 }
 
+footer {
+  position: absolute;
+  background-color: #ff8181;
+  width: 100vw;
+  height: 71px;
+  // margin-left: 0;
+  // position: absolute;
+  bottom: 0;
+  left: 0;
+}
 // #navbarNavAltMarkup{
 //   // justify-content: center;
 // }
