@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const portafolioSchema = mongoose.Schema({
-    name : {
+    nameImage : {
         type : String,
         required : true
     },
@@ -10,17 +10,26 @@ const portafolioSchema = mongoose.Schema({
         required : true
     },
     img: {
-        data: Buffer,
-        contentType: String,
+        type : String,
         required : true
     }
 });
 
 mongoose.pluralize(null);
 
-const PortafolioCollection = mongoose.model( 'Portafolios', portafolioSchema );
+const PortafolioCollection = mongoose.model( 'portafolio', portafolioSchema );
 
-const Portafolios = {
+const Portafolio = {
+    verPortafolio : function(){
+        return PortafolioCollection
+        .find()
+        .then( galeria => {
+            return galeria;
+        })
+        .catch( err => {
+            return err;
+        });
+    },
     addNewImage : function( newImage ){
         return PortafolioCollection
         .create( newImage )
@@ -31,14 +40,26 @@ const Portafolios = {
             return err;
         });
     },
-    verPortafolio : function(){
+    deleteImage : function( nameImage ){
         return PortafolioCollection
-        .find()
-        .then( galeria => {
-            return galeria;
+        .deleteOne( {nameImage : nameImage } )
+        .then( results =>{
+            return results;
         })
         .catch( err => {
             return err;
         });
-    }
+    },
+    modificarImage : function(name, newLink){
+        return ProductoCollection
+        .updateOne({name : name}, {$set : {link : newLink}})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            return err;
+        });
+    },
 }
+
+module.exports = { Portafolio };

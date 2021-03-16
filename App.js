@@ -11,10 +11,12 @@ const app = express();
 // Routes
 app.use('/', rutas );
 
-const server = http.createServer((req, res) => {
+app.use('/uploads', express.static('uploads'));
+
+/*const server = http.createServer((req, res) => {
   res.writeHead(200, { 'content-type': 'text/html' })
   fs.createReadStream('index.html').pipe(res)
-});
+});*/
 
 app.listen( 8080, () => {
   console.log( 'Sever on port ', 8080);

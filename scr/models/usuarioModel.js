@@ -1,7 +1,7 @@
 const mongoose = require( 'mongoose' );
 
 const userSchema = mongoose.Schema({
-    nombre : {
+    nameUsuario : {
         type : String,
         required : true
     },
@@ -30,9 +30,7 @@ const Users = {
         .catch( err => {
             return err;
         });
-    },
+    }
 }
 
-module.exports = {
-    Users
-};
+module.exports = { Users };
