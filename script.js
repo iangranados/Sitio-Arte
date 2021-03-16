@@ -1,4 +1,6 @@
-$(".head").load("/templates/header.html");
+$(".head").load("/templates/header.html"); 
+$(".navsection").load("/templates/navbar.html"); 
+
 
 Galleria.loadTheme(
   "https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/folio/galleria.folio.js"
