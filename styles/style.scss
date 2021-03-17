@@ -16,7 +16,7 @@ html {
 	max-width: 807px;
 
 	margin: 20px auto 0;
-	//   min-height: vh;
+	  min-height: 90vh;
 }
 
 .nav-link {
@@ -44,7 +44,7 @@ html {
 }
 
 footer {
-	position: absolute;
+	// position: absolute;
 	background-color: #ff8181;
 	width: 100%;
 	height: 71px;
@@ -52,6 +52,7 @@ footer {
 	// position: absolute;
 	bottom: 0;
 	left: 0;
+	margin-top: 5vh;
 }
 // #navbarNavAltMarkup{
 //   // justify-content: center;
@@ -73,4 +74,25 @@ textarea {
 	border-radius: 15px;
 	padding: 10px;
 	border: solid 1px #999999;
+	  resize: none;
+}
+
+#ordenarComision {
+	width: 327px;
+// margin-left: auto;
+	height: 48px;
+
+	// margin: 54px 591px 200px 53px;
+
+	// padding: 15px 64px 15px 65px;
+
+	border-radius: 15px;
+	color: #ffffff;
+	background-color: #ff8181;
+}
+
+.btn-close{
+	position: absolute;
+	top: 3px;
+	right: 3px;
 }
