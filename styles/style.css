@@ -28,6 +28,7 @@
 }
 
 footer {
+  position: absolute;
   background-color: #ff8181;
   width: 100%;
   height: 71px;
@@ -38,5 +39,18 @@ footer {
 .disclaimer {
   text-align: right;
   font-size: 12px;
+}
+
+textarea {
+  width: 100%;
+}
+
+input,
+.form-control,
+.form-select,
+textarea {
+  border-radius: 15px;
+  padding: 10px;
+  border: solid 1px #999999;
 }
 /*# sourceMappingURL=style.css.map */
