@@ -58,7 +58,6 @@ textarea {
 
 #ordenarComision {
   width: 327px;
-  margin-left: auto;
   height: 48px;
   border-radius: 15px;
   color: #ffffff;
@@ -69,5 +68,66 @@ textarea {
   position: absolute;
   top: 3px;
   right: 3px;
+}
+
+#botonOrdenar {
+  width: 198px;
+  height: 18px;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.75;
+  letter-spacing: 1.6px;
+  text-align: center;
+  color: #ffffff;
+  width: 327px;
+  height: 48px;
+  border-radius: 15px;
+  background-color: #ff8181;
+}
+
+.btn-pink {
+  display: block;
+  width: 327px;
+  height: 48px;
+  border-radius: 15px;
+  background-color: #ff8181;
+  color: white;
+  text-align: center;
+}
+
+.inicia {
+  width: 442px;
+  height: 31px;
+  font-family: Gotham;
+  font-size: 28px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.43;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ff8181;
+}
+
+.kanban {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 90vw;
+  margin: 0 auto 0 -15vw;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.kanban-section {
+  width: 365px;
+  height: 696px;
+  padding: 21px 14px;
+  border-radius: 10px;
+  background-color: #efefef;
+  overflow: scroll;
 }
 /*# sourceMappingURL=style.css.map */

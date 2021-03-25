@@ -22,12 +22,15 @@
 			integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
 			crossorigin="anonymous"
 		/>
+
+		<script src="templates/navbar.js" type="module"></script>
 		<link rel="stylesheet" href="styles/style.css" />
 	</head>
 
 	<body>
 		<div class="content">
-			<div class="navsection"></div>
+			<navbar-lele></navbar-lele>
+
 			<h1>Ordenar Nueva Comision</h1>
 			<form action="">
 				<div class="mb-3">
@@ -72,12 +75,11 @@
 					class="form-control mb-3"
 				></textarea>
 				<!-- <button type="submit" class="btn"></button> -->
-				
-				<div class="submit-group">
 
+				<div class="submit-group">
 					<button
 						type="button"
-						class="btn d-block ms-auto "
+						class="btn d-block ms-auto"
 						id="ordenarComision"
 						data-bs-toggle="modal"
 						data-bs-target="#exampleModal"
@@ -96,7 +98,6 @@
 				>
 					<div class="modal-dialog">
 						<div class="modal-content">
-							
 							<div class="modal-body">
 								<button
 									type="button"
@@ -113,7 +114,9 @@
 									Comisiones Activas
 								</p>
 								<h3 class="text-center mx-auto">01236789</h3>
-								<button class="btn btn-primary ms-auto d-block">IR A COMISIONES ACTIVAS</button>
+								<button class="btn btn-primary ms-auto d-block">
+									IR A COMISIONES ACTIVAS
+								</button>
 							</div>
 						</div>
 					</div>

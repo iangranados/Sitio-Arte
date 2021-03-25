@@ -31,24 +31,18 @@
 	<body>
 		<div class="content">
 			<navbar-lele></navbar-lele>
-
-			<div class="galleria">
-				<img src="images/cplysght.bmp" />
-				<img src="images/eeossqfv.bmp" />
-				<img src="images/n6b7g390.bmp" />
-				<img src="images/vo0pmsno.bmp" />
-				<img src="images/wz01umpz.bmp" />
+			<div class="kanban">
+				<div class="kanban-section">
+					<h2 class="kanban-title">Lista de espera (aprobados)</h2>
+				</div>
+				<div class="kanban-section">
+					<h2 class="kanban-title">En progreso</h2>
+				</div>
+				<div class="kanban-section">
+					<h2 class="kanban-title">Completado</h2>
+				</div>
 			</div>
 		</div>
-
-		<script>
-			Galleria.loadTheme(
-				"https://cdnjs.cloudflare.com/ajax/libs/galleria/0.6.1/themes/folio/galleria.folio.js"
-			);
-			Galleria.run(".galleria");
-			var loc = $(location).attr("href");
-			console.log(loc);
-		</script>
 	</body>
 
 	<footer></footer>
