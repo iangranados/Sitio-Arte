@@ -50,9 +50,9 @@ const Portafolio = {
             return err;
         });
     },
-    modificarImage : function(name, newLink){
-        return ProductoCollection
-        .updateOne({name : name}, {$set : {link : newLink}})
+    modificarImage : function(nameImage, newLink){
+        return PortafolioCollection
+        .updateOne({nameImage : nameImage}, {$set : {link : newLink}})
         .then( results => {
             return results;
         })
