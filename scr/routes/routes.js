@@ -3,6 +3,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const { Portafolio } = require('../models/portafolioModel')
 const { Users } = require( '../models/usuarioModel' );
+const { Comision } = require('../models/comisionModel');
 const jsonParser = bodyParser.json();
 const multer = require('multer');
 
@@ -108,7 +109,7 @@ router.patch('/modificarImagen/:nameImage', ( req, res ) => {
         res.statusMessage =  "Somethong went wrong with the DB";
         return res.status( 500 ).end();
     })
-})
+});
 
 // Ruta para obtener los clientes
 router.get( '/clientes', ( req, res ) => {
@@ -122,5 +123,68 @@ router.get( '/clientes', ( req, res ) => {
         return res.status( 500 ).end();
     })
 });
+
+// Ruta para obtener todas las comisiones
+router.get( '/comisiones', ( req, res ) => {
+    Comision
+    .verComisiones()
+    .then( result => {
+        return res.status( 200).json( result );
+    })
+    .catch( err => {
+        res.statusMessage = "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+// Ruta para crear una nueva comision
+router.post( '/crearComision', ( req, res ) => {
+
+    let { name, contact, username, tipo, description } = req.body;
+
+    if( !name || !contact || !username || !tipo || !description ){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    const newComision = { name, contact, username, tipo, description }
+
+    Comision
+    .addNewComision( newComision )
+    .then( results => {
+        return res.status( 201 ).json( results );
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    });
+});
+
+// Ruta para modificar la descripcion de una comision
+router.patch('/modificarComsion/:name', ( req, res ) => {
+    let name = req.params.name;
+    let newDes = req.body.description;
+
+    if(!name || !newDes){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Comision
+    .modificarComisionDes(name, newDes)
+    .then( results => {
+        if(results.nModified > 0){
+            return res.status( 202 ).end();
+        }
+        else{
+            res.statusMessage = "There is no comision with the user passed";
+            return res.status( 409 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+})
 
 module.exports = router;

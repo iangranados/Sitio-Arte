@@ -5,7 +5,11 @@ const comisionSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    precio : {
+    contact : {
+        type : String,
+        required : true
+    },
+    username: {
         type : String,
         required : true
     },
@@ -13,16 +17,12 @@ const comisionSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    avance: {
-        type : Number,
-        required : true
-    },
-    username: {
-        type : String,
-        required : true
-    },
     completed: {
         type : Boolean,
+        required : false
+    },
+    description: {
+        type : String,
         required : true
     }
 });
@@ -62,9 +62,9 @@ const Comision = {
             return err;
         });
     },
-    modificarComisionAvance : function(name, newAvance){
+    modificarComisionDes : function(name, newDes){
         return ComisionCollection
-        .updateOne({name : name}, {$set : {avance : newAvance}})
+        .updateOne({name : name}, {$set : {description : newDes}})
         .then( results => {
             return results;
         })
