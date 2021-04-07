@@ -1,0 +1,73 @@
+.galleria {
+  height: 100vh;
+}
+
+/* img{
+    max-width: 20vw;
+    max-height: 10 vh;
+} */
+.content {
+  max-width: 807px;
+  margin: 20px auto 0;
+  min-height: 90vh;
+}
+
+.nav-link {
+  width: 170px;
+  height: 55px;
+  padding-top: 13px;
+  border-radius: 30px;
+  border: solid 1px #686868;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.navbar-nav {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+footer {
+  background-color: #ff8181;
+  width: 100%;
+  height: 71px;
+  bottom: 0;
+  left: 0;
+  margin-top: 5vh;
+}
+
+.disclaimer {
+  text-align: right;
+  font-size: 12px;
+}
+
+textarea {
+  width: 100%;
+}
+
+input,
+.form-control,
+.form-select,
+textarea {
+  border-radius: 15px;
+  padding: 10px;
+  border: solid 1px #999999;
+  resize: none;
+}
+
+#ordenarComision {
+  width: 327px;
+  margin-left: auto;
+  height: 48px;
+  border-radius: 15px;
+  color: #ffffff;
+  background-color: #ff8181;
+}
+
+.btn-close {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+/*# sourceMappingURL=style.css.map */
