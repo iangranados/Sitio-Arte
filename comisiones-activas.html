@@ -25,22 +25,24 @@
 		/>
 
 		<script src="templates/navbar.js" type="module"></script>
+		<script src="templates/kanban-item.js" type="module"></script>
 		<link rel="stylesheet" href="styles/style.css" />
 	</head>
 
 	<body>
-		<div class="content">
+		<div class="activas">
 			<navbar-lele></navbar-lele>
-			<div class="kanban">
-				<div class="kanban-section">
-					<h2 class="kanban-title">Lista de espera (aprobados)</h2>
-				</div>
-				<div class="kanban-section">
-					<h2 class="kanban-title">En progreso</h2>
-				</div>
-				<div class="kanban-section">
-					<h2 class="kanban-title">Completado</h2>
-				</div>
+		</div>
+		<div class="kanban">
+			<div class="kanban-section">
+				<h2 class="kanban-title">Lista de espera (aprobados)</h2>
+				<kanban-item color="#CCC" text="hello!"></kanban-item>
+			</div>
+			<div class="kanban-section">
+				<h2 class="kanban-title">En progreso</h2>
+			</div>
+			<div class="kanban-section">
+				<h2 class="kanban-title">Completado</h2>
 			</div>
 		</div>
 	</body>

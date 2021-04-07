@@ -10,7 +10,7 @@
 } */
 
 // html {
-	// font-family: ;
+// font-family: ;
 // }
 .content {
 	max-width: 807px;
@@ -177,9 +177,10 @@ textarea {
 .kanban {
 	// position: absolute;
 	display: flex;
-	width: 90vw;
-	margin: 0 auto 0 -15vw;
+	width: 70%;
+	margin: 0 auto 0;
 	justify-content: space-between;
+	min-height: 90vh;
 }
 
 .kanban-section {
@@ -187,11 +188,58 @@ textarea {
 
 	height: 696px;
 
-	padding: 21px 14px;
+	padding: 21px  14px;
 
 	border-radius: 10px;
 
 	background-color: #efefef;
 
-	overflow: scroll;
+	overflow-y: auto;
+	h2 {
+		font-family: Gotham;
+
+		font-size: 20px;
+
+		font-weight: 700;
+
+		font-stretch: normal;
+
+		font-style: normal;
+
+		line-height: 0.6;
+
+		letter-spacing: normal;
+
+		text-align: left;
+
+		color: #686868;
+	}
+}
+
+.activas {
+	max-width: 807px;
+	margin: 20px auto 0;
+}
+
+.kanban-item{
+  width: 90%;
+
+  height: 65px;
+
+  margin: 18px auto;
+
+  padding: 14px 12px 13px;
+
+  border-radius: 5px;
+
+  box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.16);
+
+  background-color: #ffffff;
+
+}
+
+.kanban-item .status{
+	height: 9px;
+	border-radius: 3px;
+	
 }
