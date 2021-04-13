@@ -24,6 +24,10 @@ const comisionSchema = mongoose.Schema({
     description: {
         type : String,
         required : true
+    },
+    token: {
+        type : String,
+        required : true
     }
 });
 
@@ -52,9 +56,9 @@ const Comision = {
             return err;
         });
     },
-    deleteComision : function( name ){
+    deleteComision : function( token ){
         return ComisionCollection
-        .deleteOne( {name : name } )
+        .deleteOne( {token : token } )
         .then( results =>{
             return results;
         })
@@ -62,9 +66,9 @@ const Comision = {
             return err;
         });
     },
-    modificarComisionDes : function(name, newDes){
+    modificarComisionDes : function(token, newDes){
         return ComisionCollection
-        .updateOne({name : name}, {$set : {description : newDes}})
+        .updateOne({token : token}, {$set : {description : newDes}})
         .then( results => {
             return results;
         })
@@ -72,9 +76,9 @@ const Comision = {
             return err;
         });
     },
-    completarComision : function(name, completed){
+    completarComision : function(token, completed){
         return ComisionCollection
-        .updateOne({name : name}, {$set : {completed : completed}})
+        .updateOne({token : token}, {$set : {completed : completed}})
         .then( results => {
             return results;
         })
@@ -82,9 +86,9 @@ const Comision = {
             return err;
         });
     },
-    getComisionByName : function( username ){
+    getComisionByToken : function( token ){
         return ComisionCollection
-        .find( {username : username})
+        .find( {token : token})
         .then( results => {
             return results;
         })

@@ -6,6 +6,7 @@ const { Users } = require( '../models/usuarioModel' );
 const { Comision } = require('../models/comisionModel');
 const jsonParser = bodyParser.json();
 const multer = require('multer');
+const { v4: uuidv4 } = require('uuid');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -147,7 +148,11 @@ router.post( '/crearComision', ( req, res ) => {
         return res.status( 406 ).end()
     }
 
-    const newComision = { name, contact, username, tipo, description }
+    let token = uuidv4();
+    console.log(token);
+
+    const newComision = { name, contact, username, tipo, description, token }
+    console.log(newComision);
 
     Comision
     .addNewComision( newComision )
@@ -161,17 +166,17 @@ router.post( '/crearComision', ( req, res ) => {
 });
 
 // Ruta para modificar la descripcion de una comision
-router.patch('/modificarComsion/:name', ( req, res ) => {
-    let name = req.params.name;
+router.patch('/modificarComsion/:token', ( req, res ) => {
+    let token = req.params.token;
     let newDes = req.body.description;
 
-    if(!name || !newDes){
+    if(!token || !newDes){
         res.statusMessage = "Please send all the fields required";
         return res.status( 406 ).end()
     }
 
     Comision
-    .modificarComisionDes(name, newDes)
+    .modificarComisionDes(token, newDes)
     .then( results => {
         if(results.nModified > 0){
             return res.status( 202 ).end();
@@ -185,6 +190,31 @@ router.patch('/modificarComsion/:name', ( req, res ) => {
         res.statusMessage =  "Somethong went wrong with the DB";
         return res.status( 500 ).end();
     })
-})
+});
+
+// Ruta para borrar alguna comision
+router.delete('/borrarComision/:token', ( req, res ) => {
+
+    let token = req.params.token;
+
+    if(!token){
+        res.statusMessage = "Please send the comision to delete";
+        return res.status( 406 ).end()
+    }
+    Comision.deleteComision( token )
+    .then( result => {
+        if(result.deletedCount > 0){
+            return res.status( 200 ).end();
+        }
+        else{
+            res.statusMessage = "That comision was not found in the db";
+            return res.status( 404 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
 
 module.exports = router;
