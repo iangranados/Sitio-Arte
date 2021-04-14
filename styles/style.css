@@ -6,6 +6,10 @@
     max-width: 20vw;
     max-height: 10 vh;
 } */
+html {
+  overflow-x: hidden;
+}
+
 .content {
   max-width: 807px;
   margin: 20px auto 0;
@@ -58,7 +62,6 @@ textarea {
 
 #ordenarComision {
   width: 327px;
-  margin-left: auto;
   height: 48px;
   border-radius: 15px;
   color: #ffffff;
@@ -69,5 +72,123 @@ textarea {
   position: absolute;
   top: 3px;
   right: 3px;
+}
+
+#botonOrdenar {
+  width: 198px;
+  height: 18px;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.75;
+  letter-spacing: 1.6px;
+  text-align: center;
+  color: #ffffff;
+  width: 327px;
+  height: 48px;
+  border-radius: 15px;
+  background-color: #ff8181;
+}
+
+.btn-pink {
+  display: block;
+  width: 327px;
+  height: 48px;
+  border-radius: 15px;
+  background-color: #ff8181;
+  color: white;
+  text-align: center;
+}
+
+.inicia {
+  width: 442px;
+  height: 31px;
+  font-family: Gotham;
+  font-size: 28px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.43;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ff8181;
+}
+
+.kanban {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 70%;
+  margin: 0 auto 0;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  min-height: 90vh;
+}
+
+.kanban-section {
+  width: 365px;
+  height: 696px;
+  padding: 21px  14px;
+  border-radius: 10px;
+  background-color: #efefef;
+  overflow-y: auto;
+}
+
+.kanban-section h2 {
+  font-family: Gotham;
+  font-size: 20px;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.6;
+  letter-spacing: normal;
+  text-align: left;
+  color: #686868;
+}
+
+.activas {
+  max-width: 807px;
+  margin: 20px auto 0;
+}
+
+.kanban-item {
+  width: 90%;
+  height: 65px;
+  margin: 18px auto;
+  padding: 14px 12px 13px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.16);
+          box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.16);
+  background-color: #ffffff;
+}
+
+.kanban-item .status {
+  height: 9px;
+  border-radius: 3px;
+}
+
+.admin-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  min-height: 10vh;
+}
+
+.admin-menu {
+  min-width: 20%;
+  background-color: #5f5f5f;
+}
+
+.admin-main > .kanban {
+  overflow-x: scroll;
+  margin: 0 0 0 !important;
+  width: 80vw;
+}
+
+.admin-main .kanban-section {
+  min-width: 25vw;
+  margin: 0 5vw;
 }
 /*# sourceMappingURL=style.css.map */

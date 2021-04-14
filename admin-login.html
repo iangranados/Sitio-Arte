@@ -32,23 +32,35 @@
 		<div class="content">
 			<navbar-lele></navbar-lele>
 
-			<div class="galleria">
-				<img src="images/cplysght.bmp" />
-				<img src="images/eeossqfv.bmp" />
-				<img src="images/n6b7g390.bmp" />
-				<img src="images/vo0pmsno.bmp" />
-				<img src="images/wz01umpz.bmp" />
-			</div>
+			<h2 class="inicia mx-auto my-5">Inicia sesión</h2>
+			<form>
+				<div class="mb-3">
+					<!-- <label for="usuario" class="form-label"
+						>Nombre de usuario</label
+					> -->
+					<input
+						type="text"
+						class="form-control"
+						id="usuarip"
+						aria-describedby="nombre Usuario"
+						placeholder="Nombre de Usuario"
+					/>
+					
+				</div>
+				<div class="mb-3">
+					<!-- <label for="exampleInputPassword1" class="form-label">Contraseña</label> -->
+					<input
+						type="password"
+						class="form-control"
+						id="exampleInputPassword1"
+						placeholder="Contraseña"
+					/>
+				</div>
+				<button type="submit" class="btn btn-pink mx-auto">Submit</button>
+			</form>
 		</div>
 
-		<script>
-			Galleria.loadTheme(
-				"https://cdnjs.cloudflare.com/ajax/libs/galleria/0.6.1/themes/folio/galleria.folio.js"
-			);
-			Galleria.run(".galleria");
-			var loc = $(location).attr("href");
-			console.log(loc);
-		</script>
+		<script src="script.js"></script>
 	</body>
 
 	<footer></footer>
