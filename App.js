@@ -1,41 +1,40 @@
-const fs = require("fs");
-const http = require("http");
-const url = require("url");
-const hostname = "127.0.0.1";
-const port = 3000;
 
-const server = http.createServer((req, response) => {
-  // var path = url.parse(request.url).pathname;
-  console.log(req.url);
-  if (/^\/[a-zA-Z0-9\/]*.css$/.test(request.url.toString())) {
-    sendFileContent(response, request.url.toString().substring(1), "text/css");
-  } else if (request.url === "/index") {
-    fs.readFile("index.html", function (err, data) {
-      response.writeHead(200, { "Content-Type": "text/html" });
-      response.write(data);
-      response.end();
-    });
-  }
+const express = require('express');
+const mongoose = require('mongoose');
+const rutas = require('./scr/routes/routes');
+const { Users } = require('./scr/models/usuarioModel');
+
+// Init
+const app = express();
+// Routes
+app.use('/', rutas );
+
+app.use('/uploads', express.static('uploads'));
+
+
+app.listen( 8080, () => {
+  console.log( 'Sever on port ', 8080);
+
+  const settings = {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true, 
+    useCreateIndex: true
+};
+
+new Promise( (resolve, reject) => {
+    mongoose.connect( 'mongodb+srv://admi:LabWeb2021@sitiodearte.nlsjt.mongodb.net/artedb?retryWrites=true&w=majority', settings, ( err ) => {
+        if ( err ){
+            reject( err );
+        }
+        else{
+            console.log( "Database connected successfully." );
+            return resolve();
+        }
+    })
+})
+.catch( err =>{
+    mongoose.disconnect();
+    console.log( err );
 });
 
-function sendFileContent(response, fileName, contentType) {
-  fs.readFile(fileName, function (err, data) {
-    if (err) {
-      response.writeHead(404);
-      response.write("Not Found!");
-    } else {
-      response.writeHead(200, { "Content-Type": contentType });
-      response.write(data);
-    }
-    response.end();
-  });
-}
-// fs.readFile("index.html", function (err, data) {
-//     response.writeHead(200, { "Content-Type": "text/html" });
-//     response.write(data);
-//     response.end();
-//   });
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
 });
