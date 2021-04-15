@@ -1,0 +1,21 @@
+// app global css in Sass form
+
+body
+	font-family: Gotham
+
+p
+	@include font(16px, normal, $gray)
+	@media (min-width: $breakpoint-md-min)
+		font-size: 18px
+
+ul > li
+	@include font(16px, normal, $gray)
+	margin-bottom: 0.8rem
+	@media (min-width: $breakpoint-md-min)
+		font-size: 18px
+
+.text-light-gray
+	color: $light-gray !important
+
+.bg-light-gray
+	background-color: $light-gray !important

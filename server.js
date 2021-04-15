@@ -1,8 +1,8 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-const rutas = require('./scr/routes/routes');
-const { Users } = require('./scr/models/usuarioModel');
+const rutas = require('./src/routes/routes');
+const { Users } = require('./src/models/usuarioModel');
 
 // Init
 const app = express();
