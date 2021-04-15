@@ -38,7 +38,7 @@ footer {
   height: 71px;
   bottom: 0;
   left: 0;
-  margin-top: 5vh;
+  /* margin-top: 5vh; */
 }
 
 .disclaimer {
@@ -125,6 +125,7 @@ textarea {
       -ms-flex-pack: justify;
           justify-content: space-between;
   min-height: 90vh;
+  /* padding-bottom: 2vh; */
 }
 
 .kanban-section {
@@ -178,17 +179,31 @@ textarea {
 
 .admin-menu {
   min-width: 20%;
-  background-color: #5f5f5f;
+  background-color: hsl(0, 0%, 37%);
+  padding: 5vh;
+  color:white;
 }
 
 .admin-main > .kanban {
   overflow-x: scroll;
   margin: 0 0 0 !important;
   width: 80vw;
+  padding-right: 4vw;
 }
 
 .admin-main .kanban-section {
   min-width: 25vw;
   margin: 0 5vw;
 }
+
+.admin-title{
+	margin: 5vh 5vw;
+	color: #ff8181;
+	font-family: Gotham;
+}
+
+.admin-main{
+	padding-bottom: 5vh;
+}
+
 /*# sourceMappingURL=style.css.map */
