@@ -11,7 +11,8 @@ const routes = [
     path: '/comisiones',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: '', component: () => import('pages/ComisionesMain.vue') },
+      { path: 'ordenar', component: () => import('pages/OrderComission.vue')}
     ]
   },
 

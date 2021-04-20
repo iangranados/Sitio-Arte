@@ -1,5 +1,8 @@
 <template>
   <q-header class="Header" height-hint="98">
+    <div class="Header__movbile desktop-hide">
+      <q-btn flat round color="primary" icon="menu" />
+    </div>
     <div class="Header__nav mobile-hide">
       <q-btn
         class="Header__nav-btn"
@@ -63,6 +66,12 @@ export default {
   @media (min-width: $breakpoint-md-min) {
     display: flex;
   }
+}
+
+.Header__movbile {
+  padding: 20px 18px;
+  -webkit-box-shadow: 0px 2px 14px -5px $light-gray; 
+  box-shadow: 0px 2px 10px -5px $light-gray;
 }
 
 .Header__nav-btn {

@@ -2,10 +2,11 @@
   <q-page class="Home">
   	<section class="Home__main">
 	    <h1 class="Home__title">lele dibujitos</h1>
-	    <img
+	    <q-img
 	      alt="Quasar logo"
 	      src="~assets/quasar-logo-full.svg"
-	    >
+	      width="35%"
+	    />
 	    <div class="SocialLinks">
 	    	<q-btn
 	          flat
@@ -41,7 +42,7 @@
 		</section>
 		<q-separator color="light-gray"/>
 		<section class="Home__section">
-	    <h2 class="Section__title">Reglas</h2>
+	    <h2 class="SectionTitle">Reglas</h2>
 	    <p>
 	    	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus vel nisi at feugiat. Nulla facilisi. Nulla congue gravida magna ac blandit. Vestibulum sed felis at dolor vulputate fringilla ut ut turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a diam turpis.
 	    </p>
@@ -95,11 +96,4 @@ export default {
 	}
 }
 
-.Section__title {
-	@include font(21px, bold, $salmon-pink);
-	margin: 0 0 20px;
-	@media (min-width: $breakpoint-md-min){
-		font-size: 28px;
-	}
-}
 </style>
