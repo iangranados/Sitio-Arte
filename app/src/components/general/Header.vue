@@ -1,9 +1,9 @@
 <template>
   <q-header class="Header" height-hint="98">
-    <div class="Header__movbile desktop-hide">
-      <q-btn flat round color="primary" icon="menu" />
+    <div class="Header__mobile">
+      <q-btn flat round color="primary" size="16px" icon="menu" />
     </div>
-    <div class="Header__nav mobile-hide">
+    <div class="Header__nav">
       <q-btn
         class="Header__nav-btn"
         :class="{'Header__nav-btn--active': $route.path == '/'}"
@@ -68,10 +68,16 @@ export default {
   }
 }
 
-.Header__movbile {
+.Header__mobile {
   padding: 20px 18px;
   -webkit-box-shadow: 0px 2px 14px -5px $light-gray; 
   box-shadow: 0px 2px 10px -5px $light-gray;
+
+  display: block;
+
+  @media (min-width: $breakpoint-md-min) {
+    display: none;
+  }
 }
 
 .Header__nav-btn {

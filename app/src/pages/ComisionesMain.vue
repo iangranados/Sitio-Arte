@@ -2,7 +2,7 @@
   <q-page class="Comisiones">
   	<div class="Comisiones__section">
   		<div class="Comisiones__actions">
-				<q-btn class="Comisiones__btn" label="Ver comisiones activas" outline color="primary"/>
+				<q-btn class="Comisiones__btn" to="/comisiones/board" label="Ver comisiones activas" outline color="primary"/>
 				<q-btn class="Comisiones__btn" to="/comisiones/ordenar" label="Ordenar comision" unelevated color="primary" />
 			</div>
 			<p class="Comisiones__disclaimer">

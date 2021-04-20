@@ -10,7 +10,7 @@
           Por favor guarda el siguiente <strong>token de acceso</strong> para poder darle seguimiento a tu solicitud en la sección de Comisiones Activas
 				</p>
 				<h3 class="OrderSuccessDialog__confirmationCode">{{ confirmationCode }}</h3>
-				<q-btn v-close-popup to="comisiones/activas" class="OrderSuccessDialog__btn" label="Ir a Comisiones activas" unelevated color="primary" />
+				<q-btn v-close-popup to="/comisiones/board" class="OrderSuccessDialog__btn" label="Ir a Comisiones activas" unelevated color="primary" />
 		</div>
   </q-dialog>
 </template>
