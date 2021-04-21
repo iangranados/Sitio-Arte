@@ -11,17 +11,7 @@
           color="white"
           icon="fab fa-instagram"
           type="a" 
-          href="https://www.instagram.com" 
-          target="_blank"
-        />
-        <q-btn
-          flat
-          round
-          class="Footer__social-link"
-          color="white"
-          icon="fab fa-facebook"
-          type="a" 
-          href="https://www.facebook.com" 
+          href="https://www.instagram.com/lelemoonnart/" 
           target="_blank"
         />
         <q-btn
@@ -31,7 +21,17 @@
           color="white"
           icon="fab fa-twitter"
           type="a" 
-          href="https://www.twitter.com" 
+          href="https://twitter.com/Lelemoonn" 
+          target="_blank"
+        />
+		 <q-btn
+          flat
+          round
+          class="Footer__social-link"
+          color="white"
+          icon="fab fa-twitch"
+          type="a" 
+          href="twitch.tv/lelemoonn" 
           target="_blank"
         />
       </q-toolbar>
