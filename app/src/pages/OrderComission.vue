@@ -9,6 +9,9 @@
 					outlined
 					v-model="name"
 					label="Nombre o nickname (para saber cómo decirte)"
+					:rules="[
+						val => !!val || 'Este campo es requerido'
+					]"
 				/>
 				<div class="row q-col-gutter-x-lg">
 					<q-select
@@ -17,12 +20,18 @@
 						v-model="contact_type"
 						:options="contact_options"
 						label="Medio de contacto preferido"
+						:rules="[
+							val => !!val || 'Este campo es requerido'
+						]"
 					/>
 					<q-input
 						class="Form__field col-xs-12 col-md-6"
 						outlined
 						v-model="contact_username"
 						label="Username de contacto (Discord, Twitter...)"
+						:rules="[
+							val => !!val || 'Este campo es requerido'
+						]"
 					/>
 				</div>
 			</div>
@@ -35,6 +44,9 @@
 						v-model="category"
 						:options="category_options"
 						label="Tipo de comisión"
+						:rules="[
+							val => !!val || 'Este campo es requerido'
+						]"
 					/>
 				</div>
 				<q-input
@@ -43,6 +55,9 @@
 		      label="Describe lo que buscas..."
 		      outlined
 		      type="textarea"
+		      :rules="[
+						val => !!val || 'Este campo es requerido'
+					]"
 		    />
 			</div>
 
@@ -90,14 +105,38 @@ export default {
   methods: {
   	onSubmit () {
   		this.loading = true
-  		setTimeout(() => {
-  			this.$q.dialog({
-					component: () => import('../components/comissions/OrderSuccessDialog.vue'),
-					parent: this,
-					confirmationCode: '01236789'
-				})
+
+  		let req = { 
+  			name: this.name, 
+  			contact: this.contact_type,
+  			username: this.contact_username,
+  			tipo: this.category,
+  			description: this.description
+  		};
+
+  		this.$axios.post('/crearComision', req).then(response => {
+  			let token = response.data?.token;
+  			if (!!token) {
+  				this.$q.dialog({
+  					component: () => import('../components/comissions/OrderSuccessDialog.vue'),
+						parent: this,
+						confirmationCode: token
+  				})
+  			} else {
+	  			this.$q.notify({
+		        type: 'negative',
+		        message: `Algo salió mal, intenta otra vez :c`
+		      })
+  			}
   			this.loading = false
-  		}, 2000)
+  		}).catch((e) => {
+  			console.error(e)
+  			this.loading = false
+  			this.$q.notify({
+	        type: 'negative',
+	        message: `Algo salió mal, intenta otra vez :c`
+	      })
+  		})
   	}
   }
 }

@@ -12,7 +12,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/ComisionesMain.vue') },
-      { path: 'board', component: () => import('pages/ComisionesMain.vue') },
+      { path: 'board', component: () => import('pages/ComisionesBoard.vue') },
       { path: 'ordenar', component: () => import('pages/OrderComission.vue')}
     ]
   },

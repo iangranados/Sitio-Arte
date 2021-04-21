@@ -1,10 +1,21 @@
 <template>
   <q-page class="Portfolio">
+    <div v-if="!!error" class="text-center">
+      <h2 class="Portfolio__error">{{error}}</h2>
+    </div>
+    <div v-else-if="!!loading" class="text-center">
+      <q-circular-progress
+        indeterminate
+        size="40px"
+        color="primary"
+      />
+    </div>
   	<masonry
+      v-else
   		:cols="{ default: 3, 700: 2 }"
   		:gutter="6">
   		<div class="Portfolio__imageWrapper" v-for="image in images" :key="image.id">
-  			<q-img class="Portfolio__image" :src="image.image" @click="openFullscreen(image)"/>
+  			<q-img class="Portfolio__image" :src="image.img" @click="openFullscreen(image)" :alt="image.nameImage" />
   			<q-btn
   				class="Portfolio__link"
   				:href="image.link"
@@ -29,56 +40,33 @@
 
 export default {
   name: 'Portfolio',
+  mounted () {
+    this.loading = true
+    this.$axios.get('/galeria').then(response => {
+      if (response.status === 200 && Array.isArray(response.data)) {
+        this.images = response.data
+        this.error = null
+      } else {
+        this.error = 'Algo salió mal, intenta otra vez :c'
+      }
+      this.loading = false
+    }).catch(e => {
+      this.loading = false
+      this.error = 'Algo salió mal, intenta otra vez :c'
+    })
+  },
   data: () => ({
-  	images: [
-  		{
-  			id: 1,
-  			image: 'https://loremflickr.com/320/440/cat',
-  			link: 'https://www.twitter.com'
-  		},
-  		{
-  			id: 2,
-  			image: 'https://loremflickr.com/320/340/cat',
-  			link: 'https://www.twitter.com'
-  		},
-  		{
-  			id: 3,
-  			image: 'https://loremflickr.com/320/540/cat',
-  			link: 'https://www.twitter.com'
-  		},
-  		{
-  			id: 4,
-  			image: 'https://loremflickr.com/320/260/cat',
-  			link: 'https://www.twitter.com'
-  		},
-  		{
-  			id: 5,
-  			image: 'https://loremflickr.com/320/245/cat',
-  			link: 'https://www.twitter.com'
-  		},
-  		{
-  			id: 6,
-  			image: 'https://loremflickr.com/320/500/cat',
-  			link: 'https://www.twitter.com'
-  		},
-  		{
-  			id: 7,
-  			image: 'https://loremflickr.com/320/280/cat',
-  			link: 'https://www.twitter.com'
-  		},
-  		{
-  			id: 8,
-  			image: 'https://loremflickr.com/320/400/cat',
-  			link: 'https://www.twitter.com'
-  		}
-  	],
+    loading: false,
+    error: null,
+
+  	images: [],
 
   	fullscreen: false,
   	fullscreen_image: null
   }),
   methods: {
   	openFullscreen (image) {
-  		this.fullscreen_image = image.image
+  		this.fullscreen_image = image.img
   		this.fullscreen = true
   	}
   }
@@ -100,6 +88,7 @@ export default {
 .Portfolio__image {
 	cursor: zoom-in;
 	background-color: $light-gray;
+  min-height: 100px;
 }
 
 .Portfolio__link {
@@ -107,5 +96,10 @@ export default {
 	font-size: 10px;
 	bottom: 8px;
 	right: 8px;
+}
+
+.Portfolio__error {
+  @include font(24px, bold, $red-lips);
+  margin: 0;
 }
 </style>
