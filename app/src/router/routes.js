@@ -25,11 +25,11 @@ const routes = [
   },
 
   {
-	path: '/admin',
-	component: () => import('layouts/MainLayout.vue'),
-	children:[
-		{ path: '', component: () => import('pages/Admin.vue')}
-	]
+  	path: '/login',
+  	component: () => import('layouts/MainLayout.vue'),
+  	children:[
+  		{ path: '', component: () => import('pages/AdminLogin.vue')}
+  	]
   },
 
   // Always leave this as last one,
