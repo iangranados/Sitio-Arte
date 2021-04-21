@@ -69,7 +69,7 @@ export default {
 }
 
 .Header__mobile {
-  padding: 20px 18px;
+  padding: 10px 18px;
   -webkit-box-shadow: 0px 2px 14px -5px $light-gray; 
   box-shadow: 0px 2px 10px -5px $light-gray;
 
