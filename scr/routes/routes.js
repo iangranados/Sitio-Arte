@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const { Portafolio } = require('../models/portafolioModel')
-const { Users } = require( '../models/usuarioModel' );
-const { Comision } = require('../models/comisionModel');
 const jsonParser = bodyParser.json();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
+const { Portafolio } = require('../models/portafolioModel')
+const { Users } = require( '../models/usuarioModel' );
+const { Comision } = require('../models/comisionModel');
+const { Tipo } = require('../models/tipoModel');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -36,8 +37,6 @@ router.get( '/galeria', ( req, res ) => {
 
 // Ruta para agregar una nueva imagen
 router.post( '/addImage', upload.single('img'), ( req, res ) => {
-
-    console.log(req.file);
 
     let { nameImage, link } = req.body;
     let img = req.file.path;
@@ -149,7 +148,7 @@ router.post( '/crearComision', ( req, res ) => {
     }
 
     let token = uuidv4();
-    console.log(token);
+    //console.log(token);
 
     const newComision = { name, contact, username, tipo, description, token }
     console.log(newComision);
@@ -216,5 +215,95 @@ router.delete('/borrarComision/:token', ( req, res ) => {
         return res.status( 500 ).end();
     })
 });
+
+// Ruta para obtener los tipos de comisiones
+router.get( '/tipos', ( req, res ) => {
+    Tipo
+    .verTipos()
+    .then( result => {
+        return res.status( 200 ).json( result );
+    })
+    .catch( err => {
+        res.statusMessage = "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+// Ruta para crear un nuevo tipo
+router.post( '/crearTipo', upload.single('img'), ( req, res ) => {
+    
+    let { name, description, precioBase } = req.body;
+    let img = req.file.path;
+
+    if(!name || !description || !precioBase ){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    const newTipo = { name, description, precioBase, img}
+
+    Tipo
+    .addNewTipo( newTipo )
+    .then( results => {
+        return res.status( 201 ).json( results );
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    });
+});
+
+// Ruta para eliminar un tipo
+router.delete('/borrarTipo/:name', ( req, res ) => {
+
+    let name = req.params.name;
+
+    if(!name){
+        res.statusMessage = "Please send the comision to delete";
+        return res.status( 406 ).end()
+    }
+    Tipo.deleteTipo( name )
+    .then( result => {
+        if(result.deletedCount > 0){
+            return res.status( 200 ).end();
+        }
+        else{
+            res.statusMessage = "That comision was not found in the db";
+            return res.status( 404 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+// Ruta para modificar la descripcion de un tipo
+router.patch('/modificarTipo/:name', ( req, res ) => {
+    let name = req.params.name;
+    let newDes = req.body.description;
+
+    if(!name || !newDes){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Tipo
+    .modificarTipo(name, newDes)
+    .then( results => {
+        if(results.nModified > 0){
+            return res.status( 202 ).end();
+        }
+        else{
+            res.statusMessage = "There is no type with the name passed";
+            return res.status( 409 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
 
 module.exports = router;

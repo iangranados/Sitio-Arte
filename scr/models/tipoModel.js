@@ -54,16 +54,16 @@ const Tipo = {
             return err;
         })
     },
-    modificarTipo : function(name, newDescription){
+    modificarTipo : function(name, newDes){
         return TipoCollection
-        .updateOne( {name : name}, {set : {description : newDescription}} )
+        .updateOne({name : name}, {$set : {description : newDes}})
         .then( results => {
             return results;
         })
         .catch( err => {
             return err;
-        })
-    }
+        });
+    },
 }
 
 module.exports = { Tipo };
