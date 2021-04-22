@@ -8,6 +8,9 @@
           outlined
           v-model="text"
           label="Nombre de Usuario"
+          :rules="[
+            val => !!val || 'Campo requerido'
+          ]"
         />
         <q-input
           class="Form__field"
@@ -15,6 +18,9 @@
           type="password"
           v-model="password"
           label="Contraseña"
+          :rules="[
+            val => !!val || 'Campo requerido'
+          ]"
         />
 
         <div class="FormSubmit">
@@ -45,6 +51,7 @@ export default {
     onSubmit() {
       this.loading = true;
       setTimeout(() => {
+        this.$q.notify("Logged in");
         this.loading = false;
       }, 2000);
     },
@@ -56,6 +63,21 @@ export default {
 // $
 .LoginForm {
   @include content-width;
+
+  .FormSubmit {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+  .Form__btn {
+    width: 100%;
+    letter-spacing: 1px;
+    border-radius: 10px;
+    font-size: 16px;
+    @media (min-width: $breakpoint-md-min) {
+      width: 90%;
+    }
+  }
 }
 .LoginForm__wrapper {
   padding: 50px 25%;
@@ -74,19 +96,6 @@ export default {
   }
 }
 
-.FormSubmit {
-  margin-top: 50px;
-  text-align: center;
-}
 
-.Form__btn {
-  width: 100%;
-  letter-spacing: 1px;
-  border-radius: 10px;
-  font-size: 16px;
-  @media (min-width: $breakpoint-md-min) {
-    width: 90%;
-  }
-}
 
 </style>

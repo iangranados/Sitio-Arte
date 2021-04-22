@@ -1,8 +1,8 @@
 <template>
   <q-page class="Home">
     <section class="Home__main">
-      <h1 class="Home__title">lele dibujitos</h1>
-      <q-img alt="Quasar logo" src="~assets/quasar-logo-full.svg" width="35%" />
+      <!-- <h1 class="Home__title">lele dibujitos</h1> -->
+      <q-img alt="Lelemoonn" src="~assets/logo-lele.png" width="50%" />
       <div class="SocialLinks">
         <q-btn
           flat
@@ -19,9 +19,9 @@
           round
           class="SocialLinks__item"
           color="gray"
-          icon="fab fa-facebook"
+          icon="fab fa-twitter"
           type="a"
-          href="https://www.facebook.com"
+          href="https://www.twitter.com"
           target="_blank"
         />
         <q-btn
@@ -29,9 +29,9 @@
           round
           class="SocialLinks__item"
           color="gray"
-          icon="fab fa-twitter"
+          icon="fab fa-twitch"
           type="a"
-          href="https://www.twitter.com"
+          href="https://www.twitch.tv"
           target="_blank"
         />
       </div>
