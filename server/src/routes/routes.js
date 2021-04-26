@@ -18,10 +18,12 @@ const storage = multer.diskStorage({
         cb(null, new Date().toISOString() + file.originalname);
     }
 })
+
 //const upload = multer({storage: storage});
 
 
 const singleUpload = upload.single('img');
+
 
 const app = express();
 router.use( jsonParser );
@@ -40,6 +42,7 @@ router.get( '/galeria', ( req, res ) => {
 });
 
 // Ruta para agregar una nueva imagen
+
 router.post( '/addImage', singleUpload, ( req, res ) => {
 
     let { nameImage, link } = req.body;
@@ -140,6 +143,7 @@ router.post( '/crearComision', ( req, res ) => {
 
     let token = uuidv4();
     //console.log(token);
+
 
     const newComision = { name, contact, username, tipo, description, token }
     console.log(newComision);
@@ -295,6 +299,5 @@ router.patch('/modificarTipo/:name', ( req, res ) => {
         return res.status( 500 ).end();
     })
 });
-
 
 module.exports = router;
