@@ -1,15 +1,14 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-const rutas = require('./scr/routes/routes');
-const { Users } = require('./scr/models/usuarioModel');
+const rutas = require('./server/src/routes/routes.js');
 
 // Init
 const app = express();
 // Routes
 app.use('/', rutas );
 
-app.use('/uploads', express.static('uploads'));
+//app.use('/uploads', express.static('uploads'));
 
 
 app.listen( 8080, () => {
