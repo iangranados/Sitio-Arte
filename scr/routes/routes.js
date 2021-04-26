@@ -8,6 +8,7 @@ const { Portafolio } = require('../models/portafolioModel')
 const { Users } = require( '../models/usuarioModel' );
 const { Comision } = require('../models/comisionModel');
 const { Tipo } = require('../models/tipoModel');
+const upload = require('../services/file-upload');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -17,7 +18,10 @@ const storage = multer.diskStorage({
         cb(null, new Date().toISOString() + file.originalname);
     }
 })
-const upload = multer({storage: storage});
+//const upload = multer({storage: storage});
+
+
+const singleUpload = upload.single('img');
 
 const app = express();
 router.use( jsonParser );
@@ -36,12 +40,12 @@ router.get( '/galeria', ( req, res ) => {
 });
 
 // Ruta para agregar una nueva imagen
-router.post( '/addImage', upload.single('img'), ( req, res ) => {
+router.post( '/addImage', singleUpload, ( req, res ) => {
 
     let { nameImage, link } = req.body;
-    let img = req.file.path;
+    let img = req.file.location;
 
-    if(!nameImage || !link){
+    if(!nameImage || !link || !img){
         res.statusMessage = "Please send all the fields required";
         return res.status( 406 ).end()
     }
@@ -107,19 +111,6 @@ router.patch('/modificarImagen/:nameImage', ( req, res ) => {
     })
     .catch( err => {
         res.statusMessage =  "Somethong went wrong with the DB";
-        return res.status( 500 ).end();
-    })
-});
-
-// Ruta para obtener los clientes
-router.get( '/clientes', ( req, res ) => {
-    Users
-    .verClientes()
-    .then( result => {
-        return res.status( 200).json( result );
-    })
-    .catch( err => {
-        res.statusMessage = "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -230,10 +221,10 @@ router.get( '/tipos', ( req, res ) => {
 });
 
 // Ruta para crear un nuevo tipo
-router.post( '/crearTipo', upload.single('img'), ( req, res ) => {
+router.post( '/crearTipo', singleUpload, ( req, res ) => {
     
     let { name, description, precioBase } = req.body;
-    let img = req.file.path;
+    let img = req.file.location;
 
     if(!name || !description || !precioBase ){
         res.statusMessage = "Please send all the fields required";
