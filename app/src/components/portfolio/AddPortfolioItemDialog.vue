@@ -19,6 +19,7 @@
               label="Sube un archivo"
               outlined
               accept=".jpg, .png, image/*"
+              @rejected="onRejected"
             >
               <template v-slot:prepend>
                 <q-avatar>
@@ -86,14 +87,19 @@ export default {
     urlFromFile () {
       if(FileReader && this.file) {
         const reader = new FileReader()
-        console.log('hola')
         reader.onload = () => {
-          console.log(reader.result)
           this.file_url = reader.result
         }
 
         reader.readAsDataURL(this.file)
       }
+    },
+
+    onRejected () {
+      this.$q.notify({
+        type: 'negative',
+        message: "Archivo inválido"
+      })
     }
   }
 }
