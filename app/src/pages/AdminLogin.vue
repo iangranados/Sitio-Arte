@@ -52,6 +52,7 @@ export default {
       this.loading = true;
       setTimeout(() => {
         this.$q.notify("Logged in");
+        this.$router.push('/admin');
         this.loading = false;
       }, 2000);
     },
@@ -88,14 +89,5 @@ export default {
   margin-bottom: 50px;
   text-align: center;
 }
-
-.Form__field {
-  margin-bottom: 20px;
-  .q-field__control {
-    border-radius: 10px;
-  }
-}
-
-
 
 </style>

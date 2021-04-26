@@ -14,7 +14,7 @@
       >
         <q-img
           class="Portfolio__image"
-          :src="image.img"
+          :src="AWS_URL + image.img.replace(/:/g, '_')"
           @click="openFullscreen(image)"
           :alt="image.nameImage"
         />
@@ -25,7 +25,8 @@
           target="_blank"
           icon="open_in_new"
           color="white"
-          flat
+          text-color="dark"
+          unelevated
           round
           dense
         />
@@ -69,10 +70,12 @@ export default {
 
     fullscreen: false,
     fullscreen_image: null,
+
+    AWS_URL: process.env.API_URL
   }),
   methods: {
     openFullscreen(image) {
-      this.fullscreen_image = image.img;
+      this.fullscreen_image = this.AWS_URL + image.img.replace(/:/g, '_');
       this.fullscreen = true;
     },
   },
