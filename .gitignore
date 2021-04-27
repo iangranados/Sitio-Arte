@@ -9,3 +9,7 @@ scr/.DS_Store
 scr/routes/.DS_Store
 
 .DS_Store
+
+uploads/
+
+.env

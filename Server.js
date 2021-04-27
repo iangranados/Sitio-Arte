@@ -1,23 +1,19 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
-const rutas = require('./server/src/routes/routes');
-const { Users } = require('./server/src/models/usuarioModel');
+const rutas = require('./server/src/routes/routes.js');
+require('dotenv').config()
 
 // Init
 const app = express();
-
-app.use(cors())
-
 // Routes
 app.use('/', rutas );
 
-app.use('/uploads', express.static('uploads'));
+//app.use('/uploads', express.static('uploads'));
 
 
-app.listen( 8000, () => {
-  console.log( 'Sever on port ', 8000);
+app.listen( 8080, () => {
+  console.log( 'Sever on port ', 8080);
 
   const settings = {
     useNewUrlParser: true, 
@@ -26,7 +22,7 @@ app.listen( 8000, () => {
 };
 
 new Promise( (resolve, reject) => {
-    mongoose.connect( 'mongodb+srv://admi:LabWeb2021@sitiodearte.nlsjt.mongodb.net/artedb?retryWrites=true&w=majority', settings, ( err ) => {
+    mongoose.connect(process.env.DATABASE_URL, settings, ( err ) => {
         if ( err ){
             reject( err );
         }
