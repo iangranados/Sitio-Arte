@@ -6,8 +6,8 @@
       <p class="PortfolioAdminItem__url"><b>URL:</b><br />{{item.url}}</p>
     </div>
     <div class="PortfolioAdminItem__actions">
-      <q-btn icon="edit" size="14px" flat dense round />
-      <q-btn icon="delete" size="14px" color="red-lips" flat dense round />
+      <q-btn @click="onModify" icon="edit" size="14px" flat dense round />
+      <q-btn @click="onDelete" icon="delete" size="14px" color="red-lips" flat dense round />
     </div>
   </div>
 </template>
@@ -19,6 +19,22 @@ export default {
     item: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    onDelete () {
+      this.$q.dialog({
+        component: () => import("./DeletePortfolioItemDialog.vue"),
+        parent: this,
+        item: this.item
+      });
+    },
+    onModify () {
+      this.$q.dialog({
+        component: () => import("./ModifyPortfolioItemDialog.vue"),
+        parent: this,
+        item: this.item
+      });
     }
   }
 }
