@@ -11,3 +11,5 @@ scr/routes/.DS_Store
 .DS_Store
 
 uploads/
+
+.env
