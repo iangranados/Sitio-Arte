@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const portafolioSchema = mongoose.Schema({
     nameImage : {
         type : String,
-        required : true
+        required : false
     },
     link : {
         type : String,
@@ -21,44 +21,16 @@ const PortafolioCollection = mongoose.model( 'portafolio', portafolioSchema );
 
 const Portafolio = {
     verPortafolio : function(){
-        return PortafolioCollection
-        .find()
-        .then( galeria => {
-            return galeria;
-        })
-        .catch( err => {
-            return err;
-        });
+        return PortafolioCollection.find()
     },
     addNewImage : function( newImage ){
-        return PortafolioCollection
-        .create( newImage )
-        .then( createdImage => {
-            return createdImage;
-        })
-        .catch( err => {
-            return err;
-        });
+        return PortafolioCollection.create( newImage )
     },
-    deleteImage : function( nameImage ){
-        return PortafolioCollection
-        .deleteOne( {nameImage : nameImage } )
-        .then( results =>{
-            return results;
-        })
-        .catch( err => {
-            return err;
-        });
+    deleteImage : function( id ){
+        return PortafolioCollection.deleteOne( {_id : id } )
     },
-    modificarImage : function(nameImage, newLink){
-        return PortafolioCollection
-        .updateOne({nameImage : nameImage}, {$set : {link : newLink}})
-        .then( results => {
-            return results;
-        })
-        .catch( err => {
-            return err;
-        });
+    modificarImage : function(id, newLink){
+        return PortafolioCollection.updateOne({_id : id}, {$set : {link : newLink}})
     },
 }
 

@@ -10,7 +10,7 @@ export default async ({ store, router }) => {
       if (!store.state.auth.token) {
         store.dispatch('auth/logout')
         return next({
-          path: '/',
+          path: '/login',
         })
       }
       return next()

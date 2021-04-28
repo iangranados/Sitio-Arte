@@ -19,13 +19,8 @@ const storage = multer.diskStorage({
     }
 })
 
-//const upload = multer({storage: storage});
-
-
 const singleUpload = upload.single('img');
 
-
-const app = express();
 router.use( jsonParser );
 
 // Ruta para obtener todas las imagenes
@@ -45,15 +40,15 @@ router.get( '/galeria', ( req, res ) => {
 
 router.post( '/addImage', singleUpload, ( req, res ) => {
 
-    let { nameImage, link } = req.body;
+    let { link } = req.body;
     let img = req.file.location;
 
-    if(!nameImage || !link || !img){
+    if(!link || !img){
         res.statusMessage = "Please send all the fields required";
         return res.status( 406 ).end()
     }
 
-    const newImage = { nameImage, link, img}
+    const newImage = { link, img }
 
     Portafolio
     .addNewImage( newImage )
@@ -61,21 +56,21 @@ router.post( '/addImage', singleUpload, ( req, res ) => {
         return res.status( 201 ).json( results );
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     });
 });
 
 // Ruta para borrar una iamgen
-router.delete('/borrarImagen/:nameImage', ( req, res ) => {
+router.delete('/borrarImagen/:id', ( req, res ) => {
 
-    let nameImage = req.params.nameImage;
+    let id = req.params.id;
 
-    if(!nameImage){
+    if(!id){
         res.statusMessage = "Please send the product to delete";
         return res.status( 406 ).end()
     }
-    Portafolio.deleteImage( nameImage )
+    Portafolio.deleteImage( id )
     .then( result => {
         if(result.deletedCount > 0){
             return res.status( 200 ).end();
@@ -92,23 +87,23 @@ router.delete('/borrarImagen/:nameImage', ( req, res ) => {
 });
 
 // Ruta para modificar el link de una iamgen
-router.patch('/modificarImagen/:nameImage', ( req, res ) => {
-    let nameImage = req.params.nameImage;
+router.patch('/modificarImagen/:id', ( req, res ) => {
+    let id = req.params.id;
     let newLink = req.body.link;
 
-    if(!nameImage || !newLink){
+    if(!id || !newLink){
         res.statusMessage = "Please send all the fields required";
         return res.status( 406 ).end()
     }
 
     Portafolio
-    .modificarImage(nameImage, newLink)
+    .modificarImage(id, newLink)
     .then( results => {
         if(results.nModified > 0){
             return res.status( 202 ).end();
         }
         else{
-            res.statusMessage = "There is no iamge with the name passed";
+            res.statusMessage = "There is no image with the given id";
             return res.status( 409 ).end();
         }
     })

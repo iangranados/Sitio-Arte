@@ -4,9 +4,15 @@
     <div class="text-right AdminPortafolio__actions">
       <q-btn @click="onAddNewImage" class="AdminPortafolio__btn" label="Subir nueva imágen" color="primary" no-caps unelevated/>
     </div>
-    <div class="AdminPortafolio__list row q-col-gutter-md">
-      <div class="col-xs-12 col-sm-4 col-md-3" v-for="item in portfolio" :key="item.id">
-        <PortfolioAdminItem :item="item" />
+    <div v-if="!!error" class="text-center">
+      <h2 class="AdminPortfolio__error">{{ error }}</h2>
+    </div>
+    <div v-else-if="!!loading" class="text-center">
+      <q-spinner size="40px" color="primary" />
+    </div>
+    <div v-else class="AdminPortafolio__list row q-col-gutter-md">
+      <div class="col-xs-12 col-sm-4 col-md-3" v-for="item in portfolio" :key="item._id">
+        <PortfolioAdminItem :item="item" @reload-portfolio="loadPortfolio" />
       </div>
     </div>
   </q-page>
@@ -18,81 +24,40 @@ export default {
   components: {
     PortfolioAdminItem: () => import('../components/portfolio/PortfolioAdminItem.vue')
   },
+  mounted () {
+    this.loadPortfolio()
+  },
   data: () => ({
-    portfolio: [
-      {
-        id: 1,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/320/240/cat'
-      },
-      {
-        id: 2,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/320/241/cat'
-      },
-      {
-        id: 3,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/321/240/cat',
-      },
-      {
-        id: 4,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/320/242/cat'
-      },
-      {
-        id: 5,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/322/240/cat'
-      },
-      {
-        id: 6,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/320/243/cat'
-      },
-      {
-        id: 7,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/323/240/cat'
-      },
-      {
-        id: 8,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/320/244/cat'
-      },
-      {
-        id: 9,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/324/240/cat'
-      },
-      {
-        id: 10,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/320/240/cat'
-      },
-      {
-        id: 11,
-        lastUpdate: '04/23/20 - 13:01',
-        url: 'https://www.own3d.tv/es/producto/twitch-sub-emote-mercy-love-overwatch/',
-        image: 'https://loremflickr.com/320/245/cat'
-      },
-    ]
+    loading: false,
+    error: null,
+
+    portfolio: []
   }),
   methods: {
+    loadPortfolio () {
+      this.loading = true;
+      this.$axios
+        .get("/galeria")
+        .then((response) => {
+          if (response.status === 200 && Array.isArray(response.data)) {
+            this.portfolio = response.data;
+            this.error = null;
+          } else {
+            this.error = "Algo salió mal, intenta otra vez :c";
+          }
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+          this.error = "Algo salió mal, intenta otra vez :c";
+        });
+    },
     onAddNewImage () {
       this.$q.dialog({
         component: () => import("../components/portfolio/AddPortfolioItemDialog.vue"),
         parent: this
+      }).onOk(() => {
+        this.loadPortfolio()
       });
     }
   }
@@ -121,6 +86,11 @@ export default {
 .AdminPortafolio__btn {
   border-radius: 10px;
   letter-spacing: 1px;
+}
+
+.AdminPortfolio__error {
+  @include font(24px, bold, $red-lips);
+  margin: 0;
 }
 
 .AdminPortafolio__list {
