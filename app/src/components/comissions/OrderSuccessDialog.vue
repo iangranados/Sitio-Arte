@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="OrderSuccessDialog" class="OrderSuccessDialog" persistent>
+  <q-dialog ref="OrderSuccessDialog" class="OrderSuccessDialog" @hide="onDialogHide" persistent>
 		<div class="OrderSuccessDialog__content">
 				<q-img class="OrderSuccessDialog__image" src="~assets/images/order_success.png" alt="Solicitud de comisión enviada" />
 				<h2 class="OrderSuccessDialog__title">Solicitud de comisión enviada</h2>

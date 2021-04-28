@@ -10,11 +10,11 @@
       <div
         class="Portfolio__imageWrapper"
         v-for="image in images"
-        :key="image.id"
+        :key="image._id"
       >
         <q-img
           class="Portfolio__image"
-          :src="AWS_URL + image.img.replace(/:/g, '_')"
+          :src="image.img"
           @click="openFullscreen(image)"
           :alt="image.nameImage"
         />
@@ -69,13 +69,11 @@ export default {
     images: [],
 
     fullscreen: false,
-    fullscreen_image: null,
-
-    AWS_URL: process.env.API_URL
+    fullscreen_image: null
   }),
   methods: {
     openFullscreen(image) {
-      this.fullscreen_image = this.AWS_URL + image.img.replace(/:/g, '_');
+      this.fullscreen_image = image.img;
       this.fullscreen = true;
     },
   },

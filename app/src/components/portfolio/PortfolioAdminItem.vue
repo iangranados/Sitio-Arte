@@ -1,9 +1,10 @@
 <template>
   <div class="PortfolioAdminItem">
-    <q-img :src="item.image" class="PortfolioAdminItem__image"/>
-    <div class="PortfolioAdminItem__content">
-      <p class="PortfolioAdminItem__timestamp">Última actualización: {{item.lastUpdate}}</p>
-      <p class="PortfolioAdminItem__url"><b>URL:</b><br />{{item.url}}</p>
+    <div>
+      <q-img :src="item.img" class="PortfolioAdminItem__image"/>
+      <div class="PortfolioAdminItem__content">
+        <p class="PortfolioAdminItem__url"><b>URL:</b><br />{{item.link}}</p>
+      </div>
     </div>
     <div class="PortfolioAdminItem__actions">
       <q-btn @click="onModify" icon="edit" size="14px" flat dense round />
@@ -27,6 +28,8 @@ export default {
         component: () => import("./DeletePortfolioItemDialog.vue"),
         parent: this,
         item: this.item
+      }).onOk(() => {
+        this.$emit('reload-portfolio');
       });
     },
     onModify () {
@@ -34,7 +37,9 @@ export default {
         component: () => import("./ModifyPortfolioItemDialog.vue"),
         parent: this,
         item: this.item
-      });
+      }).onOk(() => {
+        this.$emit('reload-portfolio');
+      });;
     }
   }
 }
@@ -49,6 +54,11 @@ export default {
   border: 1px solid $light-gray;
   padding: 10px 8px;
   margin-bottom: 7px; 
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .PortfolioAdminItem__image{
@@ -59,11 +69,6 @@ export default {
 .PortfolioAdminItem__content {
   margin-top: 5px;
   margin-bottom: 15px;
-}
-
-.PortfolioAdminItem__timestamp {
-  @include font(10px, normal, $gray);
-  margin: 0 0 5px;
 }
 
 .PortfolioAdminItem__url {
