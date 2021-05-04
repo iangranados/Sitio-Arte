@@ -2,11 +2,7 @@
   <div class="Kanban">
     <h2 class="Kanban__title">{{ title }}</h2>
     <div v-if="loading" class="text-center">
-      <q-circular-progress
-        indeterminate
-        size="40px"
-        color="gray"
-      />
+      <q-circular-progress indeterminate size="40px" color="gray" />
     </div>
     <q-scroll-area v-else style="flex: 1 1 auto">
       <KanbanItem v-for="(item, index) in items" :key="index" :item="item" />
@@ -16,30 +12,30 @@
 
 <script>
 export default {
-  name: 'Kanban',
+  name: "Kanban",
   components: {
-    KanbanItem: () => import('./KanbanItem.vue')
+    KanbanItem: () => import("./KanbanItem.vue"),
   },
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     items: {
       type: Array,
-      required: true
+      required: true,
     },
     loading: {
       type: Boolean,
-      default: false
-    }
-  }
-}
+      default: false,
+    },
+  },
+};
 </script>
 
 <style lang="scss">
 // $
-.Kanban{
+.Kanban {
   height: 100%;
   width: 320px;
   max-width: 90vw;
@@ -51,11 +47,11 @@ export default {
 
   display: flex;
   flex-direction: column;
-  
+
   .Kanban__title {
     @include font(16px, bold, $gray);
     margin: 0 0 15px;
-    @media (min-width: $breakpoint-md-min){
+    @media (min-width: $breakpoint-md-min) {
       font-size: 18px;
     }
   }
