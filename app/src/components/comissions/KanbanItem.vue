@@ -1,14 +1,30 @@
 <template>
   <div class="KanbanItem">
-    <q-img v-if="item.status === 'done' && item.finalThumb" :src="item.finalThumb" class="KanbanItem__image"/>
+    <q-img
+      v-if="item.status === 'done' && item.finalThumb"
+      :src="item.finalThumb"
+      class="KanbanItem__image"
+    />
     <div class="KanbanItem__content">
-      <div class="KanbanItem__status" :style="{backgroundColor: colorByStatus}"></div>
-      <p class="KanbanItem__title">{{item.title}}</p>
+      <div
+        class="KanbanItem__status"
+        :style="{ backgroundColor: colorByStatus }"
+      ></div>
+      <p class="KanbanItem__title">{{ item.title }}</p>
       <div class="KanbanItem__progressDetails">
-        <q-icon class="KanbanItem__hasComments" name="question_answer" color="light-gray" v-if="item.hasComments" />
-        <template v-if="!!item.progress && item.status === 'doing'" >
-          <q-linear-progress class="KanbanItem__progress" size="md" :value="item.progress / 100" />
-          <span class="KanbanItem__progressLabel">{{item.progress}}%</span>
+        <q-icon
+          class="KanbanItem__hasComments"
+          name="question_answer"
+          color="light-gray"
+          v-if="item.hasComments"
+        />
+        <template v-if="!!item.progress && item.status === 'doing'">
+          <q-linear-progress
+            class="KanbanItem__progress"
+            size="md"
+            :value="item.progress / 100"
+          />
+          <span class="KanbanItem__progressLabel">{{ item.progress }}%</span>
         </template>
       </div>
     </div>
@@ -17,28 +33,28 @@
 
 <script>
 export default {
-  name: 'KanbanItem',
+  name: "KanbanItem",
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     colorByStatus: function () {
       switch (this.item.status) {
-        case 'approved':
-          return '#ffff6f'
-        case 'doing':
-          return '#ff8181'
-        case 'done':
-          return '#7ae697'
+        case "approved":
+          return "#ffff6f";
+        case "doing":
+          return "#ff8181";
+        case "done":
+          return "#7ae697";
         default:
-          return '#ee6700'
+          return "#ee6700";
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">
@@ -50,7 +66,7 @@ export default {
   margin-bottom: 7px;
 
   .KanbanItem__image {
-    width: 100%
+    width: 100%;
   }
 
   .KanbanItem__content {
@@ -86,7 +102,5 @@ export default {
     @include font(10px, normal, $gray);
     margin-left: 5px;
   }
-
-  
 }
 </style>
