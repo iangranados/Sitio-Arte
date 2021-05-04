@@ -1,8 +1,8 @@
 <template>
-  <q-dialog ref="ModifyPortfolioItemDialog" >
+  <q-dialog ref="ModifyPortfolioItemDialog" @hide="onDialogHide">
 		<q-card class="ModifyPortfolioItemDialog" >
         <q-card-section class="row items-center q-pb-none">
-          <div class="ModifyPortfolioItemDialog__title">Modificar imagen</div>
+          <div class="ModifyPortfolioItemDialog__title">Modificar link</div>
           <q-space />
           <q-btn icon="close" color="red-lips" flat round dense v-close-popup />
         </q-card-section>
@@ -10,9 +10,9 @@
         <q-card-section>
           <q-form @submit="onFormSubmit">
             
-            <q-img class="ModifyPortfolioItemDialog__thumbnail" v-if="thumbnail" :src="thumbnail" />
+            <q-img class="ModifyPortfolioItemDialog__thumbnail" v-if="item.img" :src="item.img" />
 
-            <q-file
+            <!-- <q-file
               class="Form__field"
               v-model="file"
               @input="urlFromFile"
@@ -28,7 +28,7 @@
                   <q-icon name="attach_file" />
                 </q-avatar>
               </template>
-            </q-file>
+            </q-file> -->
 
             <q-input
               class="Form__field"
@@ -36,11 +36,12 @@
               name="url"
               id="url"
               label="URL (Twitter, Instagram, ...)"
+              :disable="loading"
               outlined
             />
             <div class="row justify-between q-mt-lg">
-              <q-btn v-close-popup class="ModifyPortfolioItemDialog__btn" label="Cancelar" color="gray" outline/>
-              <q-btn class="ModifyPortfolioItemDialog__btn" type="submit" label="Guardar" color="primary" unelevated/>
+              <q-btn v-close-popup class="ModifyPortfolioItemDialog__btn" label="Cancelar" color="gray" :disable="loading" outline/>
+              <q-btn class="ModifyPortfolioItemDialog__btn" type="submit" label="Guardar" color="primary" :loading="loading" unelevated/>
             </div>
           </q-form>
         </q-card-section>
@@ -59,9 +60,9 @@ export default {
   },
   data () {
     return {
-      file: null,
-      file_url: null,
-      url: this.item.url || null
+      url: this.item.link || null,
+
+      loading: false
     }
   },
   methods: {
@@ -84,14 +85,35 @@ export default {
     },
 
     onFormSubmit () {
-      const file_maybe = this.file ? {file: this.file} : {}
+      this.loading = true
 
       const values = {
-        ...file_maybe,
-        url: this.url
+        link: this.url
       }
-      console.log(values)
-      this.$q.notify("Elemento modificado")
+      this.$axios
+        .patch('modificarImagen/' + this.item._id, values).then((response) => {
+          if (response.status === 202) {
+            this.$q.notify({
+              type: 'positive',
+              message: `Cambios guardados.`
+            })
+            this.$emit('ok')
+            this.hide()
+          } else {
+            this.$q.notify({
+              type: 'negative',
+              message: `Oops, algo salió mal. Intenta otra vez.`
+            })
+          }
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+          this.$q.notify({
+            type: 'negative',
+            message: `Oops, algo salió mal. Intenta otra vez.`
+          })
+        });
     },
     
     urlFromFile () {

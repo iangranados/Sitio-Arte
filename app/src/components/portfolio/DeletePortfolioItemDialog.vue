@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="DeletePortfolioItemDialog" >
+  <q-dialog ref="DeletePortfolioItemDialog" @hide="onDialogHide">
 		<q-card class="DeletePortfolioItemDialog" >
         <q-card-section class="row items-center q-pb-none">
           <div class="DeletePortfolioItemDialog__title">Eliminar imagen</div>
@@ -14,8 +14,22 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn class="DeletePortfolioItemDialog__btn" outline label="Cancelar" color="gray" v-close-popup />
-          <q-btn @click="onDeleteItem" class="DeletePortfolioItemDialog__btn" unelevated label="Eliminar" color="red-lips" />
+          <q-btn
+            class="DeletePortfolioItemDialog__btn"
+            label="Cancelar"
+            color="gray"
+            :disable="loading"
+            outline
+            v-close-popup
+          />
+          <q-btn
+            @click="onDeleteItem"
+            class="DeletePortfolioItemDialog__btn"
+            label="Eliminar"
+            color="red-lips"
+            :loading="loading"
+            unelevated
+          />
         </q-card-actions>
       </q-card>
   </q-dialog>
@@ -30,6 +44,9 @@ export default {
       required: true
     }
   },
+  data: () => ({
+    loading: false
+  }),
   methods: {
     // following method is REQUIRED
     // (don't change its name --> "show")
@@ -50,8 +67,32 @@ export default {
     },
 
     onDeleteItem () {
-      this.$q.notify("Elemento borrado")
-      this.hide()
+      this.loading = true
+      
+      this.$axios
+        .delete('borrarImagen/' + this.item._id).then((response) => {
+          if (response.status === 200) {
+            this.$q.notify({
+              type: 'positive',
+              message: `Imagen eliminada.`
+            })
+            this.$emit('ok')
+            this.hide()
+          } else {
+            this.$q.notify({
+              type: 'negative',
+              message: `Oops, algo salió mal. Intenta otra vez.`
+            })
+          }
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+          this.$q.notify({
+            type: 'negative',
+            message: `Oops, algo salió mal. Intenta otra vez.`
+          })
+        });
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="AddPortfolioItemDialog" >
+  <q-dialog ref="AddPortfolioItemDialog" @hide="onDialogHide">
 		<q-card class="AddPortfolioItemDialog" >
         <q-card-section class="row items-center q-pb-none">
           <div class="AddPortfolioItemDialog__title">Agregar imagen</div>
@@ -10,6 +10,8 @@
         <q-card-section>
           <q-form @submit="onFormSubmit">
             
+            <q-img class="AddPortfolioItemDialog__thumbnail" v-if="file_url" :src="file_url" />
+
             <q-file
               class="Form__field"
               v-model="file"
@@ -20,6 +22,8 @@
               outlined
               accept=".jpg, .png, image/*"
               @rejected="onRejected"
+              :rules="[val => !!val || 'Campo requerido']"
+              :disable="loading"
             >
               <template v-slot:prepend>
                 <q-avatar>
@@ -28,18 +32,19 @@
               </template>
             </q-file>
 
-            <q-img class="AddPortfolioItemDialog__thumbnail" v-if="file_url" :src="file_url" />
-
             <q-input
               class="Form__field"
               v-model="url"
               name="url"
               id="url"
+              type="url"
               label="URL (Twitter, Instagram, ...)"
+              :rules="[val => !!val || 'Campo requerido']"
+              :disable="loading"
               outlined
             />
             <div class="text-right">
-              <q-btn class="AddPortfolioItemDialog__btn" type="submit" label="Agregar" color="primary" unelevated/>
+              <q-btn class="AddPortfolioItemDialog__btn" type="submit" label="Agregar" color="primary" :loading="loading" unelevated/>
             </div>
           </q-form>
         </q-card-section>
@@ -54,7 +59,9 @@ export default {
     return {
       file: null,
       file_url: null,
-      url: null
+      url: null,
+
+      loading: false,
     }
   },
   methods: {
@@ -77,11 +84,45 @@ export default {
     },
 
     onFormSubmit () {
-      let values = {
-        file: this.file,
-        url: this.url
-      }
-      console.log(values)
+
+      this.loading = true;
+
+      const formData = new FormData();
+      formData.append('img', this.file);
+      formData.append('link', this.url);
+
+      this.$axios
+        .post(
+          "/addImage",
+          formData, 
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        ).then((response) => {
+          if (response.status === 201) {
+            this.$q.notify({
+              type: 'positive',
+              message: `Imagen agregada exitosamente.`
+            })
+            this.$emit('ok')
+            this.hide()
+          } else {
+            this.$q.notify({
+              type: 'negative',
+              message: `Oops, algo salió mal. Intenta otra vez.`
+            })
+          }
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+          this.$q.notify({
+            type: 'negative',
+            message: `Oops, algo salió mal. Intenta otra vez.`
+          })
+        });
     },
     
     urlFromFile () {
@@ -120,8 +161,8 @@ export default {
   }
 
   .AddPortfolioItemDialog__thumbnail {
-    height: 150px;
-    width: 50%;
+    height: 200px;
+    width: 100%;
     margin-bottom: 20px;
   }
 
