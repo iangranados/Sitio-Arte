@@ -108,7 +108,7 @@ export default {
           } else {
             this.$q.notify({
               type: "negative",
-              message: `Algo salió mal, intenta otra vez :c`,
+              message: `Something went wrong, please try again later :c`,
             });
           }
           this.loading = false;
@@ -118,7 +118,7 @@ export default {
           this.loading = false;
           this.$q.notify({
             type: "negative",
-            message: `Algo salió mal, intenta otra vez :c`,
+            message: `Something went wrong, please try again later :c`,
           });
         });
     },
