@@ -38,7 +38,7 @@
     </section>
     <q-separator color="light-gray" />
     <section class="Home__section">
-      <h2 class="SectionTitle">Reglas</h2>
+      <h2 class="SectionTitle">Rules</h2>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus vel
         nisi at feugiat. Nulla facilisi. Nulla congue gravida magna ac blandit.
