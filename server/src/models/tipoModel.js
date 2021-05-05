@@ -10,7 +10,7 @@ const tipoSchema = mongoose.Schema({
         required : true
     },
     precioBase : {
-        type : Number,
+        type : String,
         required : true
     },
     img : {
@@ -25,44 +25,20 @@ const TipoCollection = mongoose.model( 'tipo', tipoSchema );
 
 const Tipo = {
     verTipos : function(){
-        return TipoCollection
-        .find()
-        .then( tipos => {
-            return tipos;
-        })
-        .catch( err => {
-            return err;
-        });
+        return TipoCollection.find()
     },
     addNewTipo : function( newTipo ){
-        return TipoCollection
-        .create( newTipo )
-        .then( createdTipo => {
-            return createdTipo;
-        })
-        .catch( err => {
-            return err;
-        });
+        return TipoCollection.create( newTipo )
     },
-    deleteTipo : function( name ){
-        return TipoCollection
-        .deleteOne( {name : name } )
-        .then( results => {
-            return results;
-        })
-        .catch( err => {
-            return err;
-        })
+    deleteTipo : function( id ){
+        return TipoCollection.deleteOne( {_id : id } )
     },
-    modificarTipo : function(name, newDes){
-        return TipoCollection
-        .updateOne({name : name}, {$set : {description : newDes}})
-        .then( results => {
-            return results;
-        })
-        .catch( err => {
-            return err;
-        });
+    modificarTipo : function(id, newName, newDes, newPrice){
+        return TipoCollection.updateOne({_id : id}, {$set : {
+            name: newName,
+            description : newDes,
+            precioBase: newPrice
+        }})
     },
 }
 
