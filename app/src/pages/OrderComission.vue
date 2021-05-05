@@ -3,13 +3,13 @@
     <h1 class="SectionTitle">Ordenar nueva comision</h1>
     <q-form @submit="onSubmit" class="OrderComission__Form">
       <div class="FormSection">
-        <h2 class="FormSection__title">Sobre ti</h2>
+        <h2 class="FormSection__title">About You</h2>
         <q-input
           class="Form__field"
           outlined
           v-model="name"
-          label="Nombre o nickname (para saber cómo decirte)"
-          :rules="[(val) => !!val || 'Este campo es requerido']"
+          label="Name or nickname (to know what to call you)"
+          :rules="[(val) => !!val || 'This field is required']"
         />
         <div class="row q-col-gutter-x-lg">
           <q-select
@@ -17,37 +17,37 @@
             outlined
             v-model="contact_type"
             :options="contact_options"
-            label="Medio de contacto preferido"
-            :rules="[(val) => !!val || 'Este campo es requerido']"
+            label="Preferred means of contact"
+            :rules="[(val) => !!val || 'This field is required']"
           />
           <q-input
             class="Form__field col-xs-12 col-md-6"
             outlined
             v-model="contact_username"
-            label="Username de contacto (Discord, Twitter...)"
-            :rules="[(val) => !!val || 'Este campo es requerido']"
+            label="Contact username (Discord, Twitter...)"
+            :rules="[(val) => !!val || 'This field is required']"
           />
         </div>
       </div>
       <div class="FormSection">
-        <h2 class="FormSection__title">Sobre la comisión</h2>
+        <h2 class="FormSection__title">About the Commission</h2>
         <div class="row q-col-gutter-x-lg">
           <q-select
             class="Form__field col-xs-12 col-md-6"
             outlined
             v-model="category"
             :options="category_options"
-            label="Tipo de comisión"
-            :rules="[(val) => !!val || 'Este campo es requerido']"
+            label="Type of commission"
+            :rules="[(val) => !!val || 'This field is required.']"
           />
         </div>
         <q-input
           class="Form__field"
           v-model="description"
-          label="Describe lo que buscas..."
+          label="Please describe what you would like..."
           outlined
           type="textarea"
-          :rules="[(val) => !!val || 'Este campo es requerido']"
+          :rules="[(val) => !!val || 'This field is required.']"
         />
       </div>
 
@@ -55,7 +55,7 @@
         <q-btn
           type="submit"
           class="Form__btn"
-          label="Ordenar Comisión"
+          label="Order Commission"
           color="primary"
           :loading="loading"
           unelevated
@@ -108,7 +108,7 @@ export default {
           } else {
             this.$q.notify({
               type: "negative",
-              message: `Algo salió mal, intenta otra vez :c`,
+              message: `Something went wrong, please try again later :c`,
             });
           }
           this.loading = false;
@@ -118,7 +118,7 @@ export default {
           this.loading = false;
           this.$q.notify({
             type: "negative",
-            message: `Algo salió mal, intenta otra vez :c`,
+            message: `Something went wrong, please try again later :c`,
           });
         });
     },

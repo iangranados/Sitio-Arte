@@ -5,21 +5,21 @@
         <q-btn
           class="Comisiones__btn"
           to="/comisiones/board"
-          label="Ver comisiones activas"
+          label="See active commissions"
           outline
           color="primary"
         />
         <q-btn
           class="Comisiones__btn"
           to="/comisiones/ordenar"
-          label="Ordenar comision"
+          label="Order a commission"
           unelevated
           color="primary"
         />
       </div>
       <p class="Comisiones__disclaimer">
-        *Asegúrate de revisar las reglas en la página de inicio antes de ordenar
-        una comisión
+        *Please be sure to check the rules in the home page before requesting a
+        commission.
       </p>
     </div>
     <q-separator color="light-gray" />
@@ -33,8 +33,8 @@
             aspernatur molestias sit ex itaque
           </p>
           <ul>
-            <li>Precio: $$$</li>
-            <li>Incluye png, psd, jpg</li>
+            <li>Price: $$$</li>
+            <li>Includes png, psd, jpg</li>
           </ul>
         </div>
         <div class="Category__placeholder col-xs-12 col-md-5">
@@ -53,8 +53,8 @@
             aspernatur molestias sit ex itaque
           </p>
           <ul>
-            <li>Precio: $$$</li>
-            <li>Incluye png, psd, jpg</li>
+            <li>Price: $$$</li>
+            <li>Includes png, psd, jpg</li>
           </ul>
         </div>
         <div class="Category__placeholder col-xs-12 col-md-5">
@@ -73,8 +73,8 @@
             aspernatur molestias sit ex itaque
           </p>
           <ul>
-            <li>Precio: $$$</li>
-            <li>Incluye png, psd, jpg</li>
+            <li>Price: $$$</li>
+            <li>Includes png, psd, jpg</li>
           </ul>
         </div>
         <div class="Category__placeholder col-xs-12 col-md-5">
