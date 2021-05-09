@@ -1,5 +1,5 @@
 <template>
-  <div class="KanbanItem" @click="seeDetail">
+  <div class="KanbanItem" @click="seeDetail" >
     <q-img
       v-if="item.status === 'done' && item.finalThumb"
       :src="item.finalThumb"
@@ -42,11 +42,18 @@ export default {
   },
   methods: {
     seeDetail: function () {
-      this.$q.dialog({
-        component: () =>
-          import("./TokenRequestDialog.vue"),
-        parent: this,
-      });
+      this.$q
+        .dialog({
+          component: () => import("./TokenRequestDialog.vue"),
+          parent: this,
+        })
+        .onOk(() => {
+          this.$q.dialog({
+            component: () => import("./CommissionViewDialog.vue"),
+            parent: this,
+          });
+          console.log("hello!");
+        });
     },
   },
   computed: {
