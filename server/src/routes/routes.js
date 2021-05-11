@@ -137,10 +137,12 @@ router.post( '/crearComision', ( req, res ) => {
     }
 
     let token = uuidv4();
-    //console.log(token);
+    let approved = false;
+    let avance = 0;
+    let completed = false;
+    let comments = [];
 
-
-    const newComision = { name, contact, username, tipo, description, token }
+    const newComision = { name, contact, username, tipo, description, token, approved, avance, completed, comments }
     console.log(newComision);
 
     Comision
@@ -198,6 +200,60 @@ router.delete('/borrarComision/:token', ( req, res ) => {
         else{
             res.statusMessage = "That comision was not found in the db";
             return res.status( 404 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+// Rura para modificar el avance de una comision
+router.patch('/modificarComsionAvance/:token', ( req, res ) => {
+    let token = req.params.token;
+    let newAvance = req.body.avance;
+
+    if(!token || !newAvance){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Comision
+    .modificarComisionAvance(token, newAvance)
+    .then( results => {
+        if(results.nModified > 0){
+            return res.status( 202 ).end();
+        }
+        else{
+            res.statusMessage = "There is no comision with the token passed";
+            return res.status( 409 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+// Rura para marcar como completada una comision
+router.patch('/completedComision/:token', ( req, res ) => {
+    let token = req.params.token;
+    let newComp = req.body.completed;
+
+    if(!token || !newComp){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Comision
+    .modificarComisionCompleted(token, newComp)
+    .then( results => {
+        if(results.nModified > 0){
+            return res.status( 202 ).end();
+        }
+        else{
+            res.statusMessage = "There is no comision with the token passed";
+            return res.status( 409 ).end();
         }
     })
     .catch( err => {
