@@ -23,6 +23,7 @@ const singleUpload = upload.single('img');
 
 router.use( jsonParser );
 
+///////////////// RUTAS PORTAFOLIO //////////////////////
 // Ruta para obtener todas las imagenes
 router.get( '/galeria', ( req, res ) => {
     Portafolio
@@ -37,7 +38,6 @@ router.get( '/galeria', ( req, res ) => {
 });
 
 // Ruta para agregar una nueva imagen
-
 router.post( '/addImage', singleUpload, ( req, res ) => {
 
     let { link } = req.body;
@@ -113,6 +113,7 @@ router.patch('/modificarImagen/:id', ( req, res ) => {
     })
 });
 
+///////////////// RUTAS COMISIONES //////////////////////
 // Ruta para obtener todas las comisiones
 router.get( '/comisiones', ( req, res ) => {
     Comision
@@ -262,6 +263,74 @@ router.patch('/completedComision/:token', ( req, res ) => {
     })
 });
 
+router.patch('/approveComision/:token', ( req, res ) => {
+    let token = req.params.token;
+    let newApprove = req.body.approved;
+
+    if(!token || !newApprove){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Comision
+    .approveComision(token, newApprove)
+    .then( results => {
+        if(results.nModified > 0){
+            return res.status( 202 ).end();
+        }
+        else{
+            res.statusMessage = "There is no comision with the token passed";
+            return res.status( 409 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+// Ruta para agregar un comentario a la comision
+router.patch('/addComment/:token', ( req, res ) => {
+    let token = req.params.token;
+    let newComment = req.body.comments;
+
+    if(!token || !newComment){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Comision
+    .addComment(token, newComment)
+    .then( results => {
+        return res.status( 202 ).end();
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+router.patch('/addArchivo/:token', singleUpload, ( req, res ) => {
+    let token = req.params.token;
+    let newArchivo = req.file.location;
+
+    if(!token || !newArchivo){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Comision
+    .addArchivo(token, newArchivo)
+    .then( results => {
+        return res.status( 202 ).end();
+    })
+    .catch( err => {
+        res.statusMessage =  "Somethong went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+///////////////// RUTAS TIPO //////////////////////
 // Ruta para obtener los tipos de comisiones
 router.get( '/tipos', ( req, res ) => {
     Tipo
