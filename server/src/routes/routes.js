@@ -154,13 +154,13 @@ router.post( '/crearComision', ( req, res ) => {
         return res.status( 201 ).json( results );
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     });
 });
 
 // Ruta para modificar la descripcion de una comision
-router.patch('/modificarComsion/:token', ( req, res ) => {
+router.patch('/modificarComision/:token', ( req, res ) => {
     let token = req.params.token;
     let newDes = req.body.description;
 
