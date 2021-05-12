@@ -16,8 +16,8 @@
 export default {
   name: 'MainLayout',
   components: {
-    Footer: () => import('components/general/Footer'),
-    Header: () => import('components/general/Header')
+    Footer: () => import('../components/general/Footer.vue'),
+    Header: () => import('../components/general/Header.vue')
   },
   data () {
     return {

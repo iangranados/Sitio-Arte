@@ -7,7 +7,7 @@
       <q-btn
         class="Header__nav-btn"
         :class="{'Header__nav-btn--active': $route.path == '/'}"
-        label="Inicio"
+        label="Home"
         to="/"
         outline
         rounded
@@ -15,7 +15,7 @@
       <q-btn
         class="Header__nav-btn"
         :class="{'Header__nav-btn--active': $route.path == '/portafolio'}"
-        label="Portafolio"
+        label="Portfolio"
         to="/portafolio"
         padding="sm md"
         outline
@@ -24,7 +24,7 @@
       <q-btn
         class="Header__nav-btn"
         :class="{'Header__nav-btn--active': $route.path == '/comisiones'}"
-        label="Comisiones"
+        label="Commissions"
         to="/comisiones"
         outline
         rounded
@@ -32,7 +32,7 @@
       <q-btn
         class="Header__nav-btn"
         :class="{'Header__nav-btn--active': $route.path == '/tienda'}"
-        label="Tienda"
+        label="Store"
         to="/tienda"
         outline
         rounded

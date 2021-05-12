@@ -17,10 +17,6 @@ const comisionSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    completed: {
-        type : Boolean,
-        required : false
-    },
     description: {
         type : String,
         required : true
@@ -28,6 +24,26 @@ const comisionSchema = mongoose.Schema({
     token: {
         type : String,
         required : true
+    },
+    approved: {
+        type: Boolean,
+        required: true
+    },
+    avance: {
+        type: Number,
+        required: true
+    },
+    completed: {
+        type: Boolean,
+        required: true
+    },
+    comments: {
+        type: [String],
+        required: true
+    },
+    archivos: {
+        type: [String],
+        required: true
     }
 });
 
@@ -43,7 +59,7 @@ const Comision = {
             return comisiones;
         })
         .catch( err => {
-            return err;
+            throw err;
         });
     },
     addNewComision : function( newComision ){
@@ -53,7 +69,7 @@ const Comision = {
             return crearedComision;
         })
         .catch( err => {
-            return err;
+            throw err;
         });
     },
     deleteComision : function( token ){
@@ -63,7 +79,7 @@ const Comision = {
             return results;
         })
         .catch( err => {
-            return err;
+            throw err;
         });
     },
     modificarComisionDes : function(token, newDes){
@@ -73,17 +89,7 @@ const Comision = {
             return results;
         })
         .catch( err => {
-            return err;
-        });
-    },
-    completarComision : function(token, completed){
-        return ComisionCollection
-        .updateOne({token : token}, {$set : {completed : completed}})
-        .then( results => {
-            return results;
-        })
-        .catch( err => {
-            return err;
+            throw err;
         });
     },
     getComisionByToken : function( token ){
@@ -93,7 +99,61 @@ const Comision = {
             return results;
         })
         .catch( err => {
-            return err;
+            throw err;
+        })
+    },
+    modificarComisionAvance : function( token, newAvance ){
+        return ComisionCollection
+        .updateOne({token : token}, {$set : {avance : newAvance}})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
+        })
+    },
+    modificarComisionCompleted : function( token, newComp ){
+        return ComisionCollection
+        .updateOne({token : token}, {$set : {completed : newComp}})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
+        })
+    },
+    approveComision : function( token, newApprove ){
+        return ComisionCollection
+        .updateOne({token : token}, {$set : {approved : newApprove}})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
+        })
+    },
+    addComment : function( token, newComment ) {
+        return ComisionCollection
+        .updateOne(
+            { token: token }, 
+            { $push: { comments: newComment }})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
+        })
+    },
+    addArchivo : function( token, newArchivo ) {
+        return ComisionCollection
+        .updateOne(
+            { token: token }, 
+            { $push: { archivos: newArchivo }})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
         })
     }
 }

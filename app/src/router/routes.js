@@ -31,6 +31,16 @@ const routes = [
   		{ path: '', component: () => import('pages/AdminLogin.vue')}
   	]
   },
+  {
+    path: '/admin',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [
+      { path: '', redirect: 'comisiones' },
+      { path: 'comisiones', component: () => import('pages/AdminLogin.vue') },
+      { path: 'portafolio', component: () => import('pages/AdminPortafolio.vue') },
+      { path: 'tienda', component: () => import('pages/AdminLogin.vue') },
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it

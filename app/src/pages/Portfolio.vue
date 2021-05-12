@@ -10,7 +10,7 @@
       <div
         class="Portfolio__imageWrapper"
         v-for="image in images"
-        :key="image.id"
+        :key="image._id"
       >
         <q-img
           class="Portfolio__image"
@@ -25,7 +25,8 @@
           target="_blank"
           icon="open_in_new"
           color="white"
-          flat
+          text-color="dark"
+          unelevated
           round
           dense
         />
@@ -68,7 +69,7 @@ export default {
     images: [],
 
     fullscreen: false,
-    fullscreen_image: null,
+    fullscreen_image: null
   }),
   methods: {
     openFullscreen(image) {
