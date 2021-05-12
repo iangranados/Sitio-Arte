@@ -37,9 +37,18 @@
             outlined
             v-model="category"
             :options="category_options"
+            :loading="category_options_loading"
             label="Type of commission"
             :rules="[(val) => !!val || 'This field is required.']"
-          />
+          >
+          <template v-slot:no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                No results
+              </q-item-section>
+            </q-item>
+          </template>
+          </q-select>
         </div>
         <q-input
           class="Form__field"
@@ -70,6 +79,17 @@
 <script>
 export default {
   name: "OrderComission",
+  mounted () {
+    if (this.category_options.length <= 0) {
+      this.$store.dispatch('types/loadTypes')
+        .catch(() => {
+          this.$q.notify({
+            type: 'negative',
+            message: `Couldn't load commissions info. Try again later.`
+          })
+        })
+    }
+  },
   data: () => ({
     name: null,
     contact_type: null,
@@ -78,7 +98,6 @@ export default {
     description: null,
 
     contact_options: ["Discord", "Instagram", "Twitter", "Correo"],
-    category_options: ["Emotes", "Badges", "Full-body", "Custom"],
 
     loading: false,
   }),
@@ -123,6 +142,14 @@ export default {
         });
     },
   },
+  computed: {
+    category_options_loading () {
+      return this.$store.state.types.loading
+    },
+    category_options () {
+      return this.$store.getters['types/typesAsListOfStrings']
+    }
+  }
 };
 </script>
 

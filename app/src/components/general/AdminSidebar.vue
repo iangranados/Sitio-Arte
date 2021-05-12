@@ -22,6 +22,11 @@
     			Tienda
     		</q-item-section>
     	</q-item>
+    	<q-item to="/admin/tipos" class="AdminSidebar__link" clickable v-ripple>
+    		<q-item-section>
+    			Categorías
+    		</q-item-section>
+    	</q-item>
     </q-list>
     <div class="text-right">
     	<q-btn to="/" class="AdminSidebar__logout" label="Cerrar Sesión" icon-right="logout" no-caps flat dense />
