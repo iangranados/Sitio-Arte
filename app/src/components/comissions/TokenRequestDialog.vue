@@ -5,9 +5,9 @@
     @hide="onDialogHide"
     persistent
   >
-    <q-card style="min-width: 350px">
+    <q-card class="TokenRequestDialog" style="min-width: 350px">
       <q-card-section>
-        <div class="text-h6">Your Token</div>
+        <div class="TokenRequestDialog-title">Your Token</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -17,14 +17,15 @@
           autofocus
           @keyup.enter="prompt = false"
           label="Token"
+		  outlined
         />
       </q-card-section>
 
       <q-card-actions align="right" class="text-primary">
-        <q-btn flat label="Cancel" v-close-popup />
-        <q-btn flat label="Submit" @click="processToken" v-close-popup/>
+        <q-btn class="TokenRequestDialog-btn" label="Cancel" color="gray" outline v-close-popup />
+        <q-btn class="TokenRequestDialog-btn " @click="processToken" label="Submit" color="primary" type="submit" unelevated v-close-popup />
       </q-card-actions>
-    </q-card>
+	</q-card>
   </q-dialog>
 </template>
 
@@ -64,4 +65,15 @@ export default {
 
 <style lang="scss">
 // $
+.TokenRequestDialog-title{
+	@include font(24px, bold, $primary);
+}
+
+.TokenRequestDialog-btn {
+    border-radius: 10px;
+    letter-spacing: 1px;
+    min-width: 48%;
+    font-size: 16px;
+  }
+
 </style>
