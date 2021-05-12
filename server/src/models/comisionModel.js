@@ -62,6 +62,26 @@ const Comision = {
             throw err;
         });
     },
+    verComisionesAprobadas : function(){
+        return ComisionCollection
+        .find( { approved: {$eq: true}})
+        .then( comisiones => {
+            return comisiones;
+        })
+        .catch( err => {
+            throw err;
+        });
+    },
+    verComisionesEnProgreso : function(){
+        return ComisionCollection
+        .find( { avance : {$lt : 100}})
+        .then( comisiones => {
+            return comisiones;
+        })
+        .catch( err => {
+            throw err;
+        });
+    },
     addNewComision : function( newComision ){
         return ComisionCollection
         .create( newComision )

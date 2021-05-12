@@ -81,7 +81,7 @@ router.delete('/borrarImagen/:id', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -108,7 +108,7 @@ router.patch('/modificarImagen/:id', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -179,7 +179,7 @@ router.patch('/modificarComision/:token', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -204,7 +204,7 @@ router.delete('/borrarComision/:token', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -231,7 +231,7 @@ router.patch('/modificarComsionAvance/:token', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -258,7 +258,7 @@ router.patch('/completedComision/:token', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -284,7 +284,7 @@ router.patch('/approveComision/:token', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -305,7 +305,7 @@ router.patch('/addComment/:token', ( req, res ) => {
         return res.status( 202 ).end();
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -325,7 +325,7 @@ router.patch('/addArchivo/:token', singleUpload, ( req, res ) => {
         return res.status( 202 ).end();
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -363,7 +363,7 @@ router.post( '/crearTipo', singleUpload, ( req, res ) => {
         return res.status( 201 ).json( results );
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     });
 });
@@ -388,7 +388,7 @@ router.delete('/borrarTipo/:name', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -415,7 +415,7 @@ router.patch('/modificarTipo/:name', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
