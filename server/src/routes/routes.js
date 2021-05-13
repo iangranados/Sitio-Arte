@@ -4,11 +4,14 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
-const { Portafolio } = require('../models/portafolioModel')
+const { Portafolio } = require('../models/portafolioModel');
 const { Users } = require( '../models/usuarioModel' );
 const { Comision } = require('../models/comisionModel');
 const { Tipo } = require('../models/tipoModel');
 const upload = require('../services/file-upload');
+const Admin = require('../models/adminModel');
+
+const passport = require('passport');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -18,6 +21,8 @@ const storage = multer.diskStorage({
         cb(null, new Date().toISOString() + file.originalname);
     }
 })
+
+
 
 const singleUpload = upload.single('img');
 
@@ -112,6 +117,12 @@ router.patch('/modificarImagen/:id', ( req, res ) => {
         return res.status( 500 ).end();
     })
 });
+
+///////////////// RUTAS ADMIN //////////////////////
+router.post('/admin', passport.authenticate('local', {
+    successRedirect: '/admin/portafolio',
+    failureRedirect: '/admin'
+}));
 
 ///////////////// RUTAS COMISIONES //////////////////////
 // Ruta para obtener todas las comisiones

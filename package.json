@@ -5,6 +5,7 @@
   "main": "Server.js",
   "scripts": {
     "start": "nodemon server.js",
+    "dev": "nodemon server.js && ./app/ quasar dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
