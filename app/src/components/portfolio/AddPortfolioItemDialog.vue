@@ -1,154 +1,160 @@
 <template>
   <q-dialog ref="AddPortfolioItemDialog" @hide="onDialogHide">
-		<q-card class="AddPortfolioItemDialog" >
-        <q-card-section class="row items-center q-pb-none">
-          <div class="AddPortfolioItemDialog__title">Agregar imagen</div>
-          <q-space />
-          <q-btn icon="close" color="red-lips" flat round dense v-close-popup />
-        </q-card-section>
+    <q-card class="AddPortfolioItemDialog">
+      <q-card-section class="row items-center q-pb-none">
+        <div class="AddPortfolioItemDialog__title">Agregar imagen</div>
+        <q-space />
+        <q-btn icon="close" color="red-lips" flat round dense v-close-popup />
+      </q-card-section>
 
-        <q-card-section>
-          <q-form @submit="onFormSubmit">
-            
-            <q-img class="AddPortfolioItemDialog__thumbnail" v-if="file_url" :src="file_url" />
+      <q-card-section>
+        <q-form @submit="onFormSubmit">
+          <q-img
+            class="AddPortfolioItemDialog__thumbnail"
+            v-if="file_url"
+            :src="file_url"
+          />
 
-            <q-file
-              class="Form__field"
-              v-model="file"
-              @input="urlFromFile"
-              name="file"
-              id="file"
-              label="Sube un archivo"
-              outlined
-              accept=".jpg, .png, image/*"
-              @rejected="onRejected"
-              :rules="[val => !!val || 'Campo requerido']"
-              :disable="loading"
-            >
-              <template v-slot:prepend>
-                <q-avatar>
-                  <q-icon name="attach_file" />
-                </q-avatar>
-              </template>
-            </q-file>
+          <q-file
+            class="Form__field"
+            v-model="file"
+            @input="urlFromFile"
+            name="file"
+            id="file"
+            label="Sube un archivo"
+            outlined
+            accept=".jpg, .png, image/*"
+            @rejected="onRejected"
+            :rules="[(val) => !!val || 'Campo requerido']"
+            :disable="loading"
+          >
+            <template v-slot:prepend>
+              <q-avatar>
+                <q-icon name="attach_file" />
+              </q-avatar>
+            </template>
+          </q-file>
 
-            <q-input
-              class="Form__field"
-              v-model="url"
-              name="url"
-              id="url"
-              type="url"
-              label="URL (Twitter, Instagram, ...)"
-              :rules="[val => !!val || 'Campo requerido']"
-              :disable="loading"
-              outlined
+          <q-input
+            class="Form__field"
+            v-model="url"
+            name="url"
+            id="url"
+            type="url"
+            label="URL (Twitter, Instagram, ...)"
+            :rules="[(val) => !!val || 'Campo requerido']"
+            :disable="loading"
+            outlined
+          />
+          <div class="text-right">
+            <q-btn
+              class="AddPortfolioItemDialog__btn"
+              type="submit"
+              label="Agregar"
+              color="primary"
+              :loading="loading"
+              unelevated
             />
-            <div class="text-right">
-              <q-btn class="AddPortfolioItemDialog__btn" type="submit" label="Agregar" color="primary" :loading="loading" unelevated/>
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
+          </div>
+        </q-form>
+      </q-card-section>
+    </q-card>
   </q-dialog>
 </template>
 
 <script>
 export default {
-  name: 'AddPortfolioItemDialog',
-  data () {
+  name: "AddPortfolioItemDialog",
+  data() {
     return {
       file: null,
       file_url: null,
       url: null,
 
       loading: false,
-    }
+    };
   },
   methods: {
     // following method is REQUIRED
     // (don't change its name --> "show")
-    show () {
-      this.$refs.AddPortfolioItemDialog.show()
+    show() {
+      this.$refs.AddPortfolioItemDialog.show();
     },
 
     // following method is REQUIRED
     // (don't change its name --> "hide")
-    hide () {
-      this.$refs.AddPortfolioItemDialog.hide()
+    hide() {
+      this.$refs.AddPortfolioItemDialog.hide();
     },
 
-    onDialogHide () {
+    onDialogHide() {
       // required to be emitted
       // when QDialog emits "hide" event
-      this.$emit('hide')
+      this.$emit("hide");
     },
 
-    onFormSubmit () {
-
+    onFormSubmit() {
       this.loading = true;
 
       const formData = new FormData();
-      formData.append('img', this.file);
-      formData.append('link', this.url);
+      formData.append("img", this.file);
+      formData.append("link", this.url);
 
       this.$axios
-        .post(
-          "/addImage",
-          formData, 
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          }
-        ).then((response) => {
+        .post("/addImage", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
           if (response.status === 201) {
             this.$q.notify({
-              type: 'positive',
-              message: `Imagen agregada exitosamente.`
-            })
-            this.$emit('ok')
-            this.hide()
+              type: "positive",
+              message: `Imagen agregada exitosamente.`,
+            });
+            this.$emit("ok");
+            this.hide();
           } else {
             this.$q.notify({
-              type: 'negative',
-              message: `Oops, algo salió mal. Intenta otra vez.`
-            })
+              type: "negative",
+              message: `Oops, algo salió mal. Intenta otra vez.`,
+            });
           }
           this.loading = false;
         })
         .catch((e) => {
           this.loading = false;
           this.$q.notify({
-            type: 'negative',
-            message: `Oops, algo salió mal. Intenta otra vez.`
-          })
+            type: "negative",
+            message: `Oops, algo salió mal. Intenta otra vez.`,
+          });
         });
     },
-    
-    urlFromFile () {
-      if(FileReader && this.file) {
-        const reader = new FileReader()
-        reader.onload = () => {
-          this.file_url = reader.result
-        }
 
-        reader.readAsDataURL(this.file)
+    urlFromFile() {
+      if (FileReader && this.file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.file_url = reader.result;
+        };
+
+        reader.readAsDataURL(this.file);
       }
     },
 
-    onRejected () {
+    onRejected() {
       this.$q.notify({
-        type: 'negative',
-        message: "Archivo inválido"
-      })
-    }
-  }
-}
+        type: "negative",
+        message: "Archivo inválido",
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
 // $
-.AddPortfolioItemDialog{
+.AddPortfolioItemDialog {
   padding: 30px 24px;
   min-width: 90vw;
 
