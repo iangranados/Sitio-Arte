@@ -31,28 +31,28 @@ export default {
     },
   },
   methods: {
-    onDelete() {
-      this.$q
-        .dialog({
-          component: () => import("./DeletePortfolioItemDialog.vue"),
-          parent: this,
-          item: this.item,
-        })
-        .onOk(() => {
-          this.$emit("reload-portfolio");
-        });
-    },
-    onModify() {
-      this.$q
-        .dialog({
-          component: () => import("./ModifyPortfolioItemDialog.vue"),
-          parent: this,
-          item: this.item,
-        })
-        .onOk(() => {
-          this.$emit("reload-portfolio");
-        });
-    },
+    // onDelete() {
+    //   this.$q
+    //     .dialog({
+    //       component: () => import("./DeletePortfolioItemDialog.vue"),
+    //       parent: this,
+    //       item: this.item,
+    //     })
+    //     .onOk(() => {
+    //       this.$emit("reload-portfolio");
+    //     });
+    // },
+    // onModify() {
+    //   this.$q
+    //     .dialog({
+    //       component: () => import("./ModifyPortfolioItemDialog.vue"),
+    //       parent: this,
+    //       item: this.item,
+    //     })
+    //     .onOk(() => {
+    //       this.$emit("reload-portfolio");
+    //     });
+    // },
   },
 };
 </script>
