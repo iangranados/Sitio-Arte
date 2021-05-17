@@ -15,25 +15,7 @@
             :src="item.img"
           />
 
-          <!-- <q-file
-              class="Form__field"
-              v-model="file"
-              @input="urlFromFile"
-              name="file"
-              id="file"
-              label="Reemplazar imágen"
-              outlined
-              accept=".jpg, .png, image/*"
-              @rejected="onRejected"
-            >
-              <template v-slot:prepend>
-                <q-avatar>
-                  <q-icon name="attach_file" />
-                </q-avatar>
-              </template>
-            </q-file> 
-
-          <q-input
+                   <q-input
             class="Form__field"
             v-model="url"
             name="url"
@@ -69,94 +51,94 @@
 <script>
 export default {
   name: "ModifyPortfolioItemDialog",
-//   props: {
-//     item: {
-//       type: Object,
-//       required: true,
-//     },
-//   },
-//   data() {
-//     return {
-//       url: this.item.link || null,
+  //   props: {
+  //     item: {
+  //       type: Object,
+  //       required: true,
+  //     },
+  //   },
+  //   data() {
+  //     return {
+  //       url: this.item.link || null,
 
-//       loading: false,
-//     };
-//   },
-//   methods: {
-//     // following method is REQUIRED
-//     // (don't change its name --> "show")
-//     show() {
-//       this.$refs.ModifyPortfolioItemDialog.show();
-//     },
+  //       loading: false,
+  //     };
+  //   },
+  //   methods: {
+  //     // following method is REQUIRED
+  //     // (don't change its name --> "show")
+  //     show() {
+  //       this.$refs.ModifyPortfolioItemDialog.show();
+  //     },
 
-//     // following method is REQUIRED
-//     // (don't change its name --> "hide")
-//     hide() {
-//       this.$refs.ModifyPortfolioItemDialog.hide();
-//     },
+  //     // following method is REQUIRED
+  //     // (don't change its name --> "hide")
+  //     hide() {
+  //       this.$refs.ModifyPortfolioItemDialog.hide();
+  //     },
 
-//     onDialogHide() {
-//       // required to be emitted
-//       // when QDialog emits "hide" event
-//       this.$emit("hide");
-//     },
+  //     onDialogHide() {
+  //       // required to be emitted
+  //       // when QDialog emits "hide" event
+  //       this.$emit("hide");
+  //     },
 
-//     onFormSubmit() {
-//       this.loading = true;
+  //     onFormSubmit() {
+  //       this.loading = true;
 
-//       const values = {
-//         link: this.url,
-//       };
-//       this.$axios
-//         .patch("modificarImagen/" + this.item._id, values)
-//         .then((response) => {
-//           if (response.status === 202) {
-//             this.$q.notify({
-//               type: "positive",
-//               message: `Cambios guardados.`,
-//             });
-//             this.$emit("ok");
-//             this.hide();
-//           } else {
-//             this.$q.notify({
-//               type: "negative",
-//               message: `Oops, algo salió mal. Intenta otra vez.`,
-//             });
-//           }
-//           this.loading = false;
-//         })
-//         .catch((e) => {
-//           this.loading = false;
-//           this.$q.notify({
-//             type: "negative",
-//             message: `Oops, algo salió mal. Intenta otra vez.`,
-//           });
-//         });
-//     },
+  //       const values = {
+  //         link: this.url,
+  //       };
+  //       this.$axios
+  //         .patch("modificarImagen/" + this.item._id, values)
+  //         .then((response) => {
+  //           if (response.status === 202) {
+  //             this.$q.notify({
+  //               type: "positive",
+  //               message: `Cambios guardados.`,
+  //             });
+  //             this.$emit("ok");
+  //             this.hide();
+  //           } else {
+  //             this.$q.notify({
+  //               type: "negative",
+  //               message: `Oops, algo salió mal. Intenta otra vez.`,
+  //             });
+  //           }
+  //           this.loading = false;
+  //         })
+  //         .catch((e) => {
+  //           this.loading = false;
+  //           this.$q.notify({
+  //             type: "negative",
+  //             message: `Oops, algo salió mal. Intenta otra vez.`,
+  //           });
+  //         });
+  //     },
 
-//     urlFromFile() {
-//       if (FileReader && this.file) {
-//         const reader = new FileReader();
-//         reader.onload = () => {
-//           this.file_url = reader.result;
-//         };
+  //     urlFromFile() {
+  //       if (FileReader && this.file) {
+  //         const reader = new FileReader();
+  //         reader.onload = () => {
+  //           this.file_url = reader.result;
+  //         };
 
-//         reader.readAsDataURL(this.file);
-//       }
-//     },
+  //         reader.readAsDataURL(this.file);
+  //       }
+  //     },
 
-//     onRejected() {
-//       this.$q.notify({
-//         type: "negative",
-//         message: "Archivo inválido",
-//       });
-//     },
-//   },
-//   computed: {
-//     thumbnail: function () {
-//       return this.file_url || this.item.image;
-//     },
-//   },
+  //     onRejected() {
+  //       this.$q.notify({
+  //         type: "negative",
+  //         message: "Archivo inválido",
+  //       });
+  //     },
+  //   },
+  //   computed: {
+  //     thumbnail: function () {
+  //       return this.file_url || this.item.image;
+  //     },
+  //   },
 };
 </script>
 

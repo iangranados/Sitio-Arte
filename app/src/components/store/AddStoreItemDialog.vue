@@ -1,8 +1,8 @@
 <template>
-   <q-dialog ref="AddPortfolioItemDialog" @hide="onDialogHide">
-    <!--<q-card class="AddPortfolioItemDialog">
+  <q-dialog ref="AddStoreItemDialog" @hide="onDialogHide">
+    <q-card class="AddStoreItemDialog">
       <q-card-section class="row items-center q-pb-none">
-        <div class="AddPortfolioItemDialog__title">Agregar imagen</div>
+        <div class="AddStoreItemDialog__title">Agregar Oferta a Tienda</div>
         <q-space />
         <q-btn icon="close" color="red-lips" flat round dense v-close-popup />
       </q-card-section>
@@ -10,7 +10,7 @@
       <q-card-section>
         <q-form @submit="onFormSubmit">
           <q-img
-            class="AddPortfolioItemDialog__thumbnail"
+            class="AddStoreItemDialog__thumbnail"
             v-if="file_url"
             :src="file_url"
           />
@@ -35,20 +35,42 @@
             </template>
           </q-file>
 
+          <q-select
+            class="Form__field"
+            v-model="selectedType"
+            :options="options"
+            label="Categoria"
+            outlined
+            :rules="[(val) => !!val || 'Campo requerido']"
+            :disable="loading"
+          />
+
           <q-input
             class="Form__field"
-            v-model="url"
-            name="url"
-            id="url"
-            type="url"
-            label="URL (Twitter, Instagram, ...)"
+            v-model="title"
+            name="title"
+            id="title"
+            type="text"
+            label="Titulo"
             :rules="[(val) => !!val || 'Campo requerido']"
             :disable="loading"
             outlined
           />
+          <q-input
+            class="Form__field"
+            v-model="price"
+            name="price"
+            id="price"
+            type="number"
+            label="Precio"
+            :rules="[(val) => !!val || 'Campo requerido']"
+            :disable="loading"
+            outlined
+          />
+
           <div class="text-right">
             <q-btn
-              class="AddPortfolioItemDialog__btn"
+              class="AddStoreItemDialog__btn"
               type="submit"
               label="Agregar"
               color="primary"
@@ -58,33 +80,35 @@
           </div>
         </q-form>
       </q-card-section>
-    </q-card> -->
+    </q-card>
   </q-dialog>
 </template>
 
 <script>
 export default {
-  name: "AddPortfolioItemDialog",
+  name: "AddStoreItemDialog",
   data() {
     return {
       file: null,
       file_url: null,
-      url: null,
-
+      title: null,
+      options: ["Full body", "Portrait", "other"],
       loading: false,
+	  price: null,
+	  selectedType: null,
     };
   },
   methods: {
     // following method is REQUIRED
     // (don't change its name --> "show")
     show() {
-    //   this.$refs.AddPortfolioItemDialog.show();
+      this.$refs.AddStoreItemDialog.show();
     },
 
     // following method is REQUIRED
     // (don't change its name --> "hide")
     hide() {
-    //   this.$refs.AddPortfolioItemDialog.hide();
+      this.$refs.AddStoreItemDialog.hide();
     },
 
     onDialogHide() {
@@ -94,52 +118,49 @@ export default {
     },
 
     onFormSubmit() {
-    //   this.loading = true;
-
-    //   const formData = new FormData();
-    //   formData.append("img", this.file);
-    //   formData.append("link", this.url);
-
-    //   this.$axios
-    //     .post("/addImage", formData, {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //     })
-    //     .then((response) => {
-    //       if (response.status === 201) {
-    //         this.$q.notify({
-    //           type: "positive",
-    //           message: `Imagen agregada exitosamente.`,
-    //         });
-    //         this.$emit("ok");
-    //         this.hide();
-    //       } else {
-    //         this.$q.notify({
-    //           type: "negative",
-    //           message: `Oops, algo salió mal. Intenta otra vez.`,
-    //         });
-    //       }
-    //       this.loading = false;
-    //     })
-    //     .catch((e) => {
-    //       this.loading = false;
-    //       this.$q.notify({
-    //         type: "negative",
-    //         message: `Oops, algo salió mal. Intenta otra vez.`,
-    //       });
-    //     });
+      //   this.loading = true;
+      //   const formData = new FormData();
+      //   formData.append("img", this.file);
+      //   formData.append("link", this.url);
+      //   this.$axios
+      //     .post("/addImage", formData, {
+      //       headers: {
+      //         "Content-Type": "multipart/form-data",
+      //       },
+      //     })
+      //     .then((response) => {
+      //       if (response.status === 201) {
+      //         this.$q.notify({
+      //           type: "positive",
+      //           message: `Imagen agregada exitosamente.`,
+      //         });
+      //         this.$emit("ok");
+      //         this.hide();
+      //       } else {
+      //         this.$q.notify({
+      //           type: "negative",
+      //           message: `Oops, algo salió mal. Intenta otra vez.`,
+      //         });
+      //       }
+      //       this.loading = false;
+      //     })
+      //     .catch((e) => {
+      //       this.loading = false;
+      //       this.$q.notify({
+      //         type: "negative",
+      //         message: `Oops, algo salió mal. Intenta otra vez.`,
+      //       });
+      //     });
     },
 
     urlFromFile() {
-    //   if (FileReader && this.file) {
-    //     const reader = new FileReader();
-    //     reader.onload = () => {
-    //       this.file_url = reader.result;
-    //     };
-
-    //     reader.readAsDataURL(this.file);
-    //   }
+      //   if (FileReader && this.file) {
+      //     const reader = new FileReader();
+      //     reader.onload = () => {
+      //       this.file_url = reader.result;
+      //     };
+      //     reader.readAsDataURL(this.file);
+      //   }
     },
 
     onRejected() {
@@ -154,7 +175,7 @@ export default {
 
 <style lang="scss">
 // $
-.AddPortfolioItemDialog {
+.AddStoreItemDialog {
   padding: 30px 24px;
   min-width: 90vw;
 
@@ -162,17 +183,17 @@ export default {
     padding: 40px 30px;
     min-width: 600px;
   }
-  .AddPortfolioItemDialog__title {
+  .AddStoreItemDialog__title {
     @include font(24px, bold, $primary);
   }
 
-  .AddPortfolioItemDialog__thumbnail {
+  .AddStoreItemDialog__thumbnail {
     height: 200px;
     width: 100%;
     margin-bottom: 20px;
   }
 
-  .AddPortfolioItemDialog__btn {
+  .AddStoreItemDialog__btn {
     border-radius: 10px;
     letter-spacing: 1px;
     min-width: 200px;

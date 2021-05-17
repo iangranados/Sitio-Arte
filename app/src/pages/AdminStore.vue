@@ -53,12 +53,12 @@ export default {
     //     });
     },
     onAddNewImage () {
-    //   this.$q.dialog({
-    //     component: () => import("../components/store/AddStoreItemDialog.vue"),
-    //     parent: this
-    //   }).onOk(() => {
-    //     this.loadPortfolio()
-    //   });
+      this.$q.dialog({
+        component: () => import("../components/store/AddStoreItemDialog.vue"),
+        parent: this
+      }).onOk(() => {
+        // this.loadPortfolio()
+      });
     }
   }
 };
