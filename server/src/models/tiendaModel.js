@@ -41,10 +41,13 @@ const Tienda = {
         return TiendaCollection.updateOne({_id : id}, {$set : {img : newImg}})
     },
     modificarTitulo : function(id, newTitulo){
-        return TiendaCollection.updateOne({_id : id}, {$set : {img : newTitulo}})
+        return TiendaCollection.updateOne({_id : id}, {$set : {titulo : newTitulo}})
     },
     modificarPrecio : function(id, newPrecio){
-        return TiendaCollection.updateOne({_id : id}, {$set : {img : newPrecio}})
+        return TiendaCollection.updateOne({_id : id}, {$set : {precio : newPrecio}})
+    },
+    modificarStatus : function(id, newStatus){
+        return TiendaCollection.updateOne({_id : id}, {$set : {status : newStatus}})
     }
 }
 

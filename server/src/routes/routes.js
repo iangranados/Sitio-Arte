@@ -471,4 +471,57 @@ router.post( '/crearItem', singleUpload, ( req, res ) => {
     });
 });
 
+// Ruta para borrar un item
+router.delete('/borrarItem/:id', ( req, res ) => {
+
+    let id = req.params.id;
+
+    if(!id){
+        res.statusMessage = "Please send the item to delete";
+        return res.status( 406 ).end()
+    }
+    Tienda.deleteItem( id )
+    .then( result => {
+        if(result.deletedCount > 0){
+            return res.status( 200 ).end();
+        }
+        else{
+            res.statusMessage = "That item was not found in the db";
+            return res.status( 404 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+router.patch('/modificarStatus/:id', ( req, res ) => {
+    let id = req.params.id;
+    let newStatus = req.body.status;
+
+    if(!id || !newStatus){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Tienda
+    .modificarStatus(id, newStatus)
+    .then( results => {
+        if(results.nModified > 0){
+            return res.status( 202 ).end();
+        }
+        else{
+            res.statusMessage = "There is no item with the id passed";
+            return res.status( 409 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+
+
 module.exports = router;
