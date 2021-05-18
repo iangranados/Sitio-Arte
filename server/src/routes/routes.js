@@ -8,6 +8,7 @@ const { Portafolio } = require('../models/portafolioModel');
 const { Users } = require( '../models/usuarioModel' );
 const { Comision } = require('../models/comisionModel');
 const { Tipo } = require('../models/tipoModel');
+const { Tienda } = require('../models/tiendaModel');
 const upload = require('../services/file-upload');
 const Admin = require('../models/adminModel');
 
@@ -429,6 +430,45 @@ router.patch('/modificarTipo/:name', ( req, res ) => {
         res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
+});
+
+///////////////// RUTAS TIENDA //////////////////////
+// Ruta para obtener todos los items de tienda
+router.get( '/tienda', ( req, res ) => {
+    Tienda
+    .verTienda()
+    .then( result => {
+        return res.status( 200 ).json( result );
+    })
+    .catch( err => {
+        res.statusMessage = "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+// Ruta para agregar un item a tienda
+router.post( '/crearItem', singleUpload, ( req, res ) => {
+    
+    let { titulo, categoria, precio } = req.body;
+    let img = req.file.location;
+    let status = 'available';
+
+    if(!titulo || !categoria || !precio ){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    const newItem = { titulo, categoria, precio, img, status}
+
+    Tienda
+    .addNewItem( newItem )
+    .then( results => {
+        return res.status( 201 ).json( results );
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    });
 });
 
 module.exports = router;
