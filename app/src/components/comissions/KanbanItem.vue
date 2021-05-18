@@ -46,13 +46,15 @@ export default {
         .dialog({
           component: () => import("./TokenRequestDialog.vue"),
           parent: this,
+          item: this.item,
         })
-        .onOk(() => {
+        .onOk((res) => {
+          console.log(res);
           this.$q.dialog({
             component: () => import("./CommissionViewDialog.vue"),
             parent: this,
+            commission: res
           });
-          console.log("hello!");
         });
     },
   },
@@ -80,6 +82,8 @@ export default {
   box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.16);
   background-color: #ffffff;
   margin-bottom: 7px;
+
+  cursor: pointer;
 
   .KanbanItem__image {
     width: 100%;
