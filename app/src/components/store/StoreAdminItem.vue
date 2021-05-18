@@ -1,12 +1,14 @@
 <template>
-  <div class="PortfolioAdminItem">
+  <div class="StoreAdminItem">
     <div>
-      <q-img :src="item.img" class="PortfolioAdminItem__image" />
-      <div class="PortfolioAdminItem__content">
-        <p class="PortfolioAdminItem__url"><b>URL:</b><br />{{ item.link }}</p>
+      <q-img :src="item.link" class="StoreAdminItem__image" />
+      <div class="StoreAdminItem__content">
+        <p class="StoreAdminItem__title"><b>Title:</b><br />{{ item.title }}</p>
+        <p class="StoreAdminItem__price"><b>Price:</b><br />{{ item.price }}</p>
+        <p class="StoreAdminItem__category"><b>Category:</b><br />{{ item.category }}</p>
       </div>
     </div>
-    <div class="PortfolioAdminItem__actions">
+    <div class="StoreAdminItem__actions">
       <q-btn @click="onModify" icon="edit" size="14px" flat dense round />
       <q-btn
         @click="onDelete"
@@ -31,35 +33,35 @@ export default {
     },
   },
   methods: {
-    // onDelete() {
-    //   this.$q
-    //     .dialog({
-    //       component: () => import("./DeletePortfolioItemDialog.vue"),
-    //       parent: this,
-    //       item: this.item,
-    //     })
-    //     .onOk(() => {
-    //       this.$emit("reload-portfolio");
-    //     });
-    // },
-    // onModify() {
-    //   this.$q
-    //     .dialog({
-    //       component: () => import("./ModifyPortfolioItemDialog.vue"),
-    //       parent: this,
-    //       item: this.item,
-    //     })
-    //     .onOk(() => {
-    //       this.$emit("reload-portfolio");
-    //     });
-    // },
+    onDelete() {
+      this.$q
+        .dialog({
+          component: () => import("./DeleteStoreItemDialog.vue"),
+          parent: this,
+          item: this.item,
+        })
+        .onOk(() => {
+          this.$emit("reload-Store");
+        });
+    },
+    onModify() {
+      this.$q
+        .dialog({
+          component: () => import("./ModifyStoreItemDialog.vue"),
+          parent: this,
+          item: this.item,
+        })
+        .onOk(() => {
+          this.$emit("reload-Store");
+        });
+    },
   },
 };
 </script>
 
 <style lang="scss">
 // $
-.PortfolioAdminItem {
+.StoreAdminItem {
   border-radius: 5px;
   box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.16);
   background-color: #ffffff;
@@ -73,23 +75,23 @@ export default {
   justify-content: space-between;
 }
 
-.PortfolioAdminItem__image {
+.StoreAdminItem__image {
   height: 100px;
   width: 100%;
 }
 
-.PortfolioAdminItem__content {
+.StoreAdminItem__content {
   margin-top: 5px;
   margin-bottom: 15px;
 }
 
-.PortfolioAdminItem__url {
+.StoreAdminItem__url {
   @include font(12px, normal, $dark);
   word-break: break-all;
   margin: 0 0 5px;
 }
 
-.PortfolioAdminItem__actions {
+.StoreAdminItem__actions {
   text-align: right;
 }
 </style>
