@@ -1,100 +1,121 @@
 <template>
   <q-dialog ref="CommissionViewDialog" @hide="onDialogHide">
-    <q-card class="CommissionDetailView q-pb-lg q-px-lg">
-      <q-card-section class="row items-center q-pb-none">
+    <q-card class="CommissionDetailView" style="width: 1000px; max-width: 80vw;">
+      <q-toolbar>
         <q-space />
-        <q-btn icon="close" color="red-lips" flat round dense v-close-popup />
-      </q-card-section>
+        <q-btn flat round dense icon="close" color="red-lips" v-close-popup />
+      </q-toolbar>
+      <div class="CommissionDetailView__content">
 
-      <!-- <q-separator></q-separator> -->
-
-      <q-card-section horizontal>
-        <q-card-section class="col-8">
-          <div class="CommissionDetailView-Title">Commission Details</div>
-          <div class="CommissionDetailView-Description-Title q-pt-md">
-            Description
+        <div class="CommissionDetailView__header row q-col-gutter-xl">
+          <div class="col-12 col-md-8">
+            <div class="CommissionDetailView__section">
+              <h4 class="CommissionDetailView__status">{{status}}</h4>
+              <h3 class="CommissionDetailView__title">{{commission.title}}</h3>
+            </div>
           </div>
-          <p caption>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </p>
-          <q-card-section class="CommissionDetailView-Progress">
-            <div>Progess:</div>
-            <!-- <q-scroll-area
-              horizontal
-              class="CommissionDetailView-ProgressScroll"
-            >
-              <div class="try2 row no-wrap">
-                <q-img
-                  src="https://placeimg.com/500/300/nature"
-                  spinner-color="white"
-                  style="height: 140px; max-width: 150px"
-                ></q-img>
-                <q-img
-                  src="https://placeimg.com/500/300/nature"
-                  spinner-color="white"
-                  style="height: 140px; max-width: 150px"
-                ></q-img>
-                <q-img
-                  src="https://placeimg.com/500/300/nature"
-                  spinner-color="white"
-                  style="height: 140px; max-width: 150px"
-                ></q-img>
+          <div class="col-12 col-md-4">
+            <div class="CommissionDetailView__section">
+              <p class="CommissionDetailView__timestamps">
+                Ordered on March 3rd, 2021
+                <br />
+                Accepted on March 7th, 2021
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row q-col-gutter-xl">
+          <div class="col-12 col-md-8">
+            <div class="CommissionDetailView__section">
+              <h5 class="CommissionDetailView__SectionTitle">Description</h5>
+              <p class="CommissionDetailView__description">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id pulvinar elit, et auctor tellus. Etiam in congue sapien. In viverra sollicitudin viverra. Praesent id velit nec odio luctus dictum. Praesent congue nulla nec arcu malesuada, eget consectetur odio dapibus. Integer efficitur felis nulla, eu aliquam tellus imperdiet quis.
+              </p>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="CommissionDetailView__section">
+              <h5 class="CommissionDetailView__SectionTitle">Contact info</h5>
+              <p class="CommissionDetailView__contact">Requested by: username</p>
+              <p class="CommissionDetailView__contact">Contact method: Discord</p>
+              <p class="CommissionDetailView__contact">Contact: @username</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row q-col-gutter-xl">
+          <div class="col-12 col-md-8">
+            <div class="CommissionDetailView__section">
+              <h5 class="CommissionDetailView__SectionTitle">Messages</h5>
+              <div v-if="true" class="CommissionDetailView__Messages" style="">
+                <q-chat-message
+                  name="Lelemoon"
+                  :text="['Doing fine, it\'ll be ready soon!']"
+                  sent
+                  stamp="7 minutes ago"
+                />
+                <q-chat-message
+                  name="me"
+                  :text="['Hey, how\'s the commission going?']"
+                  stamp="7 minutes ago"
+                />
+                <q-chat-message
+                  name="Lelemoon"
+                  :text="['Doing fine, it\'ll be ready soon!']"
+                  sent
+                  stamp="7 minutes ago"
+                />
+                <q-chat-message
+                  name="me"
+                  :text="['Hey, how\'s the commission going?']"
+                  stamp="7 minutes ago"
+                />
+                <q-chat-message
+                  name="Lelemoon"
+                  :text="['Doing fine, it\'ll be ready soon!']"
+                  sent
+                  stamp="7 minutes ago"
+                />
+                <q-chat-message
+                  name="me"
+                  :text="['Hey, how\'s the commission going?']"
+                  stamp="7 minutes ago"
+                />
               </div>
-            </q-scroll-area> -->
-            <q-scroll-area
-              horizontal
-              style="height: 210px; width: 100%"
-              class="col bg-grey-1 rounded-borders"
-            >
-              <div class="row no-wrap">
-                <div
-                  v-for="n in 10"
-                  :key="n"
-                  style="width: 100%"
-                  class="q-pa-md"
+              <p v-else class="CommissionDetailView__noMessages">Start the conversation by sending a new message</p>
+              <q-form>
+                <q-input 
+                  v-model="message"
+                  placeholder="Write here..."
+                  outlined
                 >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Architecto fuga quae veritatis blanditiis sequi id expedita
-                  amet esse aspernatur! Iure, doloribus!
+                  <template v-slot:append>
+                    <q-icon v-if="message !== ''" name="send" color="primary" class="cursor-pointer" />
+                  </template>
+                </q-input>
+              </q-form>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="CommissionDetailView__section">
+              <h5 class="CommissionDetailView__SectionTitle">Porcentaje de avance</h5>
+              <q-input v-model="progress" class="Form__field" outlined />
+            </div>
+            <div class="CommissionDetailView__section">
+              <h5 class="CommissionDetailView__SectionTitle">Progreso</h5>
+              <div class="row q-col-gutter-md">
+                <div v-for="(file, index) in files" :key="index" class="col-6">
+                  <q-img :src="file.file">
+                    <q-btn icon="download" style="bottom: 5px; right: 5px" />
+                  </q-img>
+                  <p>{{file.time}}</p>
                 </div>
               </div>
-            </q-scroll-area>
-          </q-card-section>
-          <q-card-section
-            class="q-pa-md row justify-center CommissionDetailView-Chat"
-          >
-            <div style="width: 100%; max-width: 400px">
-              <q-chat-message
-                name="me"
-                avatar="https://cdn.quasar.dev/img/avatar1.jpg"
-                :text="['hey, how\'s the commission going?']"
-                sent
-              />
-              <q-chat-message
-                name="Lele"
-                avatar="https://cdn.quasar.dev/img/avatar2.jpg"
-                :text="['doing fine, it\'ll be ready soon!']"
-              />
             </div>
-            <q-input
-              dense
-              autofocus
-              @keyup.enter="prompt = false"
-              label="Send a message"
-              outlined
-              class="q-mt-lg"
-            />
-          </q-card-section>
-        </q-card-section>
-
-        <q-separator vertical></q-separator>
-
-        <q-card-section class="col-4">
-          Pedido el 3 de marzo 2021
-          <br />
-          Aceptado el 7 de marzo 2021
-        </q-card-section>
-      </q-card-section>
+          </div>
+        </div>
+      </div>
     </q-card>
   </q-dialog>
 </template>
@@ -102,11 +123,36 @@
 <script>
 export default {
   name: "CommissionViewDialog",
-  data() {
-    return {
-      token: "",
-    };
+  props: {
+    commission: {
+      type: Object,
+      required: true,
+    }
   },
+  data: () => ({
+    message: "",
+
+    progress: "50%",
+
+    files: [
+      {
+        file: 'https://loremflickr.com/g/320/240/paris',
+        time: '10/03/2021'
+      },
+      {
+        file: 'https://loremflickr.com/g/320/240/paris',
+        time: '10/03/2021'
+      },
+      {
+        file: 'https://loremflickr.com/g/320/240/paris',
+        time: '10/03/2021'
+      },
+      {
+        file: 'https://loremflickr.com/g/320/240/paris',
+        time: '10/03/2021'
+      },
+    ]
+  }),
   methods: {
     // following method is REQUIRED
     // (don't change its name --> "show")
@@ -126,15 +172,78 @@ export default {
       this.$emit("hide");
     },
   },
+  computed: {
+    status: function () {
+      return "Status"
+    }
+  }
 };
 </script>
 
 <style lang="scss">
 // $
 
-.CommissionDetailView-Title {
-  @include font(24px, bold, $primary);
+.CommissionDetailView {
+  .CommissionDetailView__content {
+    padding: 20px 24px;
+    @media (min-width: $breakpoint-md-min) {
+      padding: 20px 30px 45px 40px;
+    }
+  }
+
+  .CommissionDetailView__section {
+    margin-bottom: 20px;
+  }
+
+  .CommissionDetailView__status {
+    @include font(20px, bold, $gray);
+    margin: 0 0 5px;
+  }
+
+  .CommissionDetailView__title {
+    @include font(28px, bold, $primary);
+    margin: 0 0 5px;
+  }
+
+  .CommissionDetailView__timestamps {
+    @include font(14px, normal, $gray);
+    line-height: 1.5;
+    margin: 0;
+    @media (min-width: $breakpoint-md-min) {
+      margin-top: 15px;
+      text-align: right;
+    }
+  }
+
+  .CommissionDetailView__SectionTitle {
+    @include font(16px, bold, $gray);
+    margin: 0 0 10px;
+  }
+
+  .CommissionDetailView__contact {
+    @include font(14px, normal, $gray);
+    margin: 0 0 10px;
+  }
+
+  .CommissionDetailView__Messages {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+    max-height: 400px;
+    margin-bottom: 15px;
+
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .CommissionDetailView__noMessages {
+    @include font(18px, bold, $dark);
+    text-align: center;
+
+  }
 }
+
+
 
 .CommissionDetailView-btn {
   border-radius: 10px;
