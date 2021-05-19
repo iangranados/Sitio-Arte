@@ -60,28 +60,6 @@
                   :text="['Hey, how\'s the commission going?']"
                   stamp="7 minutes ago"
                 />
-                <q-chat-message
-                  name="Lelemoon"
-                  :text="['Doing fine, it\'ll be ready soon!']"
-                  sent
-                  stamp="7 minutes ago"
-                />
-                <q-chat-message
-                  name="me"
-                  :text="['Hey, how\'s the commission going?']"
-                  stamp="7 minutes ago"
-                />
-                <q-chat-message
-                  name="Lelemoon"
-                  :text="['Doing fine, it\'ll be ready soon!']"
-                  sent
-                  stamp="7 minutes ago"
-                />
-                <q-chat-message
-                  name="me"
-                  :text="['Hey, how\'s the commission going?']"
-                  stamp="7 minutes ago"
-                />
               </div>
               <p v-else class="CommissionDetailView__noMessages">Start the conversation by sending a new message</p>
               <q-form>
@@ -106,10 +84,10 @@
               <h5 class="CommissionDetailView__SectionTitle">Progreso</h5>
               <div class="row q-col-gutter-md">
                 <div v-for="(file, index) in files" :key="index" class="col-6">
-                  <q-img :src="file.file">
-                    <q-btn icon="download" style="bottom: 5px; right: 5px" />
+                  <q-img :src="file.file" :ratio="1" class="CommissionDetailView__image">
+                    <q-btn icon="download" color="dark" size="10px" round dense unelevated/>
                   </q-img>
-                  <p>{{file.time}}</p>
+                  <p class="Image__timestamp">{{file.time}}</p>
                 </div>
               </div>
             </div>
@@ -239,34 +217,18 @@ export default {
   .CommissionDetailView__noMessages {
     @include font(18px, bold, $dark);
     text-align: center;
-
   }
-}
 
-
-
-.CommissionDetailView-btn {
-  border-radius: 10px;
-  letter-spacing: 1px;
-  min-width: 48%;
-  font-size: 16pnone;
-}
-.CommissionDetailView {
-  min-width: 50vw;
-}
-
-.CommissionDetailView-Chat {
-  background-color: rgb(241, 241, 241);
-}
-
-.CommissionDetailView-ProgressScroll {
-  height: 100px;
-  width: 100%;
-  background-color: gray;
-  .try2 {
-    background-color: #fff;
-    width: 100%;
-    height: 100%;
+  .CommissionDetailView__image {
+    .q-btn {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+    }
+  }
+  .Image__timestamp {
+    @include font(12px, normal, $gray);
+    margin: 5px 0 0;
   }
 }
 </style>
