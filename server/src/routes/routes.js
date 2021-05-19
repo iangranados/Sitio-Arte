@@ -4,11 +4,15 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
-const { Portafolio } = require('../models/portafolioModel')
+const { Portafolio } = require('../models/portafolioModel');
 const { Users } = require( '../models/usuarioModel' );
 const { Comision } = require('../models/comisionModel');
 const { Tipo } = require('../models/tipoModel');
+const { Tienda } = require('../models/tiendaModel');
 const upload = require('../services/file-upload');
+const Admin = require('../models/adminModel');
+
+const passport = require('passport');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -19,10 +23,13 @@ const storage = multer.diskStorage({
     }
 })
 
+
+
 const singleUpload = upload.single('img');
 
 router.use( jsonParser );
 
+///////////////// RUTAS PORTAFOLIO //////////////////////
 // Ruta para obtener todas las imagenes
 router.get( '/galeria', ( req, res ) => {
     Portafolio
@@ -37,7 +44,6 @@ router.get( '/galeria', ( req, res ) => {
 });
 
 // Ruta para agregar una nueva imagen
-
 router.post( '/addImage', singleUpload, ( req, res ) => {
 
     let { link } = req.body;
@@ -81,7 +87,7 @@ router.delete('/borrarImagen/:id', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -108,11 +114,18 @@ router.patch('/modificarImagen/:id', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
 
+///////////////// RUTAS ADMIN //////////////////////
+router.post('/admin', passport.authenticate('local', {
+    successRedirect: '/admin/portafolio',
+    failureRedirect: '/admin'
+}));
+
+///////////////// RUTAS COMISIONES //////////////////////
 // Ruta para obtener todas las comisiones
 router.get( '/comisiones', ( req, res ) => {
     Comision
@@ -151,13 +164,13 @@ router.post( '/crearComision', ( req, res ) => {
         return res.status( 201 ).json( results );
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     });
 });
 
 // Ruta para modificar la descripcion de una comision
-router.patch('/modificarComsion/:token', ( req, res ) => {
+router.patch('/modificarComision/:token', ( req, res ) => {
     let token = req.params.token;
     let newDes = req.body.description;
 
@@ -178,7 +191,7 @@ router.patch('/modificarComsion/:token', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -203,7 +216,7 @@ router.delete('/borrarComision/:token', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -230,7 +243,7 @@ router.patch('/modificarComsionAvance/:token', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -257,11 +270,79 @@ router.patch('/completedComision/:token', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
 
+router.patch('/approveComision/:token', ( req, res ) => {
+    let token = req.params.token;
+    let newApprove = req.body.approved;
+
+    if(!token || !newApprove){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Comision
+    .approveComision(token, newApprove)
+    .then( results => {
+        if(results.nModified > 0){
+            return res.status( 202 ).end();
+        }
+        else{
+            res.statusMessage = "There is no comision with the token passed";
+            return res.status( 409 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+// Ruta para agregar un comentario a la comision
+router.patch('/addComment/:token', ( req, res ) => {
+    let token = req.params.token;
+    let newComment = req.body.comments;
+
+    if(!token || !newComment){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Comision
+    .addComment(token, newComment)
+    .then( results => {
+        return res.status( 202 ).end();
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+router.patch('/addArchivo/:token', singleUpload, ( req, res ) => {
+    let token = req.params.token;
+    let newArchivo = req.file.location;
+
+    if(!token || !newArchivo){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Comision
+    .addArchivo(token, newArchivo)
+    .then( results => {
+        return res.status( 202 ).end();
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+///////////////// RUTAS TIPO //////////////////////
 // Ruta para obtener los tipos de comisiones
 router.get( '/tipos', ( req, res ) => {
     Tipo
@@ -294,7 +375,6 @@ router.post( '/crearTipo', singleUpload, ( req, res ) => {
         return res.status( 201 ).json( results );
     })
     .catch( err => {
-        console.log(err)
         res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     });
@@ -321,7 +401,7 @@ router.delete('/borrarTipo/:id', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -348,9 +428,101 @@ router.patch('/modificarTipo/:id', ( req, res ) => {
         }
     })
     .catch( err => {
-        res.statusMessage =  "Somethong went wrong with the DB";
+        res.statusMessage =  "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
+
+///////////////// RUTAS TIENDA //////////////////////
+// Ruta para obtener todos los items de tienda
+router.get( '/tienda', ( req, res ) => {
+    Tienda
+    .verTienda()
+    .then( result => {
+        return res.status( 200 ).json( result );
+    })
+    .catch( err => {
+        res.statusMessage = "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+// Ruta para agregar un item a tienda
+router.post( '/crearItem', singleUpload, ( req, res ) => {
+    
+    let { titulo, categoria, precio } = req.body;
+    let img = req.file.location;
+    let status = 'available';
+
+    if(!titulo || !categoria || !precio ){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    const newItem = { titulo, categoria, precio, img, status}
+
+    Tienda
+    .addNewItem( newItem )
+    .then( results => {
+        return res.status( 201 ).json( results );
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    });
+});
+
+// Ruta para borrar un item
+router.delete('/borrarItem/:id', ( req, res ) => {
+
+    let id = req.params.id;
+
+    if(!id){
+        res.statusMessage = "Please send the item to delete";
+        return res.status( 406 ).end()
+    }
+    Tienda.deleteItem( id )
+    .then( result => {
+        if(result.deletedCount > 0){
+            return res.status( 200 ).end();
+        }
+        else{
+            res.statusMessage = "That item was not found in the db";
+            return res.status( 404 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+router.patch('/modificarStatus/:id', ( req, res ) => {
+    let id = req.params.id;
+    let newStatus = req.body.status;
+
+    if(!id || !newStatus){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Tienda
+    .modificarStatus(id, newStatus)
+    .then( results => {
+        if(results.nModified > 0){
+            return res.status( 202 ).end();
+        }
+        else{
+            res.statusMessage = "There is no item with the id passed";
+            return res.status( 409 ).end();
+        }
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+
 
 module.exports = router;

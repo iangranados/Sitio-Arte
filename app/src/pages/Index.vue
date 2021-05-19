@@ -11,7 +11,7 @@
           color="gray"
           icon="fab fa-instagram"
           type="a"
-          href="https://www.instagram.com"
+          href="https://www.instagram.com/lelemoonnart/"
           target="_blank"
         />
         <q-btn
@@ -21,7 +21,7 @@
           color="gray"
           icon="fab fa-twitter"
           type="a"
-          href="https://www.twitter.com"
+          href="https://twitter.com/Lelemoonn"
           target="_blank"
         />
         <q-btn
@@ -31,7 +31,7 @@
           color="gray"
           icon="fab fa-twitch"
           type="a"
-          href="https://www.twitch.tv"
+          href="https://www.twitch.tv/lelemoonn"
           target="_blank"
         />
       </div>
@@ -39,24 +39,13 @@
     <q-separator color="light-gray" />
     <section class="Home__section">
       <h2 class="SectionTitle">Rules</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus vel
-        nisi at feugiat. Nulla facilisi. Nulla congue gravida magna ac blandit.
-        Vestibulum sed felis at dolor vulputate fringilla ut ut turpis. Lorem
-        ipsum dolor sit amet, consectetur adipiscing elit. Proin a diam turpis.
-      </p>
       <ul>
-        <li>Cras sit amet ante tincidunt</li>
-        <li>lacinia urna sed, egestas velit.</li>
+        <li>PayPal invoices only.</li>
+        <li>Payments are always upfront.</li>
+        <li>If you want to make merchandise out of a commission, please specify so. (You must pay a 50% extra from base price for commercial use.)</li>
+        <li>I can reject commissions containing: Mecha/Furry/NSFW.</li>
+        <li>Feel free to DM me if you have any questions.</li>
       </ul>
-      <p>
-        Suspendisse pulvinar lectus risus, posuere scelerisque dui facilisis
-        vitae. Praesent luctus vestibulum nisi in viverra. Integer non viverra
-        urna. Cras at nibh elit. Vestibulum dapibus, justo at varius accumsan,
-        felis urna sodales mi, eget tempus arcu ex et felis. Fusce in elit
-        dapibus, ultricies felis non, vestibulum urna. Sed ut massa at turpis
-        iaculis molestie.
-      </p>
     </section>
   </q-page>
 </template>
