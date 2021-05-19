@@ -3,7 +3,7 @@
     <div v-if="!!error" class="text-center">
       <h2 class="Portfolio__error">{{ error }}</h2>
     </div>
-    <div v-else-if="!!loading" class="text-center">
+    <div v-else-if="!!loading && images.length <= 0" class="text-center">
       <q-circular-progress indeterminate size="40px" color="primary" />
     </div>
     <masonry v-else :cols="{ default: 3, 700: 2 }" :gutter="6">
@@ -45,29 +45,9 @@
 export default {
   name: "Portfolio",
   mounted() {
-    this.loading = true;
-    this.$axios
-      .get("/galeria")
-      .then((response) => {
-        if (response.status === 200 && Array.isArray(response.data)) {
-          this.images = response.data;
-          this.error = null;
-        } else {
-          this.error = "Algo salió mal, intenta otra vez :c";
-        }
-        this.loading = false;
-      })
-      .catch((e) => {
-        this.loading = false;
-        this.error = "Algo salió mal, intenta otra vez :c";
-      });
+    this.$store.dispatch('portfolio/loadPortfolio')
   },
   data: () => ({
-    loading: false,
-    error: null,
-
-    images: [],
-
     fullscreen: false,
     fullscreen_image: null
   }),
@@ -77,6 +57,17 @@ export default {
       this.fullscreen = true;
     },
   },
+  computed: {
+    loading () {
+      return this.$store.state.portfolio.loading 
+    },
+    error () {
+      return this.$store.state.portfolio.error
+    },
+    images () {
+      return this.$store.state.portfolio.images
+    }
+  }
 };
 </script>
 

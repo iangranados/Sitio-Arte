@@ -39,6 +39,7 @@ const routes = [
       { path: 'comisiones', component: () => import('pages/AdminLogin.vue') },
       { path: 'portafolio', component: () => import('pages/AdminPortafolio.vue') },
       { path: 'tienda', component: () => import('pages/AdminLogin.vue') },
+      { path: 'tipos', component: () => import('pages/AdminTipos.vue') }
     ]
   },
 
