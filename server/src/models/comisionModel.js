@@ -40,6 +40,10 @@ const comisionSchema = mongoose.Schema({
     comments: {
         type: [String],
         required: true
+    },
+    archivos: {
+        type: [String],
+        required: true
     }
 });
 
@@ -51,6 +55,26 @@ const Comision = {
     verComisiones : function(){
         return ComisionCollection
         .find()
+        .then( comisiones => {
+            return comisiones;
+        })
+        .catch( err => {
+            throw err;
+        });
+    },
+    verComisionesAprobadas : function(){
+        return ComisionCollection
+        .find( { approved: {$eq: true}})
+        .then( comisiones => {
+            return comisiones;
+        })
+        .catch( err => {
+            throw err;
+        });
+    },
+    verComisionesEnProgreso : function(){
+        return ComisionCollection
+        .find( { avance : {$lt : 100}})
         .then( comisiones => {
             return comisiones;
         })
@@ -118,7 +142,40 @@ const Comision = {
             throw err;
         })
     },
-
+    approveComision : function( token, newApprove ){
+        return ComisionCollection
+        .updateOne({token : token}, {$set : {approved : newApprove}})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
+        })
+    },
+    addComment : function( token, newComment ) {
+        return ComisionCollection
+        .updateOne(
+            { token: token }, 
+            { $push: { comments: newComment }})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
+        })
+    },
+    addArchivo : function( token, newArchivo ) {
+        return ComisionCollection
+        .updateOne(
+            { token: token }, 
+            { $push: { archivos: newArchivo }})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
+        })
+    }
 }
 
 module.exports = { Comision };
