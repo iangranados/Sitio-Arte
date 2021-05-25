@@ -40,10 +40,22 @@ export default {
       required: true,
     },
   },
+  mounted () {
+    this.isAuthenticated = this.$route.path === '/admin/comisiones'
+  },
+  data: () => ({
+    isAuthenticated: false,
+  }),
   methods: {
-    seeDetail: function () {
-      this.$q
-        .dialog({
+    seeDetail () {
+      if (this.isAuthenticated) {
+        this.$q.dialog({
+          component: () => import("./CommissionViewDialogAdmin.vue"),
+          parent: this,
+          commission: this.item
+        });
+      } else {
+        this.$q.dialog({
           component: () => import("./TokenRequestDialog.vue"),
           parent: this,
           item: this.item,
@@ -56,6 +68,7 @@ export default {
             commission: res
           });
         });
+      }
     },
   },
   computed: {

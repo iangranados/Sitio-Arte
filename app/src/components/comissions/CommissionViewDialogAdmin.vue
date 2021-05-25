@@ -3,6 +3,22 @@
     <q-card class="CommissionDetailView" style="width: 1000px; max-width: 80vw;">
       <q-toolbar>
         <q-space />
+        <q-btn flat round dense icon="more_horiz" color="gray">
+          <q-menu>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup>
+                <q-item-section>Marcar como "En progreso"</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section>Marcar como "Completado"</q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable v-close-popup>
+                <q-item-section color="red-lips">Eliminar Comisión</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
         <q-btn flat round dense icon="close" color="red-lips" v-close-popup />
       </q-toolbar>
       <div class="CommissionDetailView__content">
@@ -77,6 +93,10 @@
           </div>
           <div class="col-12 col-md-4">
             <div class="CommissionDetailView__section">
+              <h5 class="CommissionDetailView__SectionTitle">Porcentaje de avance</h5>
+              <q-input v-model="progress" class="Form__field" outlined />
+            </div>
+            <div class="CommissionDetailView__section">
               <h5 class="CommissionDetailView__SectionTitle">Progreso</h5>
               <div class="row q-col-gutter-md">
                 <div v-for="(file, index) in files" :key="index" class="col-6">
@@ -96,7 +116,7 @@
 
 <script>
 export default {
-  name: "CommissionViewDialog",
+  name: "CommissionViewDialogAdmin",
   props: {
     commission: {
       type: Object,
