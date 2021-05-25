@@ -150,12 +150,12 @@ router.post( '/crearComision', ( req, res ) => {
     }
 
     let token = uuidv4();
-    let approved = false;
     let avance = 0;
-    let completed = false;
+    let status = "Pending";
     let comments = [];
+    let archivos = [];
 
-    const newComision = { name, contact, username, tipo, description, token, approved, avance, completed, comments }
+    const newComision = { name, contact, username, tipo, description, token, status, avance, comments, archivos }
     console.log(newComision);
 
     Comision
@@ -249,43 +249,17 @@ router.patch('/modificarComsionAvance/:token', ( req, res ) => {
 });
 
 // Rura para marcar como completada una comision
-router.patch('/completedComision/:token', ( req, res ) => {
+router.patch('/changeComStatus/:token', ( req, res ) => {
     let token = req.params.token;
-    let newComp = req.body.completed;
+    let newStatus = req.body.status;
 
-    if(!token || !newComp){
+    if(!token || !newStatus){
         res.statusMessage = "Please send all the fields required";
         return res.status( 406 ).end()
     }
 
     Comision
-    .modificarComisionCompleted(token, newComp)
-    .then( results => {
-        if(results.nModified > 0){
-            return res.status( 202 ).end();
-        }
-        else{
-            res.statusMessage = "There is no comision with the token passed";
-            return res.status( 409 ).end();
-        }
-    })
-    .catch( err => {
-        res.statusMessage =  "Something went wrong with the DB";
-        return res.status( 500 ).end();
-    })
-});
-
-router.patch('/approveComision/:token', ( req, res ) => {
-    let token = req.params.token;
-    let newApprove = req.body.approved;
-
-    if(!token || !newApprove){
-        res.statusMessage = "Please send all the fields required";
-        return res.status( 406 ).end()
-    }
-
-    Comision
-    .approveComision(token, newApprove)
+    .changeStatus(token, newStatus)
     .then( results => {
         if(results.nModified > 0){
             return res.status( 202 ).end();
@@ -302,14 +276,38 @@ router.patch('/approveComision/:token', ( req, res ) => {
 });
 
 // Ruta para agregar un comentario a la comision
-router.patch('/addComment/:token', ( req, res ) => {
+router.patch('/changeContactInfo/:token', ( req, res ) => {
     let token = req.params.token;
-    let newComment = req.body.comments;
+    let { name: newName, contact: newContact, username: newUsername } = req.body;
 
-    if(!token || !newComment){
+    if(!token || !newName || !newContact || !newUsername ){
         res.statusMessage = "Please send all the fields required";
         return res.status( 406 ).end()
     }
+
+    Comision
+    .changeContactInfo(token, newName, newContact, newUsername )
+    .then( results => {
+        return res.status( 202 ).end();
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+router.patch('/addComment/:token', ( req, res ) => {
+    let token = req.params.token;
+    let comment = req.body.comments;
+    let user = req.body.user;
+
+    if(!token || !comment || !user){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    let newComment = { user : user, comment : comment }
+    console.log(newComment)
 
     Comision
     .addComment(token, newComment)
@@ -338,6 +336,21 @@ router.patch('/addArchivo/:token', singleUpload, ( req, res ) => {
     })
     .catch( err => {
         res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+router.get( '/comisionesStatus', ( req, res ) => {
+
+    let status = req.body.status;
+
+    Comision
+    .verComisionesStatus( status )
+    .then( result => {
+        return res.status( 200).json( result );
+    })
+    .catch( err => {
+        res.statusMessage = "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
@@ -516,6 +529,26 @@ router.patch('/modificarStatus/:id', ( req, res ) => {
             res.statusMessage = "There is no item with the id passed";
             return res.status( 409 ).end();
         }
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
+router.patch('/changeItem/:token', ( req, res ) => {
+    let id = req.params.id;
+    let { titulo: newTitulo, categoria: newCate, precio: newPrecio } = req.body;
+
+    if(!id || !newTitulo || !newCate || !newPrecio ){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Tienda
+    .modificarItem(id, newTitulo, newCate, newPrecio )
+    .then( results => {
+        return res.status( 202 ).end();
     })
     .catch( err => {
         res.statusMessage =  "Something went wrong with the DB";
