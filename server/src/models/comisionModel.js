@@ -25,19 +25,20 @@ const comisionSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    approved: {
-        type: Boolean,
-        required: true
+    status: {
+        type: String,
+        required : true
+        // Pending || Aproved || Working On || Completed
     },
     avance: {
         type: Number,
         required: true
     },
-    completed: {
-        type: Boolean,
+    comments: {
+        type: [Object],
         required: true
     },
-    comments: {
+    archivos: {
         type: [String],
         required: true
     }
@@ -51,6 +52,16 @@ const Comision = {
     verComisiones : function(){
         return ComisionCollection
         .find()
+        .then( comisiones => {
+            return comisiones;
+        })
+        .catch( err => {
+            throw err;
+        });
+    },
+    verComisionesStatus : function( status ){
+        return ComisionCollection
+        .find( { status: {$eq: status}})
         .then( comisiones => {
             return comisiones;
         })
@@ -108,9 +119,9 @@ const Comision = {
             throw err;
         })
     },
-    modificarComisionCompleted : function( token, newComp ){
+    changeStatus : function( token, newStatus){
         return ComisionCollection
-        .updateOne({token : token}, {$set : {completed : newComp}})
+        .updateOne({token : token}, {$set : {status : newStatus}})
         .then( results => {
             return results;
         })
@@ -118,7 +129,37 @@ const Comision = {
             throw err;
         })
     },
-
+    addComment : function( token, newComment ) {
+        return ComisionCollection
+        .updateOne(
+            { token: token }, 
+            { $push: { comments: newComment }})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
+        })
+    },
+    addArchivo : function( token, newArchivo ) {
+        return ComisionCollection
+        .updateOne(
+            { token: token }, 
+            { $push: { archivos: newArchivo }})
+        .then( results => {
+            return results;
+        })
+        .catch( err => {
+            throw err;
+        })
+    },
+    changeContactInfo : function( token, newName, newContact, newUsername ){
+        return ComisionCollection.updateOne({ token : token}, {$set : {
+            name : newName,
+            contact : newContact,
+            username : newUsername
+        }})
+    }
 }
 
 module.exports = { Comision };
