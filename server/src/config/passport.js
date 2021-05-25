@@ -14,7 +14,7 @@ passport.use(new LocalStrategy({
     }
     else
     {
-        const match = await Admin.matchPassword(password);
+        const match = await udmin.matchPassword(password);
 
         if (match)
         {

@@ -431,4 +431,13 @@ router.patch('/modificarTipo/:name', ( req, res ) => {
     })
 });
 
+// RUTA ADMIN
+/*
+router.post('/admin/login', passport.authenticate('local', {
+    successRedirect: //redirigir a pagina de admin
+    ,
+    failureRedirect: //al mismo login,
+
+}))
+*/
 module.exports = router;
