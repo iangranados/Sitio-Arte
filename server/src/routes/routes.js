@@ -536,6 +536,26 @@ router.patch('/modificarStatus/:id', ( req, res ) => {
     })
 });
 
+router.patch('/changeItem/:token', ( req, res ) => {
+    let id = req.params.id;
+    let { titulo: newTitulo, categoria: newCate, precio: newPrecio } = req.body;
+
+    if(!id || !newTitulo || !newCate || !newPrecio ){
+        res.statusMessage = "Please send all the fields required";
+        return res.status( 406 ).end()
+    }
+
+    Tienda
+    .modificarItem(id, newTitulo, newCate, newPrecio )
+    .then( results => {
+        return res.status( 202 ).end();
+    })
+    .catch( err => {
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
 
 
 module.exports = router;
