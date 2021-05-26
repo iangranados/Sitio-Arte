@@ -1,7 +1,7 @@
 <template>
   <q-dialog ref="BuyItemDialog" @hide="onDialogHide">
     <q-card class="BuyItemDialog">
-      <q-card-section class="row items-center q-pb-none">
+      <q-card-section class="row items-center q-pb-non ">
         <div class="BuyItemDialog__title">Solicitar Compra</div>
         <q-space />
         <q-btn icon="close" color="red-lips" flat round dense v-close-popup />
@@ -15,8 +15,8 @@
           />
 
           <div class="text">
-            <h1>{{ this.item.titulo }}</h1>
             <h3>{{ this.item.categoria }}</h3>
+            <h1>{{ this.item.titulo }}</h1>
           </div>
 
           <p>Precio: {{ this.item.precio }}</p>
@@ -24,7 +24,7 @@
       </q-card-section>
       <q-card-section>
         <q-form @submit="onFormSubmit">
-          <div class="row justify-center  q-mt-lg">
+          <div class="row justify-around q-mt-lg">
             <q-input
               class="Form__field col-8"
               v-model="correo"
@@ -67,7 +67,7 @@ export default {
       category: this.item.categoria,
       price: this.item.precio,
       loading: false,
-	  correo:null,
+      correo: null,
     };
   },
   methods: {
@@ -173,7 +173,6 @@ export default {
   padding: 25px 24px;
   min-width: 90vw;
 
-
   @media (min-width: $breakpoint-md-min) {
     padding: 20px 30px;
     min-width: 70vw;
@@ -185,7 +184,7 @@ export default {
   .BuyItemDialog__thumbnail {
     height: 200px;
     // width: 100%;
-	max-width: 30%;
+    max-width: 30%;
     margin-bottom: 20px;
   }
 
@@ -194,6 +193,55 @@ export default {
     letter-spacing: 1px;
     // min-width: 48%;
     font-size: 16px;
+  }
+}
+
+.text {
+  h1 {
+    // width: 1920px;
+
+    // height: 1080px;
+
+    // padding: 54px 0 0;
+
+    // border: solid 1px #707070;
+    height: 21px;
+
+    margin: 8px 117px 99px 0px;
+
+    font-family: Gotham;
+
+    font-size: 20px;
+
+    font-weight: normal;
+
+    font-stretch: normal;
+
+    font-style: normal;
+
+    line-height: 1.1;
+
+    letter-spacing: normal;
+
+    text-align: left;
+  }
+  h3 {
+    font-family: Gotham;
+
+    font-size: 16px;
+
+    font-weight: 500;
+
+    font-stretch: normal;
+
+    font-style: normal;
+
+    line-height: 1.38;
+
+    letter-spacing: normal;
+
+    text-align: left;
+    color: grey;
   }
 }
 </style>
