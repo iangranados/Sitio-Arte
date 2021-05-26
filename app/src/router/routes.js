@@ -36,7 +36,7 @@ const routes = [
     component: () => import('layouts/AdminLayout.vue'),
     children: [
       { path: '', redirect: 'comisiones' },
-      { path: 'comisiones', component: () => import('pages/AdminLogin.vue') },
+      { path: 'comisiones', component: () => import('pages/AdminComisiones.vue') },
       { path: 'portafolio', component: () => import('pages/AdminPortafolio.vue') },
       { path: 'tienda', component: () => import('pages/AdminLogin.vue') },
       { path: 'tipos', component: () => import('pages/AdminTipos.vue') }

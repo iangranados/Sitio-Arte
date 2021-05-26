@@ -114,8 +114,8 @@ router.post('/admin', passport.authenticate('local', {
 }));
 
 ///////////////// RUTAS COMISIONES //////////////////////
-// Ruta para obtener todas las comisiones
-router.get( '/comisiones', ( req, res ) => {
+// Ruta para obtener todas las comisiones con todos (para admin)
+router.get( '/comisionesPrivileged', ( req, res ) => {
     Comision
     .verComisiones()
     .then( result => {
@@ -158,9 +158,10 @@ router.post( '/crearComision', ( req, res ) => {
 });
 
 // Ruta para modificar la descripcion de una comision
-router.patch('/modificarComision/:token', ( req, res ) => {
-    let token = req.params.token;
-    let newDes = req.body.description;
+router.patch('/modificarComision/:id', ( req, res ) => {
+    let id = req.params.id;
+
+    let { description: newDes, token } = req.body;
 
     if(!token || !newDes){
         res.statusMessage = "Please send all the fields required";
@@ -168,7 +169,7 @@ router.patch('/modificarComision/:token', ( req, res ) => {
     }
 
     Comision
-    .modificarComisionDes(token, newDes)
+    .modificarComisionDes(id, token, newDes)
     .then( results => {
         if(results.nModified > 0){
             return res.status( 202 ).end();
@@ -185,15 +186,15 @@ router.patch('/modificarComision/:token', ( req, res ) => {
 });
 
 // Ruta para borrar alguna comision
-router.delete('/borrarComision/:token', ( req, res ) => {
+router.delete('/borrarComision/:id', ( req, res ) => {
 
-    let token = req.params.token;
+    let id = req.params.id;
 
-    if(!token){
+    if(!id){
         res.statusMessage = "Please send the comision to delete";
         return res.status( 406 ).end()
     }
-    Comision.deleteComision( token )
+    Comision.deleteComision( id )
     .then( result => {
         if(result.deletedCount > 0){
             return res.status( 200 ).end();
@@ -210,9 +211,9 @@ router.delete('/borrarComision/:token', ( req, res ) => {
 });
 
 // Rura para modificar el avance de una comision
-router.patch('/modificarComsionAvance/:token', ( req, res ) => {
-    let token = req.params.token;
-    let newAvance = req.body.avance;
+router.patch('/modificarComisionAvance/:id', ( req, res ) => {
+    let id = req.params.id;
+    let { avance: newAvance, token }= req.body;
 
     if(!token || !newAvance){
         res.statusMessage = "Please send all the fields required";
@@ -220,7 +221,7 @@ router.patch('/modificarComsionAvance/:token', ( req, res ) => {
     }
 
     Comision
-    .modificarComisionAvance(token, newAvance)
+    .modificarComisionAvance(id, token, newAvance)
     .then( results => {
         if(results.nModified > 0){
             return res.status( 202 ).end();
@@ -237,9 +238,9 @@ router.patch('/modificarComsionAvance/:token', ( req, res ) => {
 });
 
 // Rura para marcar como completada una comision
-router.patch('/changeComStatus/:token', ( req, res ) => {
-    let token = req.params.token;
-    let newStatus = req.body.status;
+router.patch('/changeComStatus/:id', ( req, res ) => {
+    let id = req.params.id;
+    let { status: newStatus, token} = req.body;
 
     if(!token || !newStatus){
         res.statusMessage = "Please send all the fields required";
@@ -247,7 +248,7 @@ router.patch('/changeComStatus/:token', ( req, res ) => {
     }
 
     Comision
-    .changeStatus(token, newStatus)
+    .changeStatus(id, token, newStatus)
     .then( results => {
         if(results.nModified > 0){
             return res.status( 202 ).end();
@@ -264,9 +265,9 @@ router.patch('/changeComStatus/:token', ( req, res ) => {
 });
 
 // Ruta para agregar un comentario a la comision
-router.patch('/changeContactInfo/:token', ( req, res ) => {
-    let token = req.params.token;
-    let { name: newName, contact: newContact, username: newUsername } = req.body;
+router.patch('/changeContactInfo/:id', ( req, res ) => {
+    let id = req.params.id;
+    let { name: newName, contact: newContact, username: newUsername, token } = req.body;
 
     if(!token || !newName || !newContact || !newUsername ){
         res.statusMessage = "Please send all the fields required";
@@ -274,7 +275,7 @@ router.patch('/changeContactInfo/:token', ( req, res ) => {
     }
 
     Comision
-    .changeContactInfo(token, newName, newContact, newUsername )
+    .changeContactInfo(id, token, newName, newContact, newUsername )
     .then( results => {
         return res.status( 202 ).end();
     })
@@ -284,10 +285,9 @@ router.patch('/changeContactInfo/:token', ( req, res ) => {
     })
 });
 
-router.patch('/addComment/:token', ( req, res ) => {
-    let token = req.params.token;
-    let comment = req.body.comments;
-    let user = req.body.user;
+router.patch('/addComment/:id', ( req, res ) => {
+    let id = req.params.id;
+    let { comment, user, token } = req.body
 
     if(!token || !comment || !user){
         res.statusMessage = "Please send all the fields required";
@@ -295,7 +295,6 @@ router.patch('/addComment/:token', ( req, res ) => {
     }
 
     let newComment = { user : user, comment : comment }
-    console.log(newComment)
 
     Comision
     .addComment(token, newComment)
@@ -308,8 +307,10 @@ router.patch('/addComment/:token', ( req, res ) => {
     })
 });
 
-router.patch('/addArchivo/:token', singleUpload, ( req, res ) => {
-    let token = req.params.token;
+router.patch('/addArchivo/:id', singleUpload, ( req, res ) => {
+    let id = req.params.id;
+
+    let { token } = req.body;
     let newArchivo = req.file.location;
 
     if(!token || !newArchivo){
@@ -318,9 +319,9 @@ router.patch('/addArchivo/:token', singleUpload, ( req, res ) => {
     }
 
     Comision
-    .addArchivo(token, newArchivo)
+    .addArchivo(id, token, newArchivo)
     .then( results => {
-        return res.status( 202 ).end();
+        return res.status( 202 ).json(newArchivo);
     })
     .catch( err => {
         res.statusMessage =  "Something went wrong with the DB";
@@ -328,20 +329,47 @@ router.patch('/addArchivo/:token', singleUpload, ( req, res ) => {
     })
 });
 
-router.get( '/comisionesStatus', ( req, res ) => {
+router.get( '/comisionesStatus/:status', ( req, res ) => {
 
-    let status = req.body.status;
+    let status = req.params.status;
 
     Comision
     .verComisionesStatus( status )
     .then( result => {
-        return res.status( 200).json( result );
+        const filtered = result.map(({_id, name, tipo, status, avance, comments}) => ({
+            _id,
+            name,
+            tipo,
+            status,
+            avance,
+            hasComments: !!comments && comments.length > 0
+        }))
+        return res.status(200).json( filtered );
     })
     .catch( err => {
         res.statusMessage = "Something went wrong with the DB";
         return res.status( 500 ).end();
     })
 });
+
+router.post('/showComission/:id', (req, res) => {
+    const id = req.params.id;
+    const { token } = req.body
+
+    if (!token) {
+        return res.status( 401 ).end();
+    }
+
+    Comision.getComisionById(id, token)
+    .then( result => {
+        return res.status(200).json( result );
+    })
+    .catch( err => {
+        res.statusMessage = "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    })
+});
+
 
 ///////////////// RUTAS TIPO //////////////////////
 // Ruta para obtener los tipos de comisiones
