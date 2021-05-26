@@ -9,10 +9,10 @@
     </div>
     <q-scroll-area v-else horizontal class="AdminComisiones__ScrollArea">
       <div class="AdminComisiones__content">
-        <Kanban title="Solicitudes pendientes" :items="pending" />
-        <Kanban title="Lista de espera(aprobados)" :items="approved" />
-        <Kanban title="En progreso" :items="doing" />
-        <Kanban title="Completado" :items="done" :loading="false" />
+        <Kanban title="Solicitudes pendientes" :items="commissions_pending" @reload="loadCommissions"/>
+        <Kanban title="Lista de espera(aprobados)" :items="commissions_approved" @reload="loadCommissions"/>
+        <Kanban title="En progreso" :items="commissions_doing" @reload="loadCommissions"/>
+        <Kanban title="Completado" :items="commissions_done" @reload="loadCommissions"/>
       </div>
     </q-scroll-area>
   </q-page>
@@ -25,115 +25,21 @@ export default {
     Kanban: () => import("../components/comissions/Kanban.vue"),
   },
   mounted () {
-    // this.loadComisiones()
+    this.loadCommissions()
   },
   data: () => ({
     loading: false,
     error: null,
-
-    pending: [
-      {
-        title: "Twitch badges - Johnny",
-        status: "pending",
-      },
-      {
-        title: "Twitch badges - otherguyXD",
-        status: "pending",
-      },
-      {
-        title: "Twitch badges - MarieStreams",
-        status: "pending",
-      },
-      {
-        title: "Twitch badges - Formeee",
-        status: "pending",
-      },
-      {
-        title: "Twitch badges - Ninja",
-        status: "pending",
-      },
-      {
-        title: "Twitch badges - otherguy",
-        status: "pending",
-      },
-      {
-        title: "Twitch badges - username",
-        status: "pending",
-      },
-      {
-        title: "Twitch badges - Johnny",
-        status: "pending",
-      },
-    ],
-
-    approved: [
-      {
-        title: "Twitch badges - Johnny",
-        status: "approved",
-      },
-      {
-        title: "Twitch badges - otherguyXD",
-        status: "approved",
-      },
-      {
-        title: "Twitch badges - MarieStreams",
-        status: "approved",
-      },
-      {
-        title: "Twitch badges - Formeee",
-        status: "approved",
-      },
-      {
-        title: "Twitch badges - Ninja",
-        status: "approved",
-      },
-      {
-        title: "Twitch badges - otherguy",
-        status: "approved",
-      },
-      {
-        title: "Twitch badges - username",
-        status: "approved",
-      },
-      {
-        title: "Twitch badges - Johnny",
-        status: "approved",
-      },
-    ],
-
-    doing: [
-      {
-        title: "Twitch badges - Johnny",
-        status: "doing",
-        progress: 30,
-        hasComments: true,
-      },
-      {
-        title: "Emotes - Mary",
-        status: "doing",
-        progress: 65,
-        hasComments: false,
-      },
-    ],
-
-    done: [
-      {
-        title: "Twitch badges - Kisekii",
-        status: "done",
-        progress: 100,
-        hasComments: true,
-        finalThumb: require("../assets/images/kanban_thumb.png"),
-      },
-    ],
+    commissions_full: []
   }),
   methods: {
-    loadPortfolio () {
+    loadCommissions () {
       this.loading = true;
       this.$axios
-        .get("/galeria")
+        .get("/comisionesPrivileged")
         .then((response) => {
           if (response.status === 200 && Array.isArray(response.data)) {
-            this.portfolio = response.data;
+            this.commissions_full = response.data;
             this.error = null;
           } else {
             this.error = "Algo salió mal, intenta otra vez :c";
@@ -150,6 +56,20 @@ export default {
         minHeight: offset ? `calc(100vh - ${offset}px)` : "100vh",
         height: offset ? `calc(100vh - ${offset}px)` : "100vh",
       };
+    },
+  },
+  computed: {
+    commissions_pending: function () {
+      return this.commissions_full.filter(c => c.status === "Pending")
+    },
+    commissions_approved: function () {
+      return this.commissions_full.filter(c => c.status === "Approved")
+    },
+    commissions_doing: function () {
+      return this.commissions_full.filter(c => c.status === "Working On")
+    },
+    commissions_done: function () {
+      return this.commissions_full.filter(c => c.status === "Completed")
     },
   }
 };

@@ -11,15 +11,15 @@
           class="KanbanItem__hasComments"
           name="question_answer"
           color="light-gray"
-          v-if="item.hasComments"
+          v-if="item.hasComments || (item.comments && item.comments.length > 0)"
         />
-        <template v-if="!!item.progress && item.status === 'Working On'">
+        <template v-if="!!item.avance">
           <q-linear-progress
             class="KanbanItem__progress"
             size="md"
-            :value="item.progress / 100"
+            :value="item.avance / 100"
           />
-          <span class="KanbanItem__progressLabel">{{ item.progress }}%</span>
+          <span class="KanbanItem__progressLabel">{{ item.avance }}%</span>
         </template>
       </div>
     </div>
@@ -48,7 +48,9 @@ export default {
           component: () => import("./CommissionViewDialogAdmin.vue"),
           parent: this,
           commission: this.item
-        });
+        })
+        .onDismiss(() => this.$emit('reload'));
+
       } else {
         this.$q.dialog({
           component: () => import("./TokenRequestDialog.vue"),

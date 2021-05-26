@@ -96,7 +96,7 @@
                   :key="index"
                   :name="c.user"
                   :text="[c.comment]"
-                  :sent="c.user === 'Lele'"
+                  :sent="c.user === 'Lelemoonn'"
                 />
               </div>
               <p v-else class="CommissionDetailView__noMessages">Start the conversation by sending a new message</p>
@@ -118,12 +118,12 @@
               <h5 class="CommissionDetailView__SectionTitle">Progress</h5>
               <p>{{commission.avance || 0}}%</p>
             </div>
-            <div class="CommissionDetailView__section" v-if="commission.files && commission.files.length > 0">
+            <div class="CommissionDetailView__section" v-if="commission.archivos && commission.archivos.length > 0">
               <h5 class="CommissionDetailView__SectionTitle">Attachments</h5>
               <div class="row q-col-gutter-md">
-                <div v-for="(file, index) in commission.files" :key="index" class="col-6">
+                <div v-for="(file, index) in commission.archivos" :key="index" class="col-6">
                   <q-img :src="file" :ratio="1" class="CommissionDetailView__image">
-                    <q-btn icon="download" color="dark" size="10px" round dense unelevated/>
+                    <q-btn icon="download" type="a" :href="file" color="dark" size="10px" round dense unelevated download/>
                   </q-img>
                 </div>
               </div>
