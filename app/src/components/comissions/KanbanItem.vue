@@ -1,16 +1,11 @@
 <template>
   <div class="KanbanItem" @click="seeDetail" >
-    <q-img
-      v-if="item.status === 'done' && item.finalThumb"
-      :src="item.finalThumb"
-      class="KanbanItem__image"
-    />
     <div class="KanbanItem__content">
       <div
         class="KanbanItem__status"
         :style="{ backgroundColor: colorByStatus }"
       ></div>
-      <p class="KanbanItem__title">{{ item.title }}</p>
+      <p class="KanbanItem__title">{{ item.tipo + ' - ' + item.name }}</p>
       <div class="KanbanItem__progressDetails">
         <q-icon
           class="KanbanItem__hasComments"
@@ -18,7 +13,7 @@
           color="light-gray"
           v-if="item.hasComments"
         />
-        <template v-if="!!item.progress && item.status === 'doing'">
+        <template v-if="!!item.progress && item.status === 'Working On'">
           <q-linear-progress
             class="KanbanItem__progress"
             size="md"
@@ -61,7 +56,6 @@ export default {
           item: this.item,
         })
         .onOk((res) => {
-          console.log(res);
           this.$q.dialog({
             component: () => import("./CommissionViewDialog.vue"),
             parent: this,
@@ -74,11 +68,11 @@ export default {
   computed: {
     colorByStatus: function () {
       switch (this.item.status) {
-        case "approved":
+        case "Approved":
           return "#ffff6f";
-        case "doing":
+        case "Working On":
           return "#ff8181";
-        case "done":
+        case "Completed":
           return "#7ae697";
         default:
           return "#ee6700";

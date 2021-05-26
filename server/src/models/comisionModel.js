@@ -89,9 +89,9 @@ const Comision = {
             throw err;
         });
     },
-    modificarComisionDes : function(token, newDes){
+    modificarComisionDes : function(id, token, newDes){
         return ComisionCollection
-        .updateOne({token : token}, {$set : {description : newDes}})
+        .updateOne({token : token, _id: id}, {$set : {description : newDes}})
         .then( results => {
             return results;
         })
@@ -99,9 +99,9 @@ const Comision = {
             throw err;
         });
     },
-    getComisionByToken : function( token ){
+    getComisionById : function( id, token ){
         return ComisionCollection
-        .find( {token : token})
+        .findOne( {token : token, _id: id})
         .then( results => {
             return results;
         })
@@ -153,8 +153,8 @@ const Comision = {
             throw err;
         })
     },
-    changeContactInfo : function( token, newName, newContact, newUsername ){
-        return ComisionCollection.updateOne({ token : token}, {$set : {
+    changeContactInfo : function( id, token, newName, newContact, newUsername ){
+        return ComisionCollection.updateOne({ _id: id, token : token}, {$set : {
             name : newName,
             contact : newContact,
             username : newUsername

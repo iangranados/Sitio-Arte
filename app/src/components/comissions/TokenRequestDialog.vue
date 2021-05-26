@@ -10,7 +10,7 @@
       </q-toolbar>
 
       <q-card-section>
-        <h3 class="TokenRequestDialog__title">{{item.title}}</h3>
+        <h3 class="TokenRequestDialog__title">{{ item.tipo + ' - ' + item.name }}</h3>
         <p>
           Enter the token you received when ordering this commission to see its details and progress.
         </p>
@@ -80,13 +80,26 @@ export default {
 
     processToken() {
       this.loading = true
-      setTimeout(() => {
-        this.loading = false
-        console.log(this.token)
-        this.$emit("ok", this.item);
-        this.onDialogHide()
-      }, 2000);
-		  
+
+      this.$axios.post('/showComission/' + this.item._id, {token: this.token})
+        .then(res => {
+          this.loading = false
+          if (!!res.data) {
+            this.$emit("ok", res.data);
+            this.onDialogHide()
+          } else {
+            this.$q.notify({
+            type: 'negative',
+            message: `Wrong Token. Contact lelemoonn if you don't remember your token.`
+          })
+          }
+        })
+        .catch(() => {
+          this.$q.notify({
+            type: 'negative',
+            message: `Something went wrong. Try again later.`
+          })
+        });
     },
   },
 };
