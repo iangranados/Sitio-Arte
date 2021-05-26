@@ -35,17 +35,17 @@ export default {
 
 //   },
   methods: {
-    // onDelete() {
-    //   this.$q
-    //     .dialog({
-    //       component: () => import("./DeleteStoreItemDialog.vue"),
-    //       parent: this,
-    //       item: this.item,
-    //     })
-    //     .onOk(() => {
-    //       this.$emit("reload-Store");
-    //     });
-    // },
+    onBuy() {
+      this.$q
+        .dialog({
+          component: () => import("./BuyItemDialog.vue"),
+          parent: this,
+          item: this.item,
+        })
+        // .onOk(() => {
+        //   this.$emit("reload-Store");
+        // });
+    },
     // onModify() {
     //   this.$q
     //     .dialog({

@@ -1,65 +1,45 @@
 <template>
-  <q-dialog ref="ModifyStoreItemDialog" @hide="onDialogHide">
-    <q-card class="ModifyStoreItemDialog">
+  <q-dialog ref="BuyItemDialog" @hide="onDialogHide">
+    <q-card class="BuyItemDialog">
       <q-card-section class="row items-center q-pb-none">
-        <div class="ModifyStoreItemDialog__title">Modificar datos</div>
+        <div class="BuyItemDialog__title">Solicitar Compra</div>
         <q-space />
         <q-btn icon="close" color="red-lips" flat round dense v-close-popup />
       </q-card-section>
+      <q-card-section>
+        <div class="row justify-around items-center informationRow">
+          <q-img
+            class="BuyItemDialog__thumbnail"
+            v-if="item.img"
+            :src="item.img"
+          />
 
+          <div class="text">
+            <h1>{{ this.item.titulo }}</h1>
+            <h3>{{ this.item.categoria }}</h3>
+          </div>
+
+          <p>Precio: {{ this.item.precio }}</p>
+        </div>
+      </q-card-section>
       <q-card-section>
         <q-form @submit="onFormSubmit">
-          <q-img
-            class="ModifyStoreItemDialog__thumbnail"
-            v-if="item.link"
-            :src="item.link"
-          />
-
-          <q-select
-            class="Form__field"
-            v-model="category"
-            :options="category_options"
-            label="Categoria"
-            outlined
-            :rules="[(val) => !!val || 'Campo requerido']"
-            :disable="loading"
-          />
-
-          <q-input
-            class="Form__field"
-            v-model="title"
-            name="title"
-            id="title"
-            type="text"
-            label="Titulo"
-            :rules="[(val) => !!val || 'Campo requerido']"
-            :disable="loading"
-            outlined
-          />
-          <q-input
-            class="Form__field"
-            v-model="price"
-            name="price"
-            id="price"
-            
-            label="Precio"
-            :rules="[(val) => !!val || 'Campo requerido']"
-            :disable="loading"
-            outlined
-          />
-          <div class="row justify-between q-mt-lg">
-            <q-btn
-              v-close-popup
-              class="ModifyStoreItemDialog__btn"
-              label="Cancelar"
-              color="gray"
+          <div class="row justify-center  q-mt-lg">
+            <q-input
+              class="Form__field col-8"
+              v-model="correo"
+              name="correo"
+              id="correo"
+              label="Correo electronico"
+              :rules="[(val) => !!val || 'Campo requerido']"
               :disable="loading"
-              outline
+              outlined
             />
+
             <q-btn
-              class="ModifyStoreItemDialog__btn"
+              class="BuyItemDialog__btn"
               type="submit"
-              label="Guardar"
+              label="Solicitar"
               color="primary"
               :loading="loading"
               unelevated
@@ -73,7 +53,7 @@
 
 <script>
 export default {
-  name: "ModifyStoreItemDialog",
+  name: "BuyItemDialog",
   props: {
     item: {
       type: Object,
@@ -86,20 +66,21 @@ export default {
       title: this.item.titulo,
       category: this.item.categoria,
       price: this.item.precio,
-      loading: false, 
+      loading: false,
+	  correo:null,
     };
   },
   methods: {
     // following method is REQUIRED
     // (don't change its name --> "show")
     show() {
-      this.$refs.ModifyStoreItemDialog.show();
+      this.$refs.BuyItemDialog.show();
     },
 
     // following method is REQUIRED
     // (don't change its name --> "hide")
     hide() {
-      this.$refs.ModifyStoreItemDialog.hide();
+      this.$refs.BuyItemDialog.hide();
     },
 
     onDialogHide() {
@@ -188,28 +169,30 @@ export default {
 
 <style lang="scss">
 // $
-.ModifyStoreItemDialog {
+.BuyItemDialog {
   padding: 25px 24px;
   min-width: 90vw;
 
+
   @media (min-width: $breakpoint-md-min) {
     padding: 20px 30px;
-    min-width: 600px;
+    min-width: 70vw;
   }
-  .ModifyStoreItemDialog__title {
+  .BuyItemDialog__title {
     @include font(24px, bold, $primary);
   }
 
-  .ModifyStoreItemDialog__thumbnail {
+  .BuyItemDialog__thumbnail {
     height: 200px;
-    width: 100%;
+    // width: 100%;
+	max-width: 30%;
     margin-bottom: 20px;
   }
 
-  .ModifyStoreItemDialog__btn {
+  .BuyItemDialog__btn {
     border-radius: 10px;
     letter-spacing: 1px;
-    min-width: 48%;
+    // min-width: 48%;
     font-size: 16px;
   }
 }
