@@ -38,7 +38,7 @@
           <q-select
             class="Form__field"
             v-model="selectedType"
-            :options="options"
+            :options="category_options"
             label="Categoria"
             outlined
             :rules="[(val) => !!val || 'Campo requerido']"
@@ -92,10 +92,10 @@ export default {
       file: null,
       file_url: null,
       title: null,
-      options: ["Full body", "Portrait", "other"],
+      
       loading: false,
-	  price: null,
-	  selectedType: null,
+      price: null,
+      selectedType: null,
     };
   },
   methods: {
@@ -118,39 +118,39 @@ export default {
     },
 
     onFormSubmit() {
-      //   this.loading = true;
-      //   const formData = new FormData();
-      //   formData.append("img", this.file);
-      //   formData.append("link", this.url);
-      //   this.$axios
-      //     .post("/addImage", formData, {
-      //       headers: {
-      //         "Content-Type": "multipart/form-data",
-      //       },
-      //     })
-      //     .then((response) => {
-      //       if (response.status === 201) {
-      //         this.$q.notify({
-      //           type: "positive",
-      //           message: `Imagen agregada exitosamente.`,
-      //         });
-      //         this.$emit("ok");
-      //         this.hide();
-      //       } else {
-      //         this.$q.notify({
-      //           type: "negative",
-      //           message: `Oops, algo salió mal. Intenta otra vez.`,
-      //         });
-      //       }
-      //       this.loading = false;
-      //     })
-      //     .catch((e) => {
-      //       this.loading = false;
-      //       this.$q.notify({
-      //         type: "negative",
-      //         message: `Oops, algo salió mal. Intenta otra vez.`,
-      //       });
-      //     });
+      this.loading = true;
+      const formData = new FormData();
+      formData.append("img", this.file);
+      formData.append("link", this.link);
+      this.$axios
+        .post("/addItem", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          if (response.status === 201) {
+            this.$q.notify({
+              type: "positive",
+              message: `Imagen agregada exitosamente.`,
+            });
+            this.$emit("ok");
+            this.hide();
+          } else {
+            this.$q.notify({
+              type: "negative",
+              message: `Oops, algo salió mal. Intenta otra vez.`,
+            });
+          }
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+          this.$q.notify({
+            type: "negative",
+            message: `Oops, algo salió mal. Intenta otra vez.`,
+          });
+        });
     },
 
     urlFromFile() {
@@ -169,6 +169,44 @@ export default {
         message: "Archivo inválido",
       });
     },
+
+    loadStore() {
+      this.loading = true;
+      this.$axios
+        .get("/store")
+        .then((response) => {
+          if (response.status === 200 && Array.isArray(response.data)) {
+            this.Store = response.data;
+            this.error = null;
+          } else {
+            this.error = "Algo salió mal, intenta otra vez :c";
+          }
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+          this.error = "Algo salió mal, intenta otra vez :c";
+        });
+    },
+   
+  },
+  computed: {
+    category_options_loading() {
+      return this.$store.state.types.loading;
+    },
+    category_options() {
+      return this.$store.getters["types/typesAsListOfStrings"];
+    },
+  },
+  mounted() {
+    if (this.category_options.length <= 0) {
+      this.$store.dispatch("types/loadTypes").catch(() => {
+        this.$q.notify({
+          type: "negative",
+          message: `Couldn't load commissions info. Try again later.`,
+        });
+      });
+    }
   },
 };
 </script>

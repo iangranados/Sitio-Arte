@@ -18,7 +18,7 @@
           <q-select
             class="Form__field"
             v-model="category"
-            :options="options"
+            :options="category_options"
             label="Categoria"
             outlined
             :rules="[(val) => !!val || 'Campo requerido']"
@@ -86,9 +86,7 @@ export default {
       title: this.item.title,
       category: this.item.category,
       price: this.item.price,
-      loading: false,
-
-      options: ["Full body", "Portrait", "other"],
+      loading: false, 
     };
   },
   methods: {
@@ -114,10 +112,9 @@ export default {
       // this.loading = true;
       // const values = {
       //   link: this.link,
-	  	// title: this.title,
-		//   price:this.price,
-		//   category:this.category
-
+      // title: this.title,
+      //   price:this.price,
+      //   category:this.category
       // };
       // this.$axios
       //   .patch("modificarImagen/" + this.item._id, values)
@@ -164,10 +161,27 @@ export default {
       });
     },
   },
+
   computed: {
     thumbnail: function () {
       return this.file_url || this.item.image;
     },
+    category_options_loading() {
+      return this.$store.state.types.loading;
+    },
+    category_options() {
+      return this.$store.getters["types/typesAsListOfStrings"];
+    },
+  },
+  mounted() {
+    if (this.category_options.length <= 0) {
+      this.$store.dispatch("types/loadTypes").catch(() => {
+        this.$q.notify({
+          type: "negative",
+          message: `Couldn't load commissions info. Try again later.`,
+        });
+      });
+    }
   },
 };
 </script>

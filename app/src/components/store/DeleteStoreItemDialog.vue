@@ -68,34 +68,73 @@ export default {
     },
 
     onDeleteItem() {
-    //   this.loading = true;
+      this.loading = true;
 
-    //   this.$axios
-    //     .delete("borrarImagen/" + this.item._id)
-    //     .then((response) => {
-    //       if (response.status === 200) {
-    //         this.$q.notify({
-    //           type: "positive",
-    //           message: `Imagen eliminada.`,
-    //         });
-    //         this.$emit("ok");
-    //         this.hide();
-    //       } else {
-    //         this.$q.notify({
-    //           type: "negative",
-    //           message: `Oops, algo salió mal. Intenta otra vez.`,
-    //         });
-    //       }
-    //       this.loading = false;
-    //     })
-    //     .catch((e) => {
-    //       this.loading = false;
-    //       this.$q.notify({
-    //         type: "negative",
-    //         message: `Oops, algo salió mal. Intenta otra vez.`,
-    //       });
-    //     });
+      this.$axios
+        .delete("borrarItems/" + this.item._id)
+        .then((response) => {
+          if (response.status === 200) {
+            this.$q.notify({
+              type: "positive",
+              message: `Imagen eliminada.`,
+            });
+            this.$emit("ok");
+            this.hide();
+          } else {
+            this.$q.notify({
+              type: "negative",
+              message: `Oops, algo salió mal. Intenta otra vez.`,
+            });
+          }
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+          this.$q.notify({
+            type: "negative",
+            message: `Oops, algo salió mal. Intenta otra vez.`,
+          });
+        });
     },
+  
+    loadStore: function() {
+        this.loading = true;
+        this.$axios
+          .get("/store")
+          .then((response) => {
+            if (response.status === 200 && Array.isArray(response.data)) {
+              this.Store = response.data;
+              this.error = null;
+            } else {
+              this.error = "Algo salió mal, intenta otra vez :c";
+            }
+            this.loading = false;
+          })
+          .catch((e) => {
+            this.loading = false;
+            this.error = "Algo salió mal, intenta otra vez :c";
+          });
+    },
+   
+  },
+  computed: {
+    category_options_loading() {
+      return this.$store.state.types.loading;
+    },
+    category_options() {
+      return this.$store.getters["types/typesAsListOfStrings"];
+    },
+  },
+  mounted() {
+    if (this.tipos.length <= 0) {
+      this.$store.dispatch('types/loadTypes')
+        .catch(() => {
+          this.$q.notify({
+            type: 'negative',
+            message: `Couldn't load commissions info. Try again later.`
+          })
+        })
+    }
   },
 };
 </script>
