@@ -5,7 +5,6 @@ const jsonParser = bodyParser.json();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const { Portafolio } = require('../models/portafolioModel');
-const { Users } = require( '../models/usuarioModel' );
 const { Comision } = require('../models/comisionModel');
 const { Tipo } = require('../models/tipoModel');
 const { Tienda } = require('../models/tiendaModel');
@@ -13,17 +12,6 @@ const upload = require('../services/file-upload');
 const Admin = require('../models/adminModel');
 
 const passport = require('passport');
-
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './uploads/');
-    },
-    filename: function(req, file, cb) {
-        cb(null, new Date().toISOString() + file.originalname);
-    }
-})
-
-
 
 const singleUpload = upload.single('img');
 
