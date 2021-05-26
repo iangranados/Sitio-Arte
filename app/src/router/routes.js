@@ -25,11 +25,11 @@ const routes = [
   },
 
   {
-  	path: '/login',
-  	component: () => import('layouts/MainLayout.vue'),
-  	children:[
-  		{ path: '', component: () => import('pages/AdminLogin.vue')}
-  	]
+      path: '/login',
+      component: () => import('layouts/MainLayout.vue'),
+      children:[
+          { path: '', component: () => import('pages/AdminLogin.vue')}
+      ]
   },
   {
     path: '/admin',
@@ -42,7 +42,13 @@ const routes = [
       { path: 'tipos', component: () => import('pages/AdminTipos.vue') }
     ]
   },
-
+    {
+    path: '/tienda',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/ClientStore.vue') },
+    ]
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
