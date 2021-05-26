@@ -109,38 +109,39 @@ export default {
     },
 
     onFormSubmit() {
-      // this.loading = true;
-      // const values = {
-      //   link: this.link,
-      // title: this.title,
-      //   price:this.price,
-      //   category:this.category
-      // };
-      // this.$axios
-      //   .patch("modificarImagen/" + this.item._id, values)
-      //   .then((response) => {
-      //     if (response.status === 202) {
-      //       this.$q.notify({
-      //         type: "positive",
-      //         message: `Cambios guardados.`,
-      //       });
-      //       this.$emit("ok");
-      //       this.hide();
-      //     } else {
-      //       this.$q.notify({
-      //         type: "negative",
-      //         message: `Oops, algo salió mal. Intenta otra vez.`,
-      //       });
-      //     }
-      //     this.loading = false;
-      //   })
-      //   .catch((e) => {
-      //     this.loading = false;
-      //     this.$q.notify({
-      //       type: "negative",
-      //       message: `Oops, algo salió mal. Intenta otra vez.`,
-      //     });
-      //   });
+      this.loading = true;
+      const values = {
+        link: this.link,
+      	titulo: this.title,
+        precio:this.price,
+        categoria:this.category
+      };
+      this.$axios
+        .patch("changeItem/" + this.item._id, values)
+        .then((response) => {
+          if (response.status === 202) {
+            this.$q.notify({
+              type: "positive",
+              message: `Cambios guardados.`,
+            });
+            this.$emit("ok");
+            this.hide();
+          } else {
+			  console.log(response);
+            this.$q.notify({
+              type: "negative",
+              message: `Oops, algo salió mal. Intenta otra vez.`,
+            });
+          }
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+          this.$q.notify({
+            type: "negative",
+            message: `Oops, algo salió mal. Intenta otra vez.`,
+          });
+        });
     },
 
     urlFromFile() {

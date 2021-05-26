@@ -125,17 +125,7 @@ export default {
       return this.$store.getters["types/typesAsListOfStrings"];
     },
   },
-  mounted() {
-    if (this.tipos.length <= 0) {
-      this.$store.dispatch('types/loadTypes')
-        .catch(() => {
-          this.$q.notify({
-            type: 'negative',
-            message: `Couldn't load commissions info. Try again later.`
-          })
-        })
-    }
-  },
+  
 };
 </script>
 

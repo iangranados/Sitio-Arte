@@ -44,7 +44,7 @@ const Tienda = {
         return TiendaCollection.updateOne({_id : id}, {$set : {status : newStatus}})
     },
     modificarItem : function( id, newCate, newTitulo, newPrecio ){
-        return ComisionCollection.updateOne({ _id : id}, {$set : {
+        return TiendaCollection.updateOne({ _id : id}, {$set : {
             titulo : newTitulo,
             categoria : newCate,
             precio : newPrecio
