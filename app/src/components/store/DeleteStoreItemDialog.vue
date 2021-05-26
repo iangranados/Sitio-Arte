@@ -9,7 +9,7 @@
 
       <q-card-section>
         <p>
-          ¿Estás seguro de querer eliminar esta oferta de tu tienda? Ya no
+          ¿Estás segura de querer eliminar esta oferta de tu tienda? Ya no
           habría vuelta atrás si la eliminas.
         </p>
       </q-card-section>
@@ -71,7 +71,7 @@ export default {
       this.loading = true;
 
       this.$axios
-        .delete("borrarItems/" + this.item._id)
+        .delete("borrarItem/" + this.item._id)
         .then((response) => {
           if (response.status === 200) {
             this.$q.notify({

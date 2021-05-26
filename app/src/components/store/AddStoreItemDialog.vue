@@ -61,7 +61,7 @@
             v-model="price"
             name="price"
             id="price"
-            type="number"
+            
             label="Precio"
             :rules="[(val) => !!val || 'Campo requerido']"
             :disable="loading"
@@ -121,9 +121,11 @@ export default {
       this.loading = true;
       const formData = new FormData();
       formData.append("img", this.file);
-      formData.append("link", this.link);
+      formData.append("titulo", this.title);
+      formData.append("categoria", this.selectedType);
+      formData.append("precio", this.price);
       this.$axios
-        .post("/addItem", formData, {
+        .post("/crearItem", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -137,6 +139,7 @@ export default {
             this.$emit("ok");
             this.hide();
           } else {
+			  console.log(response);
             this.$q.notify({
               type: "negative",
               message: `Oops, algo salió mal. Intenta otra vez.`,
@@ -154,13 +157,13 @@ export default {
     },
 
     urlFromFile() {
-      //   if (FileReader && this.file) {
-      //     const reader = new FileReader();
-      //     reader.onload = () => {
-      //       this.file_url = reader.result;
-      //     };
-      //     reader.readAsDataURL(this.file);
-      //   }
+        if (FileReader && this.file) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            this.file_url = reader.result;
+          };
+          reader.readAsDataURL(this.file);
+        }
     },
 
     onRejected() {
@@ -172,6 +175,9 @@ export default {
 
     loadStore() {
       this.loading = true;
+
+
+
       this.$axios
         .get("/store")
         .then((response) => {

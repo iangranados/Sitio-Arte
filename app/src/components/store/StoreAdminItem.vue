@@ -1,11 +1,11 @@
 <template>
   <div class="StoreAdminItem">
     <div>
-      <q-img :src="item.link" class="StoreAdminItem__image" />
+      <q-img :src="item.img" class="StoreAdminItem__image" />
       <div class="StoreAdminItem__content">
-        <p class="StoreAdminItem__title"><b>Title:</b><br />{{ item.title }}</p>
-        <p class="StoreAdminItem__price"><b>Price:</b><br />{{ item.price }}</p>
-        <p class="StoreAdminItem__category"><b>Category:</b><br />{{ item.category }}</p>
+        <p class="StoreAdminItem__title"><b>Title:</b><br />{{ item.titulo }}</p>
+        <p class="StoreAdminItem__price"><b>Price:</b><br />{{ item.precio }}</p>
+        <p class="StoreAdminItem__category"><b>Category:</b><br />{{ item.categoria }}</p>
       </div>
     </div>
     <div class="StoreAdminItem__actions">
@@ -32,6 +32,9 @@ export default {
       required: true,
     },
   },
+//   mounted:{
+
+//   },
   methods: {
     onDelete() {
       this.$q

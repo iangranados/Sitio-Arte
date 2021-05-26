@@ -36,39 +36,33 @@ export default {
     StoreAdminItem: () => import("../components/store/StoreAdminItem.vue"),
   },
   mounted() {
-    // this.loadStore();
+    this.loadStore();
   },
   data: () => ({
     loading: false,
     error: null,
-    store: [
-      {
-        title: "Cool",
-        link:
-          "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.wimarys.com%2Fwp-content%2Fuploads%2F2018%2F12%2Fbokeh-full-body-portrait-5.jpg&f=1&nofb=1",
-        category: "Full body",
-		price:"19.99"
-      },
-    ],
+    store: null,
   }),
   methods: {
     loadStore() {
-    //     this.loading = true;
-    //     this.$axios
-    //       .get("/store")
-    //       .then((response) => {
-    //         if (response.status === 200 && Array.isArray(response.data)) {
-    //           this.Store = response.data;
-    //           this.error = null;
-    //         } else {
-    //           this.error = "Algo salió mal, intenta otra vez :c";
-    //         }
-    //         this.loading = false;
-    //       })
-    //       .catch((e) => {
-    //         this.loading = false;
-    //         this.error = "Algo salió mal, intenta otra vez :c";
-    //       });
+        this.loading = true;
+        this.$axios
+          .get("/tienda")
+          .then((response) => {
+            if (response.status === 200 && Array.isArray(response.data)) {
+              this.store = response.data;
+              this.error = null;
+			console.log(this.store)
+
+            } else {
+              this.error = "Algo salió mal, intenta otra vez :c";
+            }
+            this.loading = false;
+          })
+          .catch((e) => {
+            this.loading = false;
+            this.error = "Algo salió mal, intenta otra vez :c";
+          });
     },
     onAddNewImage() {
       this.$q
@@ -77,7 +71,7 @@ export default {
           parent: this,
         })
         .onOk(() => {
-        //   this.loadStore()
+          this.loadStore()
         });
     },
   },

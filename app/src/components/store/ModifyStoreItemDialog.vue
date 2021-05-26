@@ -41,7 +41,7 @@
             v-model="price"
             name="price"
             id="price"
-            type="number"
+            
             label="Precio"
             :rules="[(val) => !!val || 'Campo requerido']"
             :disable="loading"
@@ -82,10 +82,10 @@ export default {
   },
   data() {
     return {
-      url: this.item.link || null,
-      title: this.item.title,
-      category: this.item.category,
-      price: this.item.price,
+      url: this.item.img || null,
+      title: this.item.titulo,
+      category: this.item.categoria,
+      price: this.item.precio,
       loading: false, 
     };
   },
