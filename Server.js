@@ -6,7 +6,7 @@ const rutas = require('./server/src/routes/routes.js');
 const passport = require('passport');
 const session = require('express-session');
 require('dotenv').config();
-require('./server/src/config/passport');
+require('./server/src/config/passport.js');
 
 // Init
 const app = express();

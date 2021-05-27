@@ -11,6 +11,17 @@ const { Tipo } = require('../models/tipoModel');
 const upload = require('../services/file-upload');
 const Admin = require('../models/adminModel');
 
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service: 'hotmail',
+    auth: {
+        user: "lelebot@outlook.com",
+        pass: "lelemoon1234"
+    }
+});
+
+
 const passport = require('passport');
 
 const storage = multer.diskStorage({
