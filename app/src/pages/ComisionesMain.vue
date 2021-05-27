@@ -22,102 +22,25 @@
         commission.
       </p>
     </div>
-    <q-separator color="light-gray" />
-    <div class="Comisiones__section">
-      <div class="Comisiones__Category row q-col-gutter-lg">
-        <div class="Category__description col-xs-12 col-md-7">
-          <h2 class="SectionTitle">Full Body</h2>
-          <ul>
-            <li>Price: 65 USD (+45 USD per extra character)</li>
-          </ul>
-        </div>
-        <div class="Category__placeholder col-xs-12 col-md-5">
-          <q-img src="~assets/images/placeholder_thumb.png" alt="placeholder" />
-        </div>
-      </div>
+    <div v-if="!!loading && tipos.length <= 0" class="text-center">
+      <q-circular-progress indeterminate size="40px" color="primary" />
     </div>
-    <q-separator color="light-gray" />
-    <div class="Comisiones__section">
-      <div class="Comisiones__Category row q-col-gutter-lg">
-        <div class="Category__description col-xs-12 col-md-7">
-          <h2 class="SectionTitle">Half Body</h2>
-          <ul>
-            <li>Price: 45 USD (+30 USD per extra character)</li>
-          </ul>
-        </div>
-        <div class="Category__placeholder col-xs-12 col-md-5">
-          <q-img src="~assets/images/placeholder_thumb.png" alt="placeholder" />
-        </div>
-      </div>
-    </div>
-    <q-separator color="light-gray" />
-    <div class="Comisiones__section">
-      <div class="Comisiones__Category row q-col-gutter-lg">
-        <div class="Category__description col-xs-12 col-md-7">
-          <h2 class="SectionTitle">Bust</h2>
-          <ul>
-            <li>Price: 35 USD (+30 USD per extra character)</li>
-          </ul>
-        </div>
-        <div class="Category__placeholder col-xs-12 col-md-5">
-          <q-img src="~assets/images/placeholder_thumb.png" alt="placeholder" />
-        </div>
-      </div>
-    </div>
-    <q-separator color="light-gray" />
-    <div class="Comisiones__section">
-      <div class="Comisiones__Category row q-col-gutter-lg">
-        <div class="Category__description col-xs-12 col-md-7">
-          <h2 class="SectionTitle">Chibi</h2>
-          <ul>
-            <li>Price: 30 USD (+25 per extra character)</li>
-          </ul>
-        </div>
-        <div class="Category__placeholder col-xs-12 col-md-5">
-          <q-img src="~assets/images/placeholder_thumb.png" alt="placeholder" />
-        </div>
-      </div>
-    </div>
-    <q-separator color="light-gray" />
-    <div class="Comisiones__section">
-      <div class="Comisiones__Category row q-col-gutter-lg">
-        <div class="Category__description col-xs-12 col-md-7">
-          <h2 class="SectionTitle">Twitch Emotes / FB Stickers</h2>
-          <ul>
-            <li>Price: 25 USD per each</li>
-            <li>Includes png, psd, jpg</li>
-          </ul>
-        </div>
-        <div class="Category__placeholder col-xs-12 col-md-5">
-          <q-img src="~assets/images/placeholder_thumb.png" alt="placeholder" />
-        </div>
-      </div>
-    </div>
-    <q-separator color="light-gray" />
-    <div class="Comisiones__section">
-      <div class="Comisiones__Category row q-col-gutter-lg">
-        <div class="Category__description col-xs-12 col-md-7">
-          <h2 class="SectionTitle">Twitch Badges</h2>
-          <ul>
-            <li>Price: 20 USD per each, if completely different (+5 if the others are recolors, +10 if the others are slightly diffent) </li>
-          </ul>
-        </div>
-        <div class="Category__placeholder col-xs-12 col-md-5">
-          <q-img src="~assets/images/placeholder_thumb.png" alt="placeholder" />
-        </div>
-      </div>
-    </div>
-    <q-separator color="light-gray" />
-    <div class="Comisiones__section">
-      <div class="Comisiones__Category row q-col-gutter-lg">
-        <div class="Category__description col-xs-12 col-md-7">
-          <h2 class="SectionTitle">Character Design</h2>
-          <ul>
-            <li>Initial Price: 70 USD (The price can increase if the character has complex or detailed outfits)</li>
-          </ul>
-        </div>
-        <div class="Category__placeholder col-xs-12 col-md-5">
-          <q-img src="~assets/images/placeholder_thumb.png" alt="placeholder" />
+    <div else v-for="item in tipos" :key="item._id">
+      <q-separator color="light-gray" />
+      <div class="Comisiones__section" >
+        <div class="Comisiones__Category row q-col-gutter-lg">
+          <div class="Category__description col-xs-12 col-md-7">
+            <h2 class="SectionTitle">{{item.name}}</h2>
+            <p>
+              {{item.description}}
+            </p>
+            <ul>
+              <li>Price: {{item.precioBase}}</li>
+            </ul>
+          </div>
+          <div class="Category__placeholder col-xs-12 col-md-5">
+            <q-img :src="item.img" :alt="item.name" />
+          </div>
         </div>
       </div>
     </div>
@@ -127,6 +50,28 @@
 <script>
 export default {
   name: "ComisionesMain",
+  mounted() {
+    if (this.tipos.length <= 0) {
+      this.$store.dispatch('types/loadTypes')
+        .catch(() => {
+          this.$q.notify({
+            type: 'negative',
+            message: `Couldn't load commissions info. Try again later.`
+          })
+        })
+    }
+  },
+  computed: {
+    loading () {
+      return this.$store.state.types.loading 
+    },
+    error () {
+      return this.$store.state.types.error
+    },
+    tipos () {
+      return this.$store.state.types.tipos
+    }
+  }
 };
 </script>
 

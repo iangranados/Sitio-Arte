@@ -1,30 +1,25 @@
 <template>
-  <div class="KanbanItem">
-    <q-img
-      v-if="item.status === 'done' && item.finalThumb"
-      :src="item.finalThumb"
-      class="KanbanItem__image"
-    />
+  <div class="KanbanItem" @click="seeDetail" >
     <div class="KanbanItem__content">
       <div
         class="KanbanItem__status"
         :style="{ backgroundColor: colorByStatus }"
       ></div>
-      <p class="KanbanItem__title">{{ item.title }}</p>
+      <p class="KanbanItem__title">{{ item.tipo + ' - ' + item.name }}</p>
       <div class="KanbanItem__progressDetails">
         <q-icon
           class="KanbanItem__hasComments"
           name="question_answer"
           color="light-gray"
-          v-if="item.hasComments"
+          v-if="item.hasComments || (item.comments && item.comments.length > 0)"
         />
-        <template v-if="!!item.progress && item.status === 'doing'">
+        <template v-if="!!item.avance">
           <q-linear-progress
             class="KanbanItem__progress"
             size="md"
-            :value="item.progress / 100"
+            :value="item.avance / 100"
           />
-          <span class="KanbanItem__progressLabel">{{ item.progress }}%</span>
+          <span class="KanbanItem__progressLabel">{{ item.avance }}%</span>
         </template>
       </div>
     </div>
@@ -40,14 +35,46 @@ export default {
       required: true,
     },
   },
+  mounted () {
+    this.isAuthenticated = this.$route.path === '/admin/comisiones'
+  },
+  data: () => ({
+    isAuthenticated: false,
+  }),
+  methods: {
+    seeDetail () {
+      if (this.isAuthenticated) {
+        this.$q.dialog({
+          component: () => import("./CommissionViewDialogAdmin.vue"),
+          parent: this,
+          commission: this.item
+        })
+        .onDismiss(() => this.$emit('reload'));
+
+      } else {
+        this.$q.dialog({
+          component: () => import("./TokenRequestDialog.vue"),
+          parent: this,
+          item: this.item,
+        })
+        .onOk((res) => {
+          this.$q.dialog({
+            component: () => import("./CommissionViewDialog.vue"),
+            parent: this,
+            commission: res
+          });
+        });
+      }
+    },
+  },
   computed: {
     colorByStatus: function () {
       switch (this.item.status) {
-        case "approved":
+        case "Approved":
           return "#ffff6f";
-        case "doing":
+        case "Working On":
           return "#ff8181";
-        case "done":
+        case "Completed":
           return "#7ae697";
         default:
           return "#ee6700";
@@ -64,6 +91,8 @@ export default {
   box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.16);
   background-color: #ffffff;
   margin-bottom: 7px;
+
+  cursor: pointer;
 
   .KanbanItem__image {
     width: 100%;

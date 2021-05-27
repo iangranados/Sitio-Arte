@@ -17,7 +17,7 @@ const upload = multer({
         bucket: 'sitioarte',
         acl: 'public-read',
         key: function (req, file, cb) {
-        cb(null, Date.now().toString())
+        cb(null, Date.now().toString() + '-' + file.originalname)
         }
     })
 })

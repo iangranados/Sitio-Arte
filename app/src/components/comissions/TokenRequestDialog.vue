@@ -1,104 +1,149 @@
 <template>
-   <q-dialog v-model="prompt" >
-      <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">Your Token</div>
-        </q-card-section>
+  <q-dialog
+    ref="TokenRequestDialog"
+    @hide="onDialogHide"
+  >
+    <q-card class="TokenRequestDialog" style="min-width: 350px">
+      <q-toolbar>
+        <q-space />
+        <q-btn flat round dense icon="close" v-close-popup />
+      </q-toolbar>
 
-        <q-card-section class="q-pt-none">
-          <q-input dense v-model="address" autofocus @keyup.enter="prompt = false" />
-        </q-card-section>
+      <q-card-section>
+        <h3 class="TokenRequestDialog__title">{{ item.tipo + ' - ' + item.name }}</h3>
+        <p>
+          Enter the token you received when ordering this commission to see its details and progress.
+        </p>
+      </q-card-section>
 
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Submit" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+      <q-card-section class="q-pt-none">
+        <q-form @submit="processToken" class="TokenRequestDialog__form">
+          <q-input
+            class="TokenRequestDialog__input"
+            v-model="token"
+            label="Access Token"
+            :error="error"
+            :rules="[(val) => !!val || 'Please enter an Access Token']"
+            dense
+  		      outlined
+          />
+
+          <q-btn
+            class="TokenRequestDialog__btn"
+            label="See Commission"
+            color="primary"
+            type="submit"
+            padding="sm"
+            :loading="loading"
+            unelevated
+          />
+      </q-form>
+      </q-card-section>
+	</q-card>
+  </q-dialog>
 </template>
 
 <script>
 export default {
-  name: 'OrderSuccessDialog',
+  name: "TokenRequestDialog",
   props: {
-    confirmationCode: {
-      type: String,
-      required: true
+    item: {
+      type: Object,
+      required: true,
     }
   },
-  data () {
+  data() {
     return {
-      state: 'initial',
-      email: null
-    }
+      token: "",
+      loading: false,
+      error: null,
+    };
   },
   methods: {
     // following method is REQUIRED
     // (don't change its name --> "show")
-    show () {
-      this.$refs.OrderSuccessDialog.show()
+    show() {
+      this.$refs.TokenRequestDialog.show();
     },
 
     // following method is REQUIRED
     // (don't change its name --> "hide")
-    hide () {
-      this.$refs.OrderSuccessDialog.hide()
+    hide() {
+      this.$refs.OrderSuccessDialog.hide();
     },
 
-    onDialogHide () {
+    onDialogHide() {
       // required to be emitted
       // when QDialog emits "hide" event
-      this.$emit('hide')
-    }
-  }
-}
+      this.$emit("hide");
+    },
+
+    processToken() {
+      this.loading = true
+
+      this.$axios.post('/showComission/' + this.item._id, {token: this.token})
+        .then(res => {
+          this.loading = false
+          if (!!res.data) {
+            this.$emit("ok", res.data);
+            this.onDialogHide()
+          } else {
+            this.$q.notify({
+            type: 'negative',
+            message: `Wrong Token. Contact lelemoonn if you don't remember your token.`
+          })
+          }
+        })
+        .catch(() => {
+          this.$q.notify({
+            type: 'negative',
+            message: `Something went wrong. Try again later.`
+          })
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
 // $
-.OrderSuccessDialog{
+.TokenRequestDialog {
+  border-radius: 12px !important;
 
-  .OrderSuccessDialog__content {
-    background-color: white;
-    border-radius: 15px;
-    padding: 45px 30px 50px;
-    text-align: center;
-    width: 600px;
-    max-width: 80vw;
+  .TokenRequestDialog__title {
+  	@include font(24px, bold, $primary);
+    margin: 0 0 12px;
+  }
 
+  .TokenRequestDialog__form {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .TokenRequestDialog__input {
+    flex-basis: 100%;
+    width: 100%;
+    margin-bottom: 12px;
+    
     @media (min-width: $breakpoint-md-min) {
-      padding: 50px 50px 58px;
+      flex-basis: 62%;
+      width: 62%;
+      margin-bottom: 0;
+    }
+    .q-field__control {
+      border-radius: 10px
     }
   }
 
-  .OrderSuccessDialog__image {
-    width: 40%;
-  }
-
-  .OrderSuccessDialog__title {
-    @include font(24px, bold, $primary);
-    margin-bottom: 10px;
-    @media (min-width: $breakpoint-md-min) {
-      font-size: 26px;
-    }
-  }
-
-  p {
-    font-size: 14px;
-  }
-
-  .OrderSuccessDialog__confirmationCode {
-    @include font(26px, bold, $gray);
-    margin: 10px 0 35px;
-    @media (min-width: $breakpoint-md-min) { 
-      font-size: 28px;
-    }
-  }
-
-  .OrderSuccessDialog__btn {
+  .TokenRequestDialog__btn {
     border-radius: 10px;
     letter-spacing: 1px;
+    font-size: 14px;
+    @media (min-width: $breakpoint-md-min) {
+      width: 35%;
+      flex-basis: 35%;
+    }
   }
-
 }
 </style>
