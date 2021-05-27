@@ -487,6 +487,29 @@ router.get( '/tienda', ( req, res ) => {
     })
 });
 
+// Ruta para mandar mail a la artista de una compra
+router.get('/tienda/reciboCompra', ( req, res ) => {
+
+    var options = {
+        from: "lelebot@outlook.com",
+        to: "lelemoonn@gmail.com",
+        subject: "Lelemoon Store automated message",
+        text: "Una compra ha sido realizada"
+    };
+
+    transporter.sendMail(options, function(err, info)
+    {
+        if (err)
+        {
+            console.log(err);
+            res.statusMessage = "Error sending mail"
+            return res.status( 406 );
+        }
+        console.log("Sent: " + info.response);
+    });
+    return res.status( 200 );
+})
+
 // Ruta para agregar un item a tienda
 router.post( '/crearItem', singleUpload, ( req, res ) => {
     
