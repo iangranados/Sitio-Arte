@@ -488,13 +488,15 @@ router.get( '/tienda', ( req, res ) => {
 });
 
 // Ruta para mandar mail a la artista de una compra
-router.get('/tienda/reciboCompra', ( req, res ) => {
+router.post('/tienda/reciboCompra', ( req, res ) => {
+
+    let { email } = req.body;
 
     var options = {
         from: "lelebot@outlook.com",
         to: "lelemoonn@gmail.com",
         subject: "Lelemoon Store automated message",
-        text: "Una compra ha sido realizada"
+        text: "Una compra ha sido realizada por " + email
     };
 
     transporter.sendMail(options, function(err, info)
