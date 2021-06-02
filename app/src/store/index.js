@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 // import example from './module-example'
 import auth from './auth'
 import portfolio from './portfolio'
+import tienda from './tienda'
 import types from './types'
 
 Vue.use(Vuex)
@@ -23,6 +24,7 @@ export default function (/* { ssrContext } */) {
       auth,
       portfolio,
       types,
+	  tienda,
     },
 
     // enable strict mode (adds overhead!)
