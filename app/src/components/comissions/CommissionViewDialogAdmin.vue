@@ -3,6 +3,19 @@
     <q-card class="CommissionDetailView" style="width: 1000px; max-width: 80vw;">
       <q-toolbar>
         <q-space />
+        <q-btn flat round dense icon="more_horiz" color="gray">
+          <q-menu>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup v-for="(t, i) in possibleStatus" :key="i" @click="onUpdateStatus(t)">
+                <q-item-section>Move to "{{t}}"</q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable @click="onDeleteCommission" v-close-popup>
+                <q-item-section><span class="red-letters">Delete Commission</span></q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
         <q-btn flat round dense icon="close" color="red-lips" v-close-popup />
       </q-toolbar>
       <div class="CommissionDetailView__content">
@@ -11,7 +24,7 @@
           <div class="col-12 col-md-8">
             <div class="CommissionDetailView__section">
               <h4 class="CommissionDetailView__status">{{commission.status}}</h4>
-              <h3 class="CommissionDetailView__title">{{ commission.tipo + ' - ' + commission.name }}</h3>
+              <h3 class="CommissionDetailView__title">{{commission.tipo + ' - ' + commission.name}}</h3>
             </div>
           </div>
           <!--<div class="col-12 col-md-4">
@@ -38,7 +51,7 @@
                   buttons
                   auto-save>
                   <p>Edit Description</p>
-                  <q-input v-model="description" dense autofocus />
+                  <q-input v-model="description" type="textarea" outlined autofocus />
                 </q-popup-edit>
               </p>
             </div>
@@ -90,13 +103,13 @@
           <div class="col-12 col-md-8">
             <div class="CommissionDetailView__section">
               <h5 class="CommissionDetailView__SectionTitle">Messages</h5>
-              <div v-if="comments.length > 0" class="CommissionDetailView__Messages" >
+              <div v-if="comments.length > 0" class="CommissionDetailView__Messages" style="">
                 <q-chat-message
                   v-for="(c, index) in commentsReversed"
                   :key="index"
                   :name="c.user"
                   :text="[c.comment]"
-                  :sent="c.user === 'Lelemoonn'"
+                  :sent="c.user != 'Lelemoonn'"
                 />
               </div>
               <p v-else class="CommissionDetailView__noMessages">Start the conversation by sending a new message</p>
@@ -116,12 +129,23 @@
           <div class="col-12 col-md-4">
             <div class="CommissionDetailView__section">
               <h5 class="CommissionDetailView__SectionTitle">Progress</h5>
-              <p>{{commission.avance || 0}}%</p>
+              <q-slider
+                v-model="progress"
+                class="CommissionDetailView__slider"
+                @change="onUpdateProgress"
+                :min="0"
+                :max="100"
+                :step="5"
+                label
+                label-always
+                color="primary"
+              />
             </div>
-            <div class="CommissionDetailView__section" v-if="commission.archivos && commission.archivos.length > 0">
+            <div class="CommissionDetailView__section">
               <h5 class="CommissionDetailView__SectionTitle">Attachments</h5>
+              <q-btn label="Add new file" @click="addfile_modal = true" color="primary" class="q-mb-md" unelevated no-caps/>
               <div class="row q-col-gutter-md">
-                <div v-for="(file, index) in commission.archivos" :key="index" class="col-6">
+                <div v-for="(file, index) in files" :key="index" class="col-6">
                   <q-img :src="file" :ratio="1" class="CommissionDetailView__image">
                     <q-btn icon="download" type="a" :href="file" color="dark" size="10px" round dense unelevated download/>
                   </q-img>
@@ -132,12 +156,43 @@
         </div>
       </div>
     </q-card>
+    <q-dialog v-model="addfile_modal" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Add new file</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-file
+            class="Form__field"
+            v-model="file"
+            name="file"
+            id="file"
+            label="Upload a new file"
+            outlined
+            accept=".jpg, .png, image/*"
+            :disable="fileLoading"
+          >
+            <template v-slot:prepend>
+              <q-avatar>
+                <q-icon name="attach_file" />
+              </q-avatar>
+            </template>
+          </q-file>
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Upload" @click="onUploadFile" :loading="fileLoading" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-dialog>
 </template>
 
 <script>
 export default {
-  name: "CommissionViewDialog",
+  name: "CommissionViewDialogAdmin",
   props: {
     commission: {
       type: Object,
@@ -150,6 +205,8 @@ export default {
     this.contact = this.commission.contact;
     this.username = this.commission.username;
     this.comments = this.commission.comments ? this.commission.comments : [];
+    this.progress = this.commission.avance ? this.commission.avance : 0;
+    this.files = this.commission.archivos ? this.commission.archivos : [];
   },
   data: () => ({
     description: '',
@@ -157,9 +214,16 @@ export default {
     contact: '',
     username: '',
 
+    progress: 0,
+
     message: '',
 
-    comments: []
+    comments: [],
+    files: [],
+
+    addfile_modal: false,
+    file: null,
+    fileLoading: false,
   }),
   methods: {
     // following method is REQUIRED
@@ -217,15 +281,31 @@ export default {
         })
     },
 
+    onUpdateProgress () {
+      const params = {
+        token: this.commission.token,
+        avance: this.progress,
+      };
+      
+      this.$axios.patch('/modificarComisionAvance/' + this.commission._id, params)
+        .catch(() => {
+          this.progress = this.commission.avance
+          this.$q.notify({
+            type: 'negative',
+            message: `Couldn't update progress`
+          })
+        })
+    },
+
     onSendMessage () {
       if(this.message) {
         const msg = {
-          user: this.name,
+          user: 'Lelemoonn',
           comment: this.message,
           token: this.commission.token,
         }
 
-        this.comments.push({user: this.name, comment: this.message})
+        this.comments.push({user: 'Lelemoonn', comment: this.message})
         this.$axios.patch('/addComment/' + this.commission._id, msg)
           .catch(() => {
             this.comments.pop()
@@ -237,11 +317,100 @@ export default {
 
         this.message = ''
       }
+    },
+
+    onUpdateStatus (status) {
+      const params = {
+        token: this.commission.token,
+        status
+      };
+      
+      this.$axios.patch('/changeComStatus/' + this.commission._id, params)
+        .then(() => this.$emit('hide'))
+        .catch(() => {  
+          this.$q.notify({
+            type: 'negative',
+            message: `Couldn't update progress`
+          })
+        })
+    },
+
+    onUploadFile () {
+      console.log("hola");
+      if (this.file) {
+        this.fileLoading = true;
+
+        const formData = new FormData();
+        formData.append("img", this.file);
+        formData.append("token", this.commission.token);
+
+        this.$axios
+          .patch("/addArchivo/" + this.commission._id, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            if (response.status === 202) {
+              this.$q.notify({
+                type: "positive",
+                message: `Imagen agregada exitosamente.`,
+              });
+              this.files.push(response.data)
+              this.addfile_modal = false
+            } else {
+              this.$q.notify({
+                type: "negative",
+                message: `Oops, something went wrong. Try again later.`,
+              });
+            }
+            this.fileLoading = false;
+          })
+          .catch((e) => {
+            this.fileLoading = false;
+            this.$q.notify({
+              type: "negative",
+              message: `Oops, something went wrong. Try again later.`,
+            });
+          });
+      }
+    },
+    onDeleteCommission () {
+      this.$q.dialog({
+        title: 'Delete commission',
+        message: 'Are you sure you want to delete this commission? There\'s no going back',
+        cancel: true
+      }).onOk(() => {
+        this.$axios
+          .delete("/borrarComision/" + this.commission._id)
+          .then((response) => {
+            this.$emit('hide')
+            this.$q.notify({
+                type: "positive",
+                message: `Succesfully deleted commission.`,
+              });
+          })
+          .catch((e) => {
+            this.$q.notify({
+              type: "negative",
+              message: `Oops, something went wrong. Try again later.`,
+            });
+          });
+      })
     }
   },
   computed: {
     commentsReversed: function () {
       return this.comments.slice().reverse()
+    },
+    possibleStatus: function () {
+      switch(this.commission.status) {
+        case 'Pending' : return ['Approved', 'Working On']
+        case 'Approved': return ['Pending', 'Working On', 'Completed']
+        case 'Working On': return ['Approved', 'Completed']
+        case 'Completed': return ['Working On']
+        default : return []
+      }
     }
   }
 };
@@ -319,5 +488,13 @@ export default {
     @include font(12px, normal, $gray);
     margin: 5px 0 0;
   }
+
+  .CommissionDetailView__slider {
+    margin-top: 25px;
+  }
+}
+.red-letters {
+  color: $red-lips;
+  font-weight: bold;
 }
 </style>

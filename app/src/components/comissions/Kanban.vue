@@ -5,7 +5,7 @@
       <q-circular-progress indeterminate size="40px" color="gray" />
     </div>
     <q-scroll-area v-else style="flex: 1 1 auto">
-      <KanbanItem v-for="(item, index) in items" :key="index" :item="item" />
+      <KanbanItem v-for="(item, index) in items" :key="index" :item="item" @reload="$emit('reload')" />
     </q-scroll-area>
   </div>
 </template>

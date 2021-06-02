@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // import example from './module-example'
+import auth from './auth'
 import portfolio from './portfolio'
 import tienda from './tienda'
 import types from './types'
@@ -20,6 +21,7 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
+      auth,
       portfolio,
       types,
 	  tienda,
