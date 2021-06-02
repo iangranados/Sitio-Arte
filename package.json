@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "dev": "nodemon server.js && ./app/ quasar dev",
-    "build": "cd app && quasar build",
+    "build": "cd app && npm install && quasar build",
     "heroku-postbuild": "npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
