@@ -14,7 +14,7 @@ passport.use(new LocalStrategy({
     }
     else
     {
-        const match = await Admin.matchPassword(password);
+        const match = await admin.matchPassword(password);
 
         if (match)
         {
@@ -27,11 +27,11 @@ passport.use(new LocalStrategy({
     }
 }));
 
-passport.serializeAdmin((admin, done) => {
+passport.serializeUser((admin, done) => {
     done(null, admin._id);
 });
 
-passport.deserializeAdmin((_id, done) => {
+passport.deserializeUser((_id, done) => {
     Admin.findById(_id, (err, admin) => {
         done(err, admin);
     });

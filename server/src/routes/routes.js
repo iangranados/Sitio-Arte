@@ -11,6 +11,17 @@ const { Tienda } = require('../models/tiendaModel');
 const upload = require('../services/file-upload');
 const Admin = require('../models/adminModel');
 
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service: 'hotmail',
+    auth: {
+        user: "lelebot@outlook.com",
+        pass: "lelemoon1234"
+    }
+});
+
+
 const passport = require('passport');
 
 const singleUpload = upload.single('img');
@@ -476,6 +487,31 @@ router.get( '/tienda', ( req, res ) => {
     })
 });
 
+// Ruta para mandar mail a la artista de una compra
+router.post('/tienda/reciboCompra', ( req, res ) => {
+
+    let { email } = req.body;
+
+    var options = {
+        from: "lelebot@outlook.com",
+        to: "lelemoonn@gmail.com",
+        subject: "Lelemoon Store automated message",
+        text: "Una compra ha sido realizada por " + email
+    };
+
+    transporter.sendMail(options, function(err, info)
+    {
+        if (err)
+        {
+            console.log(err);
+            res.statusMessage = "Error sending mail"
+            return res.status( 406 );
+        }
+        console.log("Sent: " + info.response);
+    });
+    return res.status( 200 );
+})
+
 // Ruta para agregar un item a tienda
 router.post( '/crearItem', singleUpload, ( req, res ) => {
     
@@ -551,6 +587,44 @@ router.patch('/modificarStatus/:id', ( req, res ) => {
         return res.status( 500 ).end();
     })
 });
+
+// RUTA ADMIN
+/*
+router.post('/admin/login', passport.authenticate('local', {
+    successRedirect: '/galeria',
+    failureRedirect: '/admin'
+
+}))
+*/
+
+
+router.post('/admin/login', async (req, res) => {
+    let { email, password } = req.body;
+
+    const admin = await Admin.findOne({email: email});
+
+    if (!admin)
+    {
+        res.statusMessage = "No admin found with that email";
+        return res.status( 406 ).end();
+    }
+    else
+    {
+        const match = await admin.matchPassword(password);
+
+        if (match)
+        {
+            let token = {"token": "lelemoonn"}
+            return res.status( 200 ).json(token);
+        }
+        else
+        {
+            res.statusMessage = "Wrong password";
+            return res.status( 406 ).end();
+        }
+    }
+})
+
 
 router.patch('/changeItem/:id', ( req, res ) => {
     let id = req.params.id;

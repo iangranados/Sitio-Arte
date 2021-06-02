@@ -49,12 +49,28 @@ export default {
   }),
   methods: {
     onSubmit() {
-      this.loading = true;
-      setTimeout(() => {
-        this.$q.notify("Logged in");
-        this.$router.push('/admin');
-        this.loading = false;
-      }, 2000);
+      let req = {
+        email: this.text,
+        password: this.password
+      };
+      
+      this.$axios
+        .post("/admin/login", req)
+        .then((response) => {
+          if (response.status === 200)
+          {
+            localStorage.setItem('adminToken', res.data.token)
+            router.push("/admin")
+          }
+          else
+          {
+            this.$q.notify({
+              type: "negative",
+              message: `Incorrect email or password`
+            });
+          }
+          this.loading = false;
+        })
     },
   },
 };

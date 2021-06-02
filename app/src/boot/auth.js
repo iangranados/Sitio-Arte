@@ -1,3 +1,5 @@
+const { isAuthenticated } = require('../../../server/src/helpers/auth');
+
 export default async ({ store, router }) => {
   const TOKEN = localStorage.getItem('token')
 
@@ -7,7 +9,7 @@ export default async ({ store, router }) => {
 
   router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-      if (!store.state.auth.token) {
+      if (!isAuthenticated) {
         store.dispatch('auth/logout')
         return next({
           path: '/login',
@@ -17,7 +19,7 @@ export default async ({ store, router }) => {
     }
 
     if (to.matched.some(record => record.meta.requiresNotAuth)) {
-      if (store.state.auth.token) {
+      if (isAuthenticated) {
         return next({
           path: '/admin'
         })
