@@ -589,15 +589,15 @@ router.patch('/modificarStatus/:id', ( req, res ) => {
 });
 
 // RUTA ADMIN
-
+/*
 router.post('/admin/login', passport.authenticate('local', {
     successRedirect: '/galeria',
     failureRedirect: '/admin'
 
 }))
+*/
 
 
-/*
 router.post('/admin/login', async (req, res) => {
     let { email, password } = req.body;
 
@@ -614,7 +614,8 @@ router.post('/admin/login', async (req, res) => {
 
         if (match)
         {
-            return res.status( 202 ).end();
+            let token = {"token": "lelemoonn"}
+            return res.status( 200 ).json(token);
         }
         else
         {
@@ -623,7 +624,8 @@ router.post('/admin/login', async (req, res) => {
         }
     }
 })
-*/
+
+
 router.patch('/changeItem/:token', ( req, res ) => {
     let id = req.params.id;
     let { titulo: newTitulo, categoria: newCate, precio: newPrecio } = req.body;

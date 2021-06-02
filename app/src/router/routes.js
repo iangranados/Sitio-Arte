@@ -34,6 +34,17 @@ const routes = [
   {
     path: '/admin',
     component: () => import('layouts/AdminLayout.vue'),
+    beforeEnter(to, from, next)
+    {
+      if (localStorage.getItem('adminToken'))
+      {
+        next()
+      }
+      else
+      {
+        next('/login')
+      }
+    },
     children: [
       { path: '', redirect: 'comisiones' },
       { path: 'comisiones', component: () => import('pages/AdminComisiones.vue') },

@@ -29,7 +29,7 @@
     	</q-item>
     </q-list>
     <div class="text-right">
-    	<q-btn to="/" class="AdminSidebar__logout" label="Cerrar Sesión" icon-right="logout" no-caps flat dense />
+    	<q-btn to="/" class="AdminSidebar__logout" label="Cerrar Sesión" icon-right="logout" no-caps flat dense @click="logout" />
     </div>
   </q-drawer>
 </template>
@@ -47,6 +47,11 @@ export default {
 		drawerModel: {
 			get () { return this.drawer },
 			set (value) { this.$emit('update-drawer', value) }
+		}
+	},
+	methods: {
+		logout() {
+			localStorage.setItem('adminToken', null)
 		}
 	}
 }
