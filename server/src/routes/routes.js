@@ -626,11 +626,12 @@ router.post('/admin/login', async (req, res) => {
 })
 
 
-router.patch('/changeItem/:token', ( req, res ) => {
+router.patch('/changeItem/:id', ( req, res ) => {
     let id = req.params.id;
     let { titulo: newTitulo, categoria: newCate, precio: newPrecio } = req.body;
 
     if(!id || !newTitulo || !newCate || !newPrecio ){
+		console.log(req.params.id)
         res.statusMessage = "Please send all the fields required";
         return res.status( 406 ).end()
     }
