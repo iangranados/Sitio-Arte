@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Am3ra/Sitio-Arte#readme",
   "dependencies": {
+    "@quasar/cli": "^1.2.0",
     "aws-sdk": "^2.893.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
