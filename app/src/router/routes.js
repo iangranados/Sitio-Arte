@@ -26,6 +26,9 @@ const routes = [
 
   {
   	path: '/login',
+    meta: {
+      requiresNotAuth: true
+    },
   	component: () => import('layouts/MainLayout.vue'),
   	children:[
   		{ path: '', component: () => import('pages/AdminLogin.vue')}
@@ -33,6 +36,9 @@ const routes = [
   },
   {
     path: '/admin',
+    meta: {
+      requiresAuth: true
+    },
     component: () => import('layouts/AdminLayout.vue'),
     children: [
       { path: '', redirect: 'comisiones' },

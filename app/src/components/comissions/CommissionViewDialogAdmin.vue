@@ -288,12 +288,21 @@ export default {
       };
       
       this.$axios.patch('/modificarComisionAvance/' + this.commission._id, params)
-        .catch(() => {
+        .catch((error) => {
           this.progress = this.commission.avance
-          this.$q.notify({
-            type: 'negative',
-            message: `Couldn't update progress`
-          })
+          if (error.response && error.response.status === 403) {
+            this.$q.notify({
+              type: 'warning',
+              message: 'Tu sesión ha expirado. Inicia sesión otra vez'
+            })
+            this.$store.dispatch('auth/logout');
+            this.$router.push('/login');
+          } else {
+              this.$q.notify({
+              type: 'negative',
+              message: `Couldn't update progress`
+            })
+          }
         })
     },
 
@@ -327,11 +336,20 @@ export default {
       
       this.$axios.patch('/changeComStatus/' + this.commission._id, params)
         .then(() => this.$emit('hide'))
-        .catch(() => {  
-          this.$q.notify({
-            type: 'negative',
-            message: `Couldn't update progress`
-          })
+        .catch((error) => {  
+          if (error.response && error.response.status === 403) {
+            this.$q.notify({
+              type: 'warning',
+              message: 'Tu sesión ha expirado. Inicia sesión otra vez'
+            })
+            this.$store.dispatch('auth/logout');
+            this.$router.push('/login');
+          } else {
+            this.$q.notify({
+              type: 'negative',
+              message: `Couldn't change status`
+            })
+          }
         })
     },
 
@@ -366,12 +384,21 @@ export default {
             }
             this.fileLoading = false;
           })
-          .catch((e) => {
-            this.fileLoading = false;
-            this.$q.notify({
-              type: "negative",
-              message: `Oops, something went wrong. Try again later.`,
-            });
+          .catch((error) => {
+            if (error.response && error.response.status === 403) {
+              this.$q.notify({
+                type: 'warning',
+                message: 'Tu sesión ha expirado. Inicia sesión otra vez'
+              })
+              this.$store.dispatch('auth/logout');
+              this.$router.push('/login');
+            } else {
+              this.fileLoading = false;
+              this.$q.notify({
+                type: "negative",
+                message: `Oops, something went wrong. Try again later.`,
+              });
+            }
           });
       }
     },
@@ -390,11 +417,20 @@ export default {
                 message: `Succesfully deleted commission.`,
               });
           })
-          .catch((e) => {
-            this.$q.notify({
-              type: "negative",
-              message: `Oops, something went wrong. Try again later.`,
-            });
+          .catch((error) => {
+            if (error.response && error.response.status === 403) {
+              this.$q.notify({
+                type: 'warning',
+                message: 'Tu sesión ha expirado. Inicia sesión otra vez'
+              })
+              this.$store.dispatch('auth/logout');
+              this.$router.push('/login');
+            } else {
+              this.$q.notify({
+                type: "negative",
+                message: `Oops, something went wrong. Try again later.`,
+              });
+            }
           });
       })
     }

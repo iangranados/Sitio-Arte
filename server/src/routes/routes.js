@@ -4,18 +4,98 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
+const moment =  require('moment')
+
 const { Portafolio } = require('../models/portafolioModel');
 const { Comision } = require('../models/comisionModel');
 const { Tipo } = require('../models/tipoModel');
 const { Tienda } = require('../models/tiendaModel');
+const { Admin } = require('../models/adminModel');
+
+const {
+    comparePassword,
+    isValidEmail,
+    validatePassword,
+    isEmpty,
+} = require('../helpers/validation');
+const Utils = require('../helpers/utils');
+
 const upload = require('../services/file-upload');
-const Admin = require('../models/adminModel');
-
-const passport = require('passport');
-
 const singleUpload = upload.single('img');
 
+const { decodeHeader } = require('../middlewares/verifyAuth.js');
+
 router.use( jsonParser );
+
+///////////////// RUTAS ADMIN //////////////////////
+router.post("/auth/register", decodeHeader, async ( req, res ) => {
+    const { email, password } = req.body;
+
+    if (isEmpty(email) || isEmpty(password)) {
+        res.statusMessage = "Email or Password detail is missing";
+        return res.status( 400 ).end()
+    }
+
+    if (!isValidEmail(email) || !validatePassword(password)) {
+        res.statusMessage = "Please enter a valid Email or Password";
+        return res.status( 400 ).end()
+    }
+    try {
+        const userMaybe = await Admin.getAdminUser({email})  
+        if (userMaybe != null) {
+            res.statusMessage = "This email address already exists";
+            return res.status( 400 ).end()
+        }
+
+        const newAdmin = { email, password };
+        const newResponse = await Admin.addNewAdmin( newAdmin )
+        return res.status( 201 ).json( newResponse );
+
+    } catch(err) {
+        console.log(err)
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    }
+    
+})
+
+router.post('/auth/login', async ( req, res ) => {
+    const { email, password } = req.body
+
+    if (isEmpty(email) || isEmpty(password)) {
+        res.statusMessage = "Email or Password detail is missing";
+        return res.status( 400 ).end()
+    }
+
+    if (!isValidEmail(email) || !validatePassword(password)) {
+        res.statusMessage = "Please enter a valid Email or Password";
+        return res.status( 400 ).end()
+    }
+
+
+    try {
+        const userMaybe = await Admin.getAdminUser({email})
+        if (userMaybe == null) {
+            res.statusMessage = "User with this email does not exist";
+            return res.status( 400 ).end()
+        }
+
+        const user = userMaybe.toJSON();
+
+        if (!comparePassword(user.password, password)) {
+            res.statusMessage = "The password you provided is incorrect";
+            return res.status( 400 ).end()
+        }
+
+        const token = Utils.generateJWT(user)
+
+        return res.status( 200 ).json({ access_token: token });
+    } catch (err) {
+        console.log(err)
+        res.statusMessage =  "Something went wrong with the DB";
+        return res.status( 500 ).end();
+    }
+});
 
 ///////////////// RUTAS PORTAFOLIO //////////////////////
 // Ruta para obtener todas las imagenes
@@ -32,7 +112,7 @@ router.get( '/galeria', ( req, res ) => {
 });
 
 // Ruta para agregar una nueva imagen
-router.post( '/addImage', singleUpload, ( req, res ) => {
+router.post( '/addImage', decodeHeader, singleUpload, ( req, res ) => {
 
     let { link } = req.body;
     let img = req.file.location;
@@ -56,7 +136,7 @@ router.post( '/addImage', singleUpload, ( req, res ) => {
 });
 
 // Ruta para borrar una iamgen
-router.delete('/borrarImagen/:id', ( req, res ) => {
+router.delete('/borrarImagen/:id', decodeHeader, ( req, res ) => {
 
     let id = req.params.id;
 
@@ -81,7 +161,7 @@ router.delete('/borrarImagen/:id', ( req, res ) => {
 });
 
 // Ruta para modificar el link de una iamgen
-router.patch('/modificarImagen/:id', ( req, res ) => {
+router.patch('/modificarImagen/:id', decodeHeader, ( req, res ) => {
     let id = req.params.id;
     let newLink = req.body.link;
 
@@ -107,15 +187,9 @@ router.patch('/modificarImagen/:id', ( req, res ) => {
     })
 });
 
-///////////////// RUTAS ADMIN //////////////////////
-router.post('/admin', passport.authenticate('local', {
-    successRedirect: '/admin/portafolio',
-    failureRedirect: '/admin'
-}));
-
 ///////////////// RUTAS COMISIONES //////////////////////
 // Ruta para obtener todas las comisiones con todos (para admin)
-router.get( '/comisionesPrivileged', ( req, res ) => {
+router.get( '/comisionesPrivileged', decodeHeader, ( req, res ) => {
     Comision
     .verComisiones()
     .then( result => {
@@ -186,7 +260,7 @@ router.patch('/modificarComision/:id', ( req, res ) => {
 });
 
 // Ruta para borrar alguna comision
-router.delete('/borrarComision/:id', ( req, res ) => {
+router.delete('/borrarComision/:id', decodeHeader, ( req, res ) => {
 
     let id = req.params.id;
 
@@ -211,7 +285,7 @@ router.delete('/borrarComision/:id', ( req, res ) => {
 });
 
 // Rura para modificar el avance de una comision
-router.patch('/modificarComisionAvance/:id', ( req, res ) => {
+router.patch('/modificarComisionAvance/:id', decodeHeader, ( req, res ) => {
     let id = req.params.id;
     let { avance: newAvance, token }= req.body;
 
@@ -238,7 +312,7 @@ router.patch('/modificarComisionAvance/:id', ( req, res ) => {
 });
 
 // Rura para marcar como completada una comision
-router.patch('/changeComStatus/:id', ( req, res ) => {
+router.patch('/changeComStatus/:id', decodeHeader, ( req, res ) => {
     let id = req.params.id;
     let { status: newStatus, token} = req.body;
 
@@ -264,7 +338,7 @@ router.patch('/changeComStatus/:id', ( req, res ) => {
     })
 });
 
-// Ruta para agregar un comentario a la comision
+// Ruta para cambiar la información de contact de una comisión
 router.patch('/changeContactInfo/:id', ( req, res ) => {
     let id = req.params.id;
     let { name: newName, contact: newContact, username: newUsername, token } = req.body;
@@ -285,6 +359,7 @@ router.patch('/changeContactInfo/:id', ( req, res ) => {
     })
 });
 
+// Ruta para agregar un comentario a la comision
 router.patch('/addComment/:id', ( req, res ) => {
     let id = req.params.id;
     let { comment, user, token } = req.body
@@ -307,7 +382,7 @@ router.patch('/addComment/:id', ( req, res ) => {
     })
 });
 
-router.patch('/addArchivo/:id', singleUpload, ( req, res ) => {
+router.patch('/addArchivo/:id', decodeHeader, singleUpload, ( req, res ) => {
     let id = req.params.id;
 
     let { token } = req.body;
@@ -386,7 +461,7 @@ router.get( '/tipos', ( req, res ) => {
 });
 
 // Ruta para crear un nuevo tipo
-router.post( '/crearTipo', singleUpload, ( req, res ) => {
+router.post( '/crearTipo', decodeHeader, singleUpload, ( req, res ) => {
     
     let { name, description, precioBase } = req.body;
     let img = req.file.location;
@@ -410,7 +485,7 @@ router.post( '/crearTipo', singleUpload, ( req, res ) => {
 });
 
 // Ruta para eliminar un tipo
-router.delete('/borrarTipo/:id', ( req, res ) => {
+router.delete('/borrarTipo/:id', decodeHeader, ( req, res ) => {
 
     let id = req.params.id;
 
@@ -436,7 +511,7 @@ router.delete('/borrarTipo/:id', ( req, res ) => {
 });
 
 // Ruta para modificar la descripcion de un tipo
-router.patch('/modificarTipo/:id', ( req, res ) => {
+router.patch('/modificarTipo/:id', decodeHeader, ( req, res ) => {
     let id = req.params.id;
     let { name: newName, description: newDesc, precioBase: newPrice } = req.body;
 
@@ -477,7 +552,7 @@ router.get( '/tienda', ( req, res ) => {
 });
 
 // Ruta para agregar un item a tienda
-router.post( '/crearItem', singleUpload, ( req, res ) => {
+router.post( '/crearItem', decodeHeader, singleUpload, ( req, res ) => {
     
     let { titulo, categoria, precio } = req.body;
     let img = req.file.location;
@@ -502,7 +577,7 @@ router.post( '/crearItem', singleUpload, ( req, res ) => {
 });
 
 // Ruta para borrar un item
-router.delete('/borrarItem/:id', ( req, res ) => {
+router.delete('/borrarItem/:id', decodeHeader, ( req, res ) => {
 
     let id = req.params.id;
 
@@ -526,7 +601,7 @@ router.delete('/borrarItem/:id', ( req, res ) => {
     })
 });
 
-router.patch('/modificarStatus/:id', ( req, res ) => {
+router.patch('/modificarStatus/:id', decodeHeader, ( req, res ) => {
     let id = req.params.id;
     let newStatus = req.body.status;
 
@@ -552,7 +627,7 @@ router.patch('/modificarStatus/:id', ( req, res ) => {
     })
 });
 
-router.patch('/changeItem/:token', ( req, res ) => {
+router.patch('/changeItem/:token', decodeHeader, ( req, res ) => {
     let id = req.params.id;
     let { titulo: newTitulo, categoria: newCate, precio: newPrecio } = req.body;
 

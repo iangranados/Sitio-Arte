@@ -29,7 +29,7 @@
     	</q-item>
     </q-list>
     <div class="text-right">
-    	<q-btn to="/" class="AdminSidebar__logout" label="Cerrar Sesión" icon-right="logout" no-caps flat dense />
+    	<q-btn to="/" class="AdminSidebar__logout" label="Cerrar Sesión" icon-right="logout" @click="onLogout" no-caps flat dense />
     </div>
   </q-drawer>
 </template>
@@ -41,6 +41,12 @@ export default {
 		drawer: {
 			type: Boolean,
 			required: true
+		}
+	},
+	methods: {
+		onLogout() {
+			this.$store.dispatch('auth/logout');
+			this.$router.push('/');
 		}
 	},
 	computed: {

@@ -121,12 +121,21 @@ export default {
           }
           this.loading = false;
         })
-        .catch((e) => {
+        .catch((error) => {
           this.loading = false;
-          this.$q.notify({
-            type: 'negative',
-            message: `Oops, algo salió mal. Intenta otra vez.`
-          })
+          if (error.response && error.response.status === 403) {
+            this.$q.notify({
+              type: 'warning',
+              message: 'Tu sesión ha expirado. Inicia sesión otra vez'
+            })
+            this.$store.dispatch('auth/logout');
+            this.$router.push('/login');
+          } else {
+            this.$q.notify({
+              type: 'negative',
+              message: `Oops, algo salió mal. Intenta otra vez.`
+            })
+          }
         });
     },
     

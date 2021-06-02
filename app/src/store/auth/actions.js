@@ -2,9 +2,9 @@ import { axiosInstance } from 'boot/axios'
 
 export function login ({ commit, dispatch }, user) {
   commit('AUTH_REQUEST')
-  return axiosInstance.post('PENDIENTE', user)
+  return axiosInstance.post('/auth/login', user)
     .then(response => {
-      const token = response.data.access_token // PENDIENTE
+      const token = response.data.access_token
       commit('AUTH_SUCCESS')
       dispatch('setToken', token)
       return response
@@ -16,15 +16,7 @@ export function login ({ commit, dispatch }, user) {
 }
 
 export function logout ({ commit, dispatch }) {
-  return axiosInstance.get('/api/auth/logout')
-    .then(response => {
-      dispatch('unsetToken')
-      return response
-    })
-    .catch(error => {
-      dispatch('unsetToken')
-      throw error
-    })
+  dispatch('unsetToken')
 }
 
 export function setToken ({ commit, dispatch }, payload) {

@@ -46,9 +46,18 @@ export default {
           }
           this.loading = false;
         })
-        .catch((e) => {
-          this.loading = false;
-          this.error = "Algo salió mal, intenta otra vez :c";
+        .catch((error) => {
+          if (error.response && error.response.status === 403) {
+            this.$q.notify({
+              type: 'warning',
+              message: 'Tu sesión ha expirado. Inicia sesión otra vez'
+            })
+            this.$store.dispatch('auth/logout');
+            this.$router.push('/login');
+          } else {
+            this.loading = false;
+            this.error = "Algo salió mal, intenta otra vez :c";
+          }
         });
     },
     myTweak(offset) {

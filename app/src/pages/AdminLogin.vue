@@ -1,15 +1,15 @@
 <template>
   <q-page class="LoginForm">
     <div class="LoginForm__wrapper">
-      <h2 class="LoginForm__title">Inicia sesión</h2>
+      <h2 class="LoginForm__title">Log in</h2>
       <q-form @submit="onSubmit">
         <q-input
           class="Form__field"
           outlined
-          v-model="text"
-          label="Nombre de Usuario"
+          v-model="email"
+          label="Email"
           :rules="[
-            val => !!val || 'Campo requerido'
+            val => !!val || 'Email is required'
           ]"
         />
         <q-input
@@ -17,9 +17,9 @@
           outlined
           type="password"
           v-model="password"
-          label="Contraseña"
+          label="Password"
           :rules="[
-            val => !!val || 'Campo requerido'
+            val => !!val || 'Password is required'
           ]"
         />
 
@@ -27,7 +27,7 @@
           <q-btn
             type="submit"
             class="Form__btn"
-            label="Iniciar Sesión"
+            label="Login"
             color="primary"
             :loading="loading"
             unelevated
@@ -42,7 +42,7 @@
 export default {
   name: "AdminLogin",
   data: () => ({
-    text: null,
+    email: null,
     password: null,
 
     loading: null
@@ -50,11 +50,27 @@ export default {
   methods: {
     onSubmit() {
       this.loading = true;
-      setTimeout(() => {
-        this.$q.notify("Logged in");
-        this.$router.push('/admin');
-        this.loading = false;
-      }, 2000);
+
+      this.$store.dispatch('auth/login', {email: this.email, password: this.password})
+        .then(() => {
+          this.loading = false;
+          this.$q.notify("Logged in");
+          this.$router.push('/admin')
+        })
+        .catch((error) => {
+          this.loading = false
+          if (error.response && error.response.status === 400) {
+            this.$q.notify({
+              type: 'warning',
+              message: 'Incorrect password or username.'
+            })
+          } else {
+            this.$q.notify({
+              type: 'warning',
+              message: 'Something went wrong. Try again later.'
+            })
+          }
+        })
     },
   },
 };
