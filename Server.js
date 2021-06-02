@@ -5,6 +5,9 @@ const cors = require('cors');
 const rutas = require('./server/src/routes/routes.js');
 const passport = require('passport');
 const session = require('express-session');
+const serveStatic = require('serve-static');
+const history = require('connect-history-api-fallback');
+const app_port = process.env.APP_PORT || 5000;
 require('dotenv').config()
 
 
@@ -51,3 +54,14 @@ new Promise( (resolve, reject) => {
 });
 
 });
+
+
+// CLIENT
+
+const client = express();
+
+client.use(history())
+client.use(serveStatic(__dirname + '/app/dist/spa'))
+client.listen(app_port, () => {
+    console.log('Client on port', 5000)
+})

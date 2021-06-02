@@ -7,7 +7,7 @@ axios.defaults.headers['Accept'] = 'application/json'
 const API_URL = (process.env.API_URL)
 
 const axiosInstance = axios.create({
-  baseURL: API_URL
+  baseURL: API_URL.replace(/\"/g, '')
 })
 
 Vue.prototype.$axios = axiosInstance
