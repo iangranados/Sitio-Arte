@@ -589,15 +589,15 @@ router.patch('/modificarStatus/:id', ( req, res ) => {
 });
 
 // RUTA ADMIN
-/*
+
 router.post('/admin/login', passport.authenticate('local', {
-    successRedirect: //redirigir a pagina de admin
-    ,
-    failureRedirect: //al mismo login,
+    successRedirect: '/galeria',
+    failureRedirect: '/admin'
 
 }))
-*/
 
+
+/*
 router.post('/admin/login', async (req, res) => {
     let { email, password } = req.body;
 
@@ -623,7 +623,7 @@ router.post('/admin/login', async (req, res) => {
         }
     }
 })
-
+*/
 router.patch('/changeItem/:token', ( req, res ) => {
     let id = req.params.id;
     let { titulo: newTitulo, categoria: newCate, precio: newPrecio } = req.body;
